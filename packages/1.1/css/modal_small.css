@@ -1,0 +1,51 @@
+ .btnCancel { 
+
+  background: red; 
+  color: white;
+  font-size: 16pt; 
+ /* border-radius: 5px;*/
+  padding: 10px;
+ /* border: 2px solid rgba(255,255,255,0.4);*/
+  opacity: 0.7;
+  text-align: center; 
+    font-family:  HelveticaNeue-Light; 
+}
+
+.btnSuccess {
+  background: #018a27; 
+  color: white;
+  font-size: 16pt; 
+ /* border-radius: 5px; */ 
+  padding: 10px;
+ /* border: 2px solid rgba(255,255,255,0.4); */ 
+  opacity: 0.7;
+  text-align: center; 
+      font-family:  HelveticaNeue-Light; 
+
+}
+
+.modalHeader { 
+
+  color: rgba(0,0,0,0.6); 
+  font-family:  HelveticaNeue-Light; 
+  font-size: 14pt;
+ /* background: rgba(255,100,100, 0.3); */ 
+  border-bottom: 1px solid rgba(0,0,0,0.6);
+}
+
+.modalContent { 
+
+  color: black;
+  font-family:  HelveticaNeue-Light;
+  padding:10px; 
+
+}
+
+#modal {
+
+
+  background: rgba(255,255,255,1);
+  color: #666; 
+  font-family: roboto_con;
+
+}

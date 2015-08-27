@@ -1,0 +1,25 @@
+.rowpadding {
+    margin-top: 10px;
+}
+.historic {
+    background: rgba(222,222,222);
+}
+.historic.bottomborder {
+  /*  box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.5); */ 
+}
+.historic.allborders {
+  /*  box-shadow: 3px 3px 0px rgba(0,0,0,0.5);*/
+    border-radius:8px;
+}
+.amberLineOrder {
+    background : yellow;
+    padding-left: 4px;
+}
+.greenLineOrder {
+    background : green;
+    padding-left: 4px;
+}
+.currentPrice {
+    background: rgba(241,169,66,0.2);
+    border-bottom-right-radius:8px;
+}

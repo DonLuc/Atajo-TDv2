@@ -1,0 +1,36 @@
+<div id="ullages_only_list">
+
+    <div class="grid listSubHeading" ng-show="group.showOnly()">
+        <div class="unit whole" once-text="group.name"></div>
+    </div>
+
+    <ul>
+      <li ng-repeat="record in group.records" class="listRow" ng-if="recordNeeded() && inFilter(record)">
+
+        <div class="grid">
+            <div class="unit w-1-8 align-left" once-text="record.ProductId__c"></div>
+            <div class="unit w-3-8 align-left" once-text="record.LongDescription__c"></div>
+            <div class="unit w-4-8 align-left">
+                <table ng-repeat="reasonset in record.reasonsets" width="100%" cellpadding="0" cellspacing="0" class="ullageReasons">
+                    <tr class="row ull">
+                        <td width="40"><x class="gui-extra ullageAdd" ng-click="toggleReason();" ng-show="$last">&#xf067;</x></td>
+                        <td>
+                            <select class="select" style="color:white" ng-options="p.Name for p in ullageCodes" ng-model="reasonset.name"></select>
+                        </td>
+                        <td width="160"  align="right">
+                            <input class="half keypadEnabled " ng-model="reasonset.quantity" ng-change="change()" readonly />
+                        </td>
+                    </tr>
+                </table>
+                <table ng-show="record.reasonsets.length == 0" width="100%" cellpadding="0" cellspacing="0" class="ullageReasons">
+                    <tr class="row ull">
+                        <td width="100%"><x class="gui-extra ullageAdd" ng-click="toggleReason();">&#xf067;</x></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+      </li>
+
+    </ul>
+</div>

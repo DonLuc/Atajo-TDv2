@@ -1,0 +1,31 @@
+<div id="order_strategic_list">
+
+    <div class="grid listSubHeading" ng-show="group.showStrategic()">
+        <div class="unit whole">{{group.name}}</div>
+    </div>
+
+    <ul>
+        <li ng-repeat="record in group.records" ng-if="record.Is_Strategic_Pack__c && inFilter(record)" class="listRow yellowline">
+
+        <div class="grid">
+            <div class="unit w-2-16 align-left rowpadding">
+                <span class="amberLineOrder">&nbsp;</span>
+                <span once-text="record.SKU"></span>
+            </div>
+            <div class="unit w-5-16 align-left rowpadding"><span once-text="record.Product_Name__c"></span></div>
+            <div class="unit w-1-16 align-right rowpadding historic bottomborder" ng-click="loadOrderHistory($event, record)"><span once-text="record.Previous_Inventory__c"></span></div>
+            <div class="unit w-1-16 align-right rowpadding historic bottomborder" ng-click="loadOrderHistory($event, record)"><span once-text="record.Previous_Order__c"></span></div>
+            <div class="unit w-1-16 align-right rowpadding historic allborders" ng-click="loadOrderHistory($event, record)"><span once-text="record.Previous_Delivery__c"></span></div>
+            <div class="unit w-1-16 align-right rowpadding currentPrice"><span once-text="record.Quantity__c"></span></div>
+            <div class="unit w-2-16 align-right rowpadding"><span once-text="record.NetValue__c"></span></div>
+            <div class="unit w-1-16 align-right rowpadding"><span once-text="record.Discount__c"></span></div>
+            <div class="unit w-2-16 align-right">
+                <input class="w-7-8 keypadEnabled" ng-model="record.OrderQty__c" isSuggested="{{record.isSuggested}}" ng-change="acceptMe(record)" readonly />
+            </div>
+
+        </div>
+
+        </li>
+
+    </ul>
+</div>

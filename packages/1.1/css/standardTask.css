@@ -1,0 +1,11 @@
+div.autocomplete > div {
+    height: 350px;
+    max-height:200px;
+    max-width: 350px;
+    overflow:scroll;
+    z-index: 100;
+    float:right;
+    position:absolute;
+    background-color: #eee;
+    padding: 5px;
+}

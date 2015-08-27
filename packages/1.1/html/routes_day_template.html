@@ -1,0 +1,896 @@
+<div id="routes_day_template_monday" class="row">
+  <placeholder ng-show="!routes || routes.length == 0">NO ROUTES AVAILABLE</placeholder>
+
+
+    <ul ng-repeat="route in routes" data-collapse="accordion persist" id="mon_collapse" class="collapseme">
+      <h2 class="listSubHeading" style="padding:20px">
+          <span class="fa fa-chevron-circle-down"></span> {{route.Name}}<br />
+          <x style="font-size:12pt;" >Cases : {{totalcases(route, 'Monday__c')}} on {{totalorders(route, 'Monday__c')}} Orders | Visits Completed {{completed(route, 'Monday__c')}} / {{totalcustomers(route, 'Monday__c')}} </x>
+      </h2>
+        <div class="routeContainer">
+            <li style="border-radius:5px;" ng-repeat="customer in route.Customers__r.records"  ng-if="customer.Monday__c==true" _name="{{ customer.Name}}" _cust_id="{{ customer.CustomerId__c}}" class="tabRow">
+              {{ trackDay(route.Name, 'all') }}
+              <table style="border-radius:5px; margin:3px; border:none;" ng-class=" customer.visitStatus == 'Started' && 'amberLine' || ( customer.visitStatus == 'Complete' && 'greenLine' || 'redLine' )">
+                  <tr CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" style="vertical-align:middle">
+
+                      <td width="50" align="center" onClick="_routes.nav(this)">
+                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                      </td>
+
+                      <td width="200" class="customerName" onclick="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}">
+                          <x style="font-size:16pt; width:200px; text-overflow: ellipsis; white-space: nowrap; overflow:hidden">  {{ customer.Name }}</x><br />
+                          <x style="font-size:12pt;">{{ customer.CustomerId__c }}</x>
+                      </td>
+                      <td></td>
+                      <td width="120" style="overflow:hidden;text-align:center;text-transform:uppercase;font-size:10px;" ng-show="customer.DeliveryBlockStatusCode__c != null && customer.OrderBlockStatusCode__c == null">
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='01' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Payment Overdue</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='02' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> RD Cheque</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='03' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Legal</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='04' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Business Sold</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='05' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Over Limit</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='06' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Franchise Request</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='07' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='99' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Field Changes</span>
+                      </td>
+                      <td width="120" style="overflow:hidden;text-align:center;font-size:10px;text-transform:uppercase;" ng-show="customer.OrderBlockStatusCode__c != null">
+                          <span ng-show="customer.OrderBlockStatusCode__c=='01'"><image src="img/icon-blocked-order.png" /> Payment Overdue</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='02'"><image src="img/icon-blocked-order.png" /> RD Cheque</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='03'"><image src="img/icon-blocked-order.png" /> Legal</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='04'"><image src="img/icon-blocked-order.png" /> Business Sold</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='05'"><image src="img/icon-blocked-order.png" /> Over Limit</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='06'"><image src="img/icon-blocked-order.png" /> Franchise Request</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='07'"><image src="img/icon-blocked-order.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='99'"><image src="img/icon-blocked-order.png" /> Field Changes</span>
+                          <span ng-show="customer.Delation_Flag_Company_Code__c==true"><image src="img/icon-blocked-order.png" /> Customer Deleted</span>
+                      </td>
+                      <td width="60" style="overflow:hidden;text-align:right;font-size:10px;text-transform:uppercase;">
+                          <ul style="list-style-type:none;">
+                              <li ng-show="customer.Live_Price__c" style="border:none; font-size:10px; padding:0; margin:0; font-weight:normal;"><span class="gui-extra">&#xf02b;</span><b> {{ customer.Live_Price__c }}</b></li>
+                          </ul>
+                      </td>
+                      <td width="150" class="routeStatusInfo" style="font-size:9pt;">
+                        <!-- <div ng-show="!customer.visitStatus" class="routeListStatus notStarted">
+                          <img src="img/loader_black.gif" width="20" />
+                        </div> -->
+
+                        <div ng-show="customer.visitStatus != 'Complete' && customer.visitStatus != 'Started' "
+                             align="center"
+                             class="routeListStatus notStarted">
+
+                            {{customer.visitStatus}}
+
+                        </div>
+                        <div ng-show="customer.visitStatus == 'Started' "
+                             align="center"
+                             ontouchstart="_routes.flipSummary(this);"
+                             class="routeListStatus hasStarted">
+
+                            {{customer.visitStatus}}
+                            <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                               width="10"
+                               class="gui-extra"
+                               style="font-size:12pt; color: black;">
+
+                              &#xf080;
+
+                            </x><br />
+                          <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                        </div>
+                          <div ng-show="customer.visitStatus == 'Complete'"
+                               align="center"
+                               ontouchstart="_routes.flipSummary(this);"
+                               class="routeListStatus completed">
+
+                              {{customer.visitStatus}}
+                              <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                                 width="10"
+                                 class="gui-extra"
+                                 style="font-size:12pt; color: black;">
+
+                                  &#xf080;
+
+                              </x><br />
+                              <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                          </div>
+
+                      </td>
+                      <td width="20"  onTouchStart="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" class="fa fa-arrow-circle-right" style="font-size:24pt"></td>
+
+
+
+
+
+                  </tr>
+              </table>
+            </li>
+            <li ng-if="isEmpty(route.Name, 'mon')"><br /><center><x style="color:black; font-size:18pt">NO CUSTOMERS ON THIS ROUTE TODAY</x></center><br /></li>
+        </div>
+    </ul>
+
+</div>
+<div id="routes_day_template_tuesday" class="row">
+    <placeholder ng-show="routes.length == 0">NO ROUTES</placeholder>
+    <ul ng-repeat="route in routes" data-collapse="accordion persist" id="tue_collapse" class="collapseme">
+        <h2 class="listSubHeading" style="padding:20px">
+            <span class="fa fa-chevron-circle-down"></span> {{route.Name}}<br />
+            <x style="font-size:12pt;" >Cases : {{totalcases(route, 'Tuesday__c')}} on {{totalorders(route, 'Tuesday__c')}} Orders | Visits Completed {{completed(route, 'Tuesday__c')}} / {{totalcustomers(route, 'Tuesday__c')}} </x>
+        </h2>
+        <div class="routeContainer">
+            <li style="border-radius:5px;" ng-if="customer.Tuesday__c==true" ng-repeat="customer in route.Customers__r.records" _name="{{customer.Name}}" _cust_id="{{customer.CustomerId__c}}" class="tabRow">
+              {{ trackDay(route.Name, 'tue') }}
+              <table style="border-radius:5px; margin:3px; border:none;" ng-class=" customer.visitStatus == 'Started' && 'amberLine' || ( customer.visitStatus == 'Complete' && 'greenLine' || 'redLine' )">
+                  <tr CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" style="vertical-align:middle">
+
+                      <td width="50" align="center" onClick="_routes.nav(this)">
+                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                      </td>
+
+                      <td width="200" class="customerName" onclick="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}">
+                          <x style="font-size:16pt; width:200px; text-overflow: ellipsis; white-space: nowrap; overflow:hidden">  {{ customer.Name }}</x><br />
+                          <x style="font-size:12pt;">{{ customer.CustomerId__c }}</x>
+                      </td>
+                      <td></td>
+                      <td width="120" style="overflow:hidden;text-align:center;text-transform:uppercase;font-size:10px;" ng-show="customer.DeliveryBlockStatusCode__c != null && customer.OrderBlockStatusCode__c == null">
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='01' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Payment Overdue</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='02' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> RD Cheque</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='03' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Legal</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='04' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Business Sold</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='05' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Over Limit</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='06' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Franchise Request</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='07' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='99' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Field Changes</span>
+                      </td>
+                      <td width="120" style="overflow:hidden;text-align:center;font-size:10px;text-transform:uppercase;" ng-show="customer.OrderBlockStatusCode__c != null">
+                          <span ng-show="customer.OrderBlockStatusCode__c=='01'"><image src="img/icon-blocked-order.png" /> Payment Overdue</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='02'"><image src="img/icon-blocked-order.png" /> RD Cheque</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='03'"><image src="img/icon-blocked-order.png" /> Legal</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='04'"><image src="img/icon-blocked-order.png" /> Business Sold</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='05'"><image src="img/icon-blocked-order.png" /> Over Limit</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='06'"><image src="img/icon-blocked-order.png" /> Franchise Request</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='07'"><image src="img/icon-blocked-order.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='99'"><image src="img/icon-blocked-order.png" /> Field Changes</span>
+                          <span ng-show="customer.Delation_Flag_Company_Code__c==true"><image src="img/icon-blocked-order.png" /> Customer Deleted</span>
+                      </td>
+                      <td width="60" style="overflow:hidden;text-align:right;font-size:10px;text-transform:uppercase;">
+                          <ul style="list-style-type:none;">
+                              <li ng-show="customer.Live_Price__c" style="border:none; font-size:10px; padding:0; margin:0; font-weight:normal;"><span class="gui-extra">&#xf02b;</span><b> {{ customer.Live_Price__c }}</b></li>
+                          </ul>
+                      </td>
+                      <td width="150" class="routeStatusInfo" style="font-size:9pt;">
+                        <!-- <div ng-show="!customer.visitStatus" class="routeListStatus notStarted">
+                          <img src="img/loader_black.gif" width="20" />
+                        </div> -->
+
+                        <div ng-show="customer.visitStatus != 'Complete' && customer.visitStatus != 'Started' "
+                             align="center"
+                             class="routeListStatus notStarted">
+
+                            {{customer.visitStatus}}
+
+                        </div>
+                        <div ng-show="customer.visitStatus == 'Started' "
+                             align="center"
+                             ontouchstart="_routes.flipSummary(this);"
+                             class="routeListStatus hasStarted">
+
+                            {{customer.visitStatus}}
+                            <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                               width="10"
+                               class="gui-extra"
+                               style="font-size:12pt; color: black;">
+
+                              &#xf080;
+
+                            </x><br />
+                          <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                        </div>
+                          <div ng-show="customer.visitStatus == 'Complete'"
+                               align="center"
+                               ontouchstart="_routes.flipSummary(this);"
+                               class="routeListStatus completed">
+
+                              {{customer.visitStatus}}
+                              <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                                 width="10"
+                                 class="gui-extra"
+                                 style="font-size:12pt; color: black;">
+
+                                  &#xf080;
+
+                              </x><br />
+                              <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                          </div>
+
+                      </td>
+                      <td width="20"  onTouchStart="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" class="fa fa-arrow-circle-right" style="font-size:24pt"></td>
+
+                  </tr>
+              </table>
+            </li>
+            <li ng-if="isEmpty(route.Name, 'tue')"><br /><center><x style="color:black; font-size:18pt">NO CUSTOMERS ON THIS ROUTE TODAY</x></center><br /></li>
+        </div>
+    </ul>
+</div>
+<div id="routes_day_template_wednesday" class="row">
+    <placeholder ng-show="routes.length == 0">NO ROUTES</placeholder>
+    <ul ng-repeat="route in routes" data-collapse="accordion persist" id="wed_collapse" class="collapseme">
+        <h2 class="listSubHeading" style="padding:20px">
+            <span class="fa fa-chevron-circle-down"></span> {{route.Name}}<br />
+            <x style="font-size:12pt;" >Cases : {{totalcases(route, 'Wednesday__c')}} on {{totalorders(route, 'Wednesday__c')}} Orders | Visits Completed {{completed(route, 'Wednesday__c')}} / {{totalcustomers(route, 'Wednesday__c')}} </x>
+        </h2>
+        <div class="routeContainer">
+            <li style="border-radius:5px;" ng-if="customer.Wednesday__c==true" ng-repeat="customer in route.Customers__r.records" _name="{{ customer.Name}}" _cust_id="{{ customer.CustomerId__c}}" class="tabRow">
+              {{ trackDay(route.Name, 'wed') }}
+              <table style="border-radius:5px; margin:3px; border:none;" ng-class=" customer.visitStatus == 'Started' && 'amberLine' || ( customer.visitStatus == 'Complete' && 'greenLine' || 'redLine' )">
+                  <tr CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" style="vertical-align:middle">
+
+                      <td width="50" align="center" onClick="_routes.nav(this)">
+                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                      </td>
+
+                      <td width="200" class="customerName" onclick="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}">
+                          <x style="font-size:16pt; width:200px; text-overflow: ellipsis; white-space: nowrap; overflow:hidden">  {{ customer.Name }}</x><br />
+                          <x style="font-size:12pt;">{{ customer.CustomerId__c }}</x>
+                      </td>
+                      <td></td>
+                      <td width="120" style="overflow:hidden;text-align:center;text-transform:uppercase;font-size:10px;" ng-show="customer.DeliveryBlockStatusCode__c != null && customer.OrderBlockStatusCode__c == null">
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='01' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Payment Overdue</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='02' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> RD Cheque</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='03' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Legal</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='04' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Business Sold</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='05' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Over Limit</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='06' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Franchise Request</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='07' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='99' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Field Changes</span>
+                      </td>
+                      <td width="120" style="overflow:hidden;text-align:center;font-size:10px;text-transform:uppercase;" ng-show="customer.OrderBlockStatusCode__c != null">
+                          <span ng-show="customer.OrderBlockStatusCode__c=='01'"><image src="img/icon-blocked-order.png" /> Payment Overdue</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='02'"><image src="img/icon-blocked-order.png" /> RD Cheque</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='03'"><image src="img/icon-blocked-order.png" /> Legal</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='04'"><image src="img/icon-blocked-order.png" /> Business Sold</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='05'"><image src="img/icon-blocked-order.png" /> Over Limit</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='06'"><image src="img/icon-blocked-order.png" /> Franchise Request</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='07'"><image src="img/icon-blocked-order.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='99'"><image src="img/icon-blocked-order.png" /> Field Changes</span>
+                          <span ng-show="customer.Delation_Flag_Company_Code__c==true"><image src="img/icon-blocked-order.png" /> Customer Deleted</span>
+                      </td>
+                      <td width="60" style="overflow:hidden;text-align:right;font-size:10px;text-transform:uppercase;">
+                          <ul style="list-style-type:none;">
+                              <li ng-show="customer.Live_Price__c" style="border:none; font-size:10px; padding:0; margin:0; font-weight:normal;"><span class="gui-extra">&#xf02b;</span><b> {{ customer.Live_Price__c }}</b></li>
+                          </ul>
+                      </td>
+                      <td width="150" class="routeStatusInfo" style="font-size:9pt;">
+                        <!-- <div ng-show="!customer.visitStatus" class="routeListStatus notStarted">
+                          <img src="img/loader_black.gif" width="20" />
+                        </div> -->
+
+                        <div ng-show="customer.visitStatus != 'Complete' && customer.visitStatus != 'Started' "
+                             align="center"
+                             class="routeListStatus notStarted">
+
+                            {{customer.visitStatus}}
+
+                        </div>
+                        <div ng-show="customer.visitStatus == 'Started' "
+                             align="center"
+                             ontouchstart="_routes.flipSummary(this);"
+                             class="routeListStatus hasStarted">
+
+                            {{customer.visitStatus}}
+                            <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                               width="10"
+                               class="gui-extra"
+                               style="font-size:12pt; color: black;">
+
+                              &#xf080;
+
+                            </x><br />
+                          <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                        </div>
+                          <div ng-show="customer.visitStatus == 'Complete'"
+                               align="center"
+                               ontouchstart="_routes.flipSummary(this);"
+                               class="routeListStatus completed">
+
+                              {{customer.visitStatus}}
+                              <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                                 width="10"
+                                 class="gui-extra"
+                                 style="font-size:12pt; color: black;">
+
+                                  &#xf080;
+
+                              </x><br />
+                              <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                          </div>
+
+                      </td>
+                      <td width="20"  onTouchStart="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" class="fa fa-arrow-circle-right" style="font-size:24pt"></td>
+
+                  </tr>
+              </table>
+            </li>
+            <li ng-if="isEmpty(route.Name, 'wed')"><br /><center><x style="color:black; font-size:18pt">NO CUSTOMERS ON THIS ROUTE TODAY</x></center><br /></li>
+        </div>
+    </ul>
+</div>
+<div id="routes_day_template_thursday" class="row">
+    <placeholder ng-show="routes.length == 0">NO ROUTES</placeholder>
+    <ul ng-repeat="route in routes" data-collapse="accordion persist" id="thu_collapse" class="collapseme">
+        <h2 class="listSubHeading" style="padding:20px">
+            <span class="fa fa-chevron-circle-down"></span> {{route.Name}}<br />
+            <x style="font-size:12pt;" >Cases : {{totalcases(route, 'Thursday__c')}} on {{totalorders(route, 'Thursday__c')}} Orders | Visits Completed {{completed(route, 'Thursday__c')}} / {{totalcustomers(route, 'Thursday__c')}} </x>
+        </h2>
+        <div class="routeContainer">
+            <li style="border-radius:5px;" ng-if="customer.Thursday__c==true" ng-repeat="customer in route.Customers__r.records" _name="{{ customer.Name}}" _cust_id="{{ customer.CustomerId__c}}" class="tabRow">
+              {{ trackDay(route.Name, 'thu') }}
+              <table style="border-radius:5px; margin:3px; border:none;" ng-class=" customer.visitStatus == 'Started' && 'amberLine' || ( customer.visitStatus == 'Complete' && 'greenLine' || 'redLine' )">
+                  <tr CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" style="vertical-align:middle">
+
+                      <td width="50" align="center" onClick="_routes.nav(this)">
+                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                      </td>
+
+                      <td width="200" class="customerName" onclick="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}">
+                          <x style="font-size:16pt; width:200px; text-overflow: ellipsis; white-space: nowrap; overflow:hidden">  {{ customer.Name }}</x><br />
+                          <x style="font-size:12pt;">{{ customer.CustomerId__c }}</x>
+                      </td>
+                      <td></td>
+                      <td width="120" style="overflow:hidden;text-align:center;text-transform:uppercase;font-size:10px;" ng-show="customer.DeliveryBlockStatusCode__c != null && customer.OrderBlockStatusCode__c == null">
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='01' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Payment Overdue</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='02' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> RD Cheque</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='03' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Legal</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='04' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Business Sold</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='05' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Over Limit</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='06' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Franchise Request</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='07' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='99' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Field Changes</span>
+                      </td>
+                      <td width="120" style="overflow:hidden;text-align:center;font-size:10px;text-transform:uppercase;" ng-show="customer.OrderBlockStatusCode__c != null">
+                          <span ng-show="customer.OrderBlockStatusCode__c=='01'"><image src="img/icon-blocked-order.png" /> Payment Overdue</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='02'"><image src="img/icon-blocked-order.png" /> RD Cheque</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='03'"><image src="img/icon-blocked-order.png" /> Legal</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='04'"><image src="img/icon-blocked-order.png" /> Business Sold</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='05'"><image src="img/icon-blocked-order.png" /> Over Limit</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='06'"><image src="img/icon-blocked-order.png" /> Franchise Request</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='07'"><image src="img/icon-blocked-order.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='99'"><image src="img/icon-blocked-order.png" /> Field Changes</span>
+                          <span ng-show="customer.Delation_Flag_Company_Code__c==true"><image src="img/icon-blocked-order.png" /> Customer Deleted</span>
+                      </td>
+                      <td width="60" style="overflow:hidden;text-align:right;font-size:10px;text-transform:uppercase;">
+                          <ul style="list-style-type:none;">
+                              <li ng-show="customer.Live_Price__c" style="border:none; font-size:10px; padding:0; margin:0; font-weight:normal;"><span class="gui-extra">&#xf02b;</span><b> {{ customer.Live_Price__c }}</b></li>
+                          </ul>
+                      </td>
+                      <td width="150" class="routeStatusInfo" style="font-size:9pt;">
+                        <!-- <div ng-show="!customer.visitStatus" class="routeListStatus notStarted">
+                          <img src="img/loader_black.gif" width="20" />
+                        </div> -->
+
+                        <div ng-show="customer.visitStatus != 'Complete' && customer.visitStatus != 'Started' "
+                             align="center"
+                             class="routeListStatus notStarted">
+
+                            {{customer.visitStatus}}
+
+                        </div>
+                        <div ng-show="customer.visitStatus == 'Started' "
+                             align="center"
+                             ontouchstart="_routes.flipSummary(this);"
+                             class="routeListStatus hasStarted">
+
+                            {{customer.visitStatus}}
+                            <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                               width="10"
+                               class="gui-extra"
+                               style="font-size:12pt; color: black;">
+
+                              &#xf080;
+
+                            </x><br />
+                          <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                        </div>
+                          <div ng-show="customer.visitStatus == 'Complete'"
+                               align="center"
+                               ontouchstart="_routes.flipSummary(this);"
+                               class="routeListStatus completed">
+
+                              {{customer.visitStatus}}
+                              <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                                 width="10"
+                                 class="gui-extra"
+                                 style="font-size:12pt; color: black;">
+
+                                  &#xf080;
+
+                              </x><br />
+                              <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                          </div>
+
+                      </td>
+                      <td width="20"  onTouchStart="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" class="fa fa-arrow-circle-right" style="font-size:24pt"></td>
+
+                  </tr>
+              </table>
+            </li>
+            <li ng-if="isEmpty(route.Name, 'thu')"><br /><center><x style="color:black; font-size:18pt">NO CUSTOMERS ON THIS ROUTE TODAY</x></center><br /></li>
+        </div>
+    </ul>
+</div>
+<div id="routes_day_template_friday" class="row">
+    <placeholder ng-show="routes.length == 0">NO ROUTES</placeholder>
+    <ul ng-repeat="route in routes" data-collapse="accordion persist" id="fri_collapse" class="collapseme">
+        <h2 class="listSubHeading" style="padding:20px">
+            <span class="fa fa-chevron-circle-down"></span> {{route.Name}}<br />
+            <x style="font-size:12pt;" >Cases : <x ng-bind="totalcases(route, 'Friday__c')"></x> on {{totalorders(route, 'Friday__c')}} Orders | Visits Completed {{completed(route, 'Friday__c')}} / {{totalcustomers(route, 'Friday__c')}} </x>
+        </h2>
+        <div class="routeContainer">
+            <li style="border-radius:5px;" ng-if="customer.Friday__c==true" ng-repeat="customer in route.Customers__r.records" _name="{{ customer.Name}}" _cust_id="{{ customer.CustomerId__c}}" class="tabRow">
+              {{ trackDay(route.Name, 'fri') }}
+              <table style="border-radius:5px; margin:3px; border:none;" ng-class=" customer.visitStatus == 'Started' && 'amberLine' || ( customer.visitStatus == 'Complete' && 'greenLine' || 'redLine' )">
+                  <tr CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" style="vertical-align:middle">
+
+                      <td width="50" align="center" onClick="_routes.nav(this)">
+                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                      </td>
+
+                      <td width="200" class="customerName" onclick="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}">
+                          <x style="font-size:16pt; width:200px; text-overflow: ellipsis; white-space: nowrap; overflow:hidden">  {{ customer.Name }}</x><br />
+                          <x style="font-size:12pt;">{{ customer.CustomerId__c }}</x>
+                      </td>
+                      <td></td>
+                      <td width="120" style="overflow:hidden;text-align:center;text-transform:uppercase;font-size:10px;" ng-show="customer.DeliveryBlockStatusCode__c != null && customer.OrderBlockStatusCode__c == null">
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='01' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Payment Overdue</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='02' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> RD Cheque</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='03' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Legal</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='04' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Business Sold</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='05' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Over Limit</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='06' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Franchise Request</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='07' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='99' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Field Changes</span>
+                      </td>
+                      <td width="120" style="overflow:hidden;text-align:center;font-size:10px;text-transform:uppercase;" ng-show="customer.OrderBlockStatusCode__c != null">
+                          <span ng-show="customer.OrderBlockStatusCode__c=='01'"><image src="img/icon-blocked-order.png" /> Payment Overdue</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='02'"><image src="img/icon-blocked-order.png" /> RD Cheque</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='03'"><image src="img/icon-blocked-order.png" /> Legal</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='04'"><image src="img/icon-blocked-order.png" /> Business Sold</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='05'"><image src="img/icon-blocked-order.png" /> Over Limit</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='06'"><image src="img/icon-blocked-order.png" /> Franchise Request</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='07'"><image src="img/icon-blocked-order.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='99'"><image src="img/icon-blocked-order.png" /> Field Changes</span>
+                          <span ng-show="customer.Delation_Flag_Company_Code__c==true"><image src="img/icon-blocked-order.png" /> Customer Deleted</span>
+                      </td>
+                      <td width="60" style="overflow:hidden;text-align:right;font-size:10px;text-transform:uppercase;">
+                          <ul style="list-style-type:none;">
+                              <li ng-show="customer.Live_Price__c" style="border:none; font-size:10px; padding:0; margin:0; font-weight:normal;"><span class="gui-extra">&#xf02b;</span><b> {{ customer.Live_Price__c }}</b></li>
+                          </ul>
+                      </td>
+                      <td width="150" class="routeStatusInfo" style="font-size:9pt;">
+                        <!-- <div ng-show="!customer.visitStatus" class="routeListStatus notStarted">
+                          <img src="img/loader_black.gif" width="20" />
+                        </div> -->
+
+                        <div ng-show="customer.visitStatus != 'Complete' && customer.visitStatus != 'Started' "
+                             align="center"
+                             class="routeListStatus notStarted">
+
+                            {{customer.visitStatus}}
+
+                        </div>
+                        <div ng-show="customer.visitStatus == 'Started'"
+                             align="center"
+                             ontouchstart="_routes.flipSummary(this);"
+                             class="routeListStatus hasStarted">
+
+                            {{customer.visitStatus}}
+                            <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                               width="10"
+                               class="gui-extra"
+                               style="font-size:12pt; color: black;">
+
+                              &#xf080;
+
+                            </x><br />
+                          <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                        </div>
+                          <div ng-show="customer.visitStatus == 'Complete'"
+                               align="center"
+                               ontouchstart="_routes.flipSummary(this);"
+                               class="routeListStatus completed">
+
+                              {{customer.visitStatus}}
+                              <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                                 width="10"
+                                 class="gui-extra"
+                                 style="font-size:12pt; color: black;">
+
+                                  &#xf080;
+
+                              </x><br />
+                              <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                          </div>
+
+                      </td>
+                      <td width="20"  onTouchStart="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" class="fa fa-arrow-circle-right" style="font-size:24pt"></td>
+
+                  </tr>
+              </table>
+            </li>
+            <li ng-if="isEmpty(route.Name, 'fri')"><br /><center><x style="color:black; font-size:18pt">NO CUSTOMERS ON THIS ROUTE TODAY</x></center><br /></li>
+        </div>
+    </ul>
+</div>
+<div id="routes_day_template_saturday" class="row">
+    <placeholder ng-show="routes.length == 0">NO ROUTES</placeholder>
+    <ul ng-repeat="route in routes" data-collapse="accordion persist" id="sat_collapse" class="collapseme">
+        <h2 class="listSubHeading" style="padding:20px">
+            <span class="fa fa-chevron-circle-down"></span> {{route.Name}}<br />
+            <x style="font-size:12pt;" >Cases : {{totalcases(route, 'Saturday__c')}} on {{totalorders(route, 'Saturday__c')}} Orders | Visits Completed {{completed(route, 'Saturday__c')}} / {{totalcustomers(route, 'Saturday__c')}} </x>
+        </h2>
+        <div class="routeContainer">
+            <li style="border-radius:5px;" ng-if="customer.Saturday__c==true" ng-repeat="customer in route.Customers__r.records" _name="{{ customer.Name}}" _cust_id="{{ customer.CustomerId__c}}" class="tabRow">
+              {{ trackDay(route.Name, 'sat') }}
+              <table style="border-radius:5px; margin:3px; border:none;" ng-class=" customer.visitStatus == 'Started' && 'amberLine' || ( customer.visitStatus == 'Complete' && 'greenLine' || 'redLine' )">
+                  <tr CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" style="vertical-align:middle">
+
+                      <td width="50" align="center" onClick="_routes.nav(this)">
+                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                      </td>
+
+                      <td width="200" class="customerName" onclick="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}">
+                          <x style="font-size:16pt; width:200px; text-overflow: ellipsis; white-space: nowrap; overflow:hidden">  {{ customer.Name }}</x><br />
+                          <x style="font-size:12pt;">{{ customer.CustomerId__c }}</x>
+                      </td>
+                      <td></td>
+                      <td width="120" style="overflow:hidden;text-align:center;text-transform:uppercase;font-size:10px;" ng-show="customer.DeliveryBlockStatusCode__c != null && customer.OrderBlockStatusCode__c == null">
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='01' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Payment Overdue</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='02' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> RD Cheque</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='03' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Legal</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='04' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Business Sold</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='05' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Over Limit</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='06' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Franchise Request</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='07' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='99' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Field Changes</span>
+                      </td>
+                      <td width="120" style="overflow:hidden;text-align:center;font-size:10px;text-transform:uppercase;" ng-show="customer.OrderBlockStatusCode__c != null">
+                          <span ng-show="customer.OrderBlockStatusCode__c=='01'"><image src="img/icon-blocked-order.png" /> Payment Overdue</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='02'"><image src="img/icon-blocked-order.png" /> RD Cheque</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='03'"><image src="img/icon-blocked-order.png" /> Legal</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='04'"><image src="img/icon-blocked-order.png" /> Business Sold</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='05'"><image src="img/icon-blocked-order.png" /> Over Limit</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='06'"><image src="img/icon-blocked-order.png" /> Franchise Request</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='07'"><image src="img/icon-blocked-order.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='99'"><image src="img/icon-blocked-order.png" /> Field Changes</span>
+                          <span ng-show="customer.Delation_Flag_Company_Code__c==true"><image src="img/icon-blocked-order.png" /> Customer Deleted</span>
+                      </td>
+                      <td width="60" style="overflow:hidden;text-align:right;font-size:10px;text-transform:uppercase;">
+                          <ul style="list-style-type:none;">
+                              <li ng-show="customer.Live_Price__c" style="border:none; font-size:10px; padding:0; margin:0; font-weight:normal;"><span class="gui-extra">&#xf02b;</span><b> {{ customer.Live_Price__c }}</b></li>
+                          </ul>
+                      </td>
+                      <td width="150" class="routeStatusInfo" style="font-size:9pt;">
+                        <!-- <div ng-show="!customer.visitStatus" class="routeListStatus notStarted">
+                          <img src="img/loader_black.gif" width="20" />
+                        </div> -->
+
+                        <div ng-show="customer.visitStatus != 'Complete' && customer.visitStatus != 'Started' "
+                             align="center"
+                             class="routeListStatus notStarted">
+
+                            {{customer.visitStatus}}
+
+                        </div>
+                        <div ng-show="customer.visitStatus == 'Started' "
+                             align="center"
+                             ontouchstart="_routes.flipSummary(this);"
+                             class="routeListStatus hasStarted">
+
+                            {{customer.visitStatus}}
+                            <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                               width="10"
+                               class="gui-extra"
+                               style="font-size:12pt; color: black;">
+
+                              &#xf080;
+
+                            </x><br />
+                          <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                        </div>
+                          <div ng-show="customer.visitStatus == 'Complete'"
+                               align="center"
+                               ontouchstart="_routes.flipSummary(this);"
+                               class="routeListStatus completed">
+
+                              {{customer.visitStatus}}
+                              <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                                 width="10"
+                                 class="gui-extra"
+                                 style="font-size:12pt; color: black;">
+
+                                  &#xf080;
+
+                              </x><br />
+                              <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                          </div>
+
+                      </td>
+                      <td width="20"  onTouchStart="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" class="fa fa-arrow-circle-right" style="font-size:24pt"></td>
+
+                  </tr>
+              </table>
+            </li>
+            <li ng-if="isEmpty(route.Name, 'sat')"><br /><center><x style="color:black; font-size:18pt">NO CUSTOMERS ON THIS ROUTE TODAY</x></center><br /></li>
+        </div>
+    </ul>
+</div>
+<div id="routes_day_template_sunday" class="row">
+    <ul ng-repeat="route in routes" data-collapse="accordion persist" id="sun_collapse" class="collapseme">
+        <h2 class="listSubHeading" style="padding:20px">
+            <span class="fa fa-chevron-circle-down"></span> {{route.Name}}<br />
+            <x style="font-size:12pt;" >Cases : {{totalcases(route, 'Sunday__c')}} on {{totalorders(route, 'Sunday__c')}} Orders | Visits Completed {{completed(route, 'Sunday__c')}} / {{totalcustomers(route, 'Sunday__c')}} </x>
+        </h2>
+        <div class="routeContainer">
+            <li style="border-radius:5px;" ng-if="customer.Sunday__c==true" ng-repeat="customer in route.Customers__r.records" _name="{{ customer.Name}}" _cust_id="{{ customer.CustomerId__c}}" class="tabRow">
+              {{ trackDay(route.Name, 'sun') }}
+              <table style="border-radius:5px; margin:3px; border:none;" ng-class=" customer.visitStatus == 'Started' && 'amberLine' || ( customer.visitStatus == 'Complete' && 'greenLine' || 'redLine' )">
+                  <tr CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" style="vertical-align:middle">
+
+                      <td width="50" align="center" onClick="_routes.nav(this)">
+                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                      </td>
+
+                      <td width="200" class="customerName" onclick="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}">
+                          <x style="font-size:16pt; width:200px; text-overflow: ellipsis; white-space: nowrap; overflow:hidden">  {{ customer.Name }}</x><br />
+                          <x style="font-size:12pt;">{{ customer.CustomerId__c }}</x>
+                      </td>
+                      <td></td>
+                      <td width="120" style="overflow:hidden;text-align:center;text-transform:uppercase;font-size:10px;" ng-show="customer.DeliveryBlockStatusCode__c != null && customer.OrderBlockStatusCode__c == null">
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='01' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Payment Overdue</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='02' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> RD Cheque</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='03' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Legal</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='04' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Business Sold</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='05' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Over Limit</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='06' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Franchise Request</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='07' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='99' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Field Changes</span>
+                      </td>
+                      <td width="120" style="overflow:hidden;text-align:center;font-size:10px;text-transform:uppercase;" ng-show="customer.OrderBlockStatusCode__c != null">
+                          <span ng-show="customer.OrderBlockStatusCode__c=='01'"><image src="img/icon-blocked-order.png" /> Payment Overdue</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='02'"><image src="img/icon-blocked-order.png" /> RD Cheque</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='03'"><image src="img/icon-blocked-order.png" /> Legal</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='04'"><image src="img/icon-blocked-order.png" /> Business Sold</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='05'"><image src="img/icon-blocked-order.png" /> Over Limit</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='06'"><image src="img/icon-blocked-order.png" /> Franchise Request</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='07'"><image src="img/icon-blocked-order.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='99'"><image src="img/icon-blocked-order.png" /> Field Changes</span>
+                          <span ng-show="customer.Delation_Flag_Company_Code__c==true"><image src="img/icon-blocked-order.png" /> Customer Deleted</span>
+                      </td>
+                      <td width="60" style="overflow:hidden;text-align:right;font-size:10px;text-transform:uppercase;">
+                          <ul style="list-style-type:none;">
+                              <li ng-show="customer.Live_Price__c" style="border:none; font-size:10px; padding:0; margin:0; font-weight:normal;"><span class="gui-extra">&#xf02b;</span><b> {{ customer.Live_Price__c }}</b></li>
+                          </ul>
+                      </td>
+                      <td width="150" class="routeStatusInfo" style="font-size:9pt;">
+                        <!-- <div ng-show="!customer.visitStatus" class="routeListStatus notStarted">
+                          <img src="img/loader_black.gif" width="20" />
+                        </div> -->
+
+                        <div ng-show="customer.visitStatus != 'Complete' && customer.visitStatus != 'Started' "
+                             align="center"
+                             class="routeListStatus notStarted">
+
+                            {{customer.visitStatus}}
+
+                        </div>
+                        <div ng-show="customer.visitStatus == 'Started' "
+                             align="center"
+                             ontouchstart="_routes.flipSummary(this);"
+                             class="routeListStatus hasStarted">
+
+                            {{customer.visitStatus}}
+                            <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                               width="10"
+                               class="gui-extra"
+                               style="font-size:12pt; color: black;">
+
+                              &#xf080;
+
+                            </x><br />
+                          <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                        </div>
+                          <div ng-show="customer.visitStatus == 'Complete'"
+                               align="center"
+                               ontouchstart="_routes.flipSummary(this);"
+                               class="routeListStatus completed">
+
+                              {{customer.visitStatus}}
+                              <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                                 width="10"
+                                 class="gui-extra"
+                                 style="font-size:12pt; color: black;">
+
+                                  &#xf080;
+
+                              </x><br />
+                              <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                          </div>
+
+                      </td>
+                      <td width="20"  onTouchStart="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" class="fa fa-arrow-circle-right" style="font-size:24pt"></td>
+
+                  </tr>
+              </table>
+            </li>
+            <li ng-if="isEmpty(route.Name, 'sun')"><br /><center><x style="color:black; font-size:18pt">NO CUSTOMERS ON THIS ROUTE TODAY</x></center><br /></li>
+        </div>
+    </ul>
+</div>
+<div id="routes_day_template_all" class="row">
+    <placeholder ng-show="!routes || routes.length == 0">NO ROUTES AVAILABLE</placeholder>
+    <ul ng-repeat="route in routes" data-collapse="accordion persist" id="all_collapse" class="collapseme">
+        <h2 class="listSubHeading" style="padding:20px">
+            <span class="fa fa-chevron-circle-down"></span> {{route.Name}}<br />
+            <x style="font-size:12pt;" >Cases : {{totalcases(route, 'all')}} on {{totalorders(route, 'all')}} Orders | Visits Completed {{completed(route, 'all')}} / {{totalcustomers(route, 'all')}} </x>
+        </h2>
+        <div class="routeContainer">
+            <li style="border-radius:5px;" ng-repeat="customer in route.Customers__r.records" _name="{{ customer.Name}}" _cust_id="{{ customer.CustomerId__c}}" class="tabRow">
+              {{ trackDay(route.Name, 'all') }}
+              <table style="border-radius:5px; margin:3px; border:none;" ng-class=" customer.visitStatus == 'Started' && 'amberLine' || ( customer.visitStatus == 'Complete' && 'greenLine' || 'redLine' )">
+                  <tr CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" style="vertical-align:middle">
+
+                      <td width="50" align="center" onClick="_routes.nav(this)">
+                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                      </td>
+
+                      <td width="200" class="customerName" onclick="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}">
+                          <x style="font-size:16pt; width:200px; text-overflow: ellipsis; white-space: nowrap; overflow:hidden">  {{ customer.Name }}</x><br />
+                          <x style="font-size:12pt;">{{ customer.CustomerId__c }}</x>
+                      </td>
+                      <td></td>
+                      <td width="120" style="overflow:hidden;text-align:center;text-transform:uppercase;font-size:10px;" ng-show="customer.DeliveryBlockStatusCode__c != null && customer.OrderBlockStatusCode__c == null">
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='01' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Payment Overdue</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='02' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> RD Cheque</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='03' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Legal</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='04' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Business Sold</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='05' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Over Limit</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='06' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Franchise Request</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='07' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.DeliveryBlockStatusCode__c=='99' && customer.OrderBlockStatusCode__c == null"><image src="img/icon-blocked-delivery.png" /> Field Changes</span>
+                      </td>
+                      <td width="120" style="overflow:hidden;text-align:center;font-size:10px;text-transform:uppercase;" ng-show="customer.OrderBlockStatusCode__c != null">
+                          <span ng-show="customer.OrderBlockStatusCode__c=='01'"><image src="img/icon-blocked-order.png" /> Payment Overdue</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='02'"><image src="img/icon-blocked-order.png" /> RD Cheque</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='03'"><image src="img/icon-blocked-order.png" /> Legal</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='04'"><image src="img/icon-blocked-order.png" /> Business Sold</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='05'"><image src="img/icon-blocked-order.png" /> Over Limit</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='06'"><image src="img/icon-blocked-order.png" /> Franchise Request</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='07'"><image src="img/icon-blocked-order.png" /> Non-Trading Customer</span>
+                          <span ng-show="customer.OrderBlockStatusCode__c=='99'"><image src="img/icon-blocked-order.png" /> Field Changes</span>
+                          <span ng-show="customer.Delation_Flag_Company_Code__c==true"><image src="img/icon-blocked-order.png" /> Customer Deleted</span>
+                      </td>
+                      <td width="60" style="overflow:hidden;text-align:right;font-size:10px;text-transform:uppercase;">
+                          <ul style="list-style-type:none;">
+                              <li ng-show="customer.Live_Price__c" style="border:none; font-size:10px; padding:0; margin:0; font-weight:normal;"><span class="gui-extra">&#xf02b;</span><b> {{ customer.Live_Price__c }}</b></li>
+                          </ul>
+                      </td>
+                      <td width="150" class="routeStatusInfo" style="font-size:9pt;">
+                        <!-- <div ng-show="!customer.visitStatus" class="routeListStatus notStarted">
+                          <img src="img/loader_black.gif" width="20" />
+                        </div> -->
+
+                        <div ng-show="customer.visitStatus != 'Complete' && customer.visitStatus != 'Started' "
+                             align="center"
+                             class="routeListStatus notStarted">
+
+                            {{customer.visitStatus}}
+
+                        </div>
+                        <div ng-show="customer.visitStatus == 'Started' "
+                             align="center"
+                             ontouchstart="_routes.flipSummary(this);"
+                             class="routeListStatus hasStarted">
+
+                            {{customer.visitStatus}}
+                            <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                               width="10"
+                               class="gui-extra"
+                               style="font-size:12pt; color: black;">
+
+                              &#xf080;
+
+                            </x><br />
+                          <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                          <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                        </div>
+                          <div ng-show="customer.visitStatus == 'Complete'"
+                               align="center"
+                               ontouchstart="_routes.flipSummary(this);"
+                               class="routeListStatus completed">
+
+                              {{customer.visitStatus}}
+                              <x ng-show="customer.visitStatus == 'Complete' || customer.visitStatus == 'Started' "
+                                 width="10"
+                                 class="gui-extra"
+                                 style="font-size:12pt; color: black;">
+
+                                  &#xf080;
+
+                              </x><br />
+                              <!--   <x ng-show="{{customer.visitTime}}" style="font-size:7pt">{{customer.visitTime}}</x> -->
+
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal && customer.casesTotal != 0) || customer.orderTotal ">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</x>
+                              <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                          </div>
+
+                      </td>
+                      <td width="20"  onTouchStart="_routes.loadCustomer(this);" CustomerId__c="{{ customer.CustomerId__c }}" DeliveryBlockStatusCode__c="{{ customer.DeliveryBlockStatusCode__c }}" OrderBlockStatusCode__c="{{ customer.OrderBlockStatusCode__c }}" Id="{{customer.Id}}" class="fa fa-arrow-circle-right" style="font-size:24pt"></td>
+
+                  </tr>
+              </table>
+            </li>
+            <li ng-if="isEmpty(route.Name, 'all')"><br /><center><x style="color:black; font-size:18pt">NO CUSTOMERS ON THIS ROUTE TODAY</x></center><br /></li>
+        </div>
+    </ul>
+
+
+</div>

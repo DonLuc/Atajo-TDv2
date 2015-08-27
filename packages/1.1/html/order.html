@@ -1,0 +1,415 @@
+<card id="order" fill="true" flip="rl">
+
+    <face id="orderFront" settings="default:true,inertia:true" controller="_order.Ctrl">
+        <ctl>ORDER - {{customerName}}</ctl>
+        <ctr class="gui-extra" flip-target="orderHelp">&#xf059;</ctr>
+
+        <content>
+
+            <tabset onchange="_order.onTabChange" >
+                <tab title="All" template-url="order_all"></tab>
+                <tab title="Current" template-url="order_only"></tab>
+                <tab title="Strategic" template-url="order_strategic"></tab>
+                <tab title="Promotional" template-url="order_promo"></tab>
+                <tabWidget>
+                    <input class="input-search" style="position:absolute; right:0px; top:0px" ng-model="order.orderFilter" ng-change="keypadHack()"/>
+                    <span ng-show="order.orderFilter != ''"><i class="fa fa-close f18" style="position:absolute; right:20px; top:13px; color:white" ng-click="clearFilter()"></i></span>
+                </tabWidget>
+
+            </tabset>
+        </content>
+
+
+        <cbl><div ng-show="totalQty() > 0" onTouchStart="_order.getOnlinePricing()">GET PRICING <x ng-show="order.Live_Price__c && order.Live_Price__c != 0 && order.Live_Price__c !== null">[ LAST PRICE : <x ng-bind="order.Live_Price__c"></x> ]</div> </cbl>
+        <cbr><div id="finaliseText" onTouchStart="_order.finalize()">FINALIZE <x ng-bind="totalQty()"></x> CASES &nbsp;&nbsp;<x class="fa fa-angle-right"></x></div><img src="img/loader_black.gif" id="finaliseLoader" style="display:none; width: 20px; height: 20px;" /></cbr>
+
+
+    </face>
+
+
+    <face id="orderFinalize" face="back" controller="_order.FinalizeCtrl">
+
+        <ctl>FINALIZE ORDER - {{customerName}}</ctl>
+        <ctr class="gui" flip-target="close">x</ctr>
+
+        <content>
+            <formElement title="Order Details">
+                <div class="grid">
+                    <div class="unit w-1-4 align-left">
+                        <label>PO Number</label><br/>
+                        <input id="orderPONumber" ng-model="order.Purchase_Order_No__c" maxlength="13"/>
+                    </div>
+                    <div class="unit w-3-4 align-right">
+                        <label>Delivery Date</label><br/>
+                        <datepicker options="calOptions" ng-model="order.ScheduledDeliveryDate__c"></datepicker>
+                        <!--<input type="date" ng-model="order.ScheduledDeliveryDate__c"/>-->
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="unit whole align-left">
+                        <label>Planner Message</label><br/>
+                        <textArea class="whole" maxlength="255" ng-model="order.Planner_Message__c"/>
+                    </div>
+                </div>
+            </formElement>
+
+        </content>
+
+        <cbl></cbl>
+        <cbr onclick="_order.confirmOrder(true);"><span id="orderconfirmText">CONFIRM</span><img src="img/loader_black.gif" id="orderconfirmLoader" style="display:none; width: 20px; height: 20px;" /></cbr>
+
+    </face>
+
+
+    <face id="noOrder" face="back" controller="_order.NoOrderCtrl">
+
+        <ctl>NO ORDER TAKEN - {{customerName}}</ctl>
+        <ctr class="gui" flip-target="close">x</ctr>
+
+
+        <content>
+
+            <div ng-repeat="reason in noOrderReasons" class="grid" ng-click="selectReason(reason)">
+
+                <div class="unit align-center cardSelectButton">{{reason.Name}}</div>
+
+            </div>
+
+        </content>
+
+        <cbl flip-target="close">CANCEL</cbl>
+        <cbr></cbr>
+
+
+    </face>
+    <face id="orderHistory" face="back" controller="_order.orderHistoryCtrl">
+
+        <ctl> {{history.SKU}} {{history.Product_Name__c}}
+            <x>
+                - ORDER HISTORY
+            </x>
+        </ctl>
+        <ctr class="gui" flip-target="close" flip-callback="_order.repositionScroll()">x</ctr>
+        <content>
+            <formElement title="Order History">
+                <table style="color: #000;">
+                    <tr>
+                        <th align="left">WEEK</th>
+                        <th align="left">INV</th>
+                        <th align="left">ORD</th>
+                        <th align="left">DEL</th>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <x>1</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.InventoryWeek1__c"></span>
+                            <x ng-show="history.InventoryWeek1__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.OrderWeek1__c"></span>
+                            <x ng-show="history.OrderWeek1__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.DeliveryWeek1__c"></span>
+                            <x ng-show="history.DeliveryWeek1__c == null">00</x>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <x>2</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.InventoryWeek2__c"></span>
+                            <x ng-show="history.InventoryWeek2__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.OrderWeek2__c"></span>
+                            <x ng-show="history.OrderWeek2__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.DeliveryWeek2__c"></span>
+                            <x ng-show="history.DeliveryWeek2__c == null">00</x>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <x>3</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.InventoryWeek3__c"></span>
+                            <x ng-show="history.InventoryWeek3__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.OrderWeek3__c"></span>
+                            <x ng-show="history.OrderWeek3__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.DeliveryWeek3__c"></span>
+                            <x ng-show="history.DeliveryWeek3__c == null">00</x>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <x>4</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.InventoryWeek4__c"></span>
+                            <x ng-show="history.InventoryWeek4__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.OrderWeek4__c"></span>
+                            <x ng-show="history.OrderWeek4__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.DeliveryWeek4__c"></span>
+                            <x ng-show="history.DeliveryWeek4__c == null">00</x>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <x>5</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.InventoryWeek5__c"></span>
+                            <x ng-show="history.InventoryWeek5__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.OrderWeek5__c"></span>
+                            <x ng-show="history.OrderWeek5__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.DeliveryWeek5__c"></span>
+                            <x ng-show="history.DeliveryWeek5__c == null">00</x>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <x>6</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.InventoryWeek6__c"></span>
+                            <x ng-show="history.InventoryWeek6__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.OrderWeek6__c"></span>
+                            <x ng-show="history.OrderWeek6__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.DeliveryWeek6__c"></span>
+                            <x ng-show="history.DeliveryWeek6__c == null">00</x>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <x>7</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.InventoryWeek7__c"></span>
+                            <x ng-show="history.InventoryWeek7__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.OrderWeek7__c"></span>
+                            <x ng-show="history.OrderWeek7__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.DeliveryWeek7__c"></span>
+                            <x ng-show="history.DeliveryWeek7__c == null">00</x>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <x>8</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.InventoryWeek8__c"></span>
+                            <x ng-show="history.InventoryWeek8__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.OrderWeek8__c"></span>
+                            <x ng-show="history.OrderWeek8__c == null">00</x>
+                        </td>
+                        <td align="center">
+                            <span once-text="history.DeliveryWeek8__c"></span>
+                            <x ng-show="history.DeliveryWeek8__c == null">00</x>
+                        </td>
+                    </tr>
+                </table>
+                </formElement>
+        </content>
+
+        <cbl flip-target="close" flip-callback="_order.repositionScroll()">CANCEL</cbl>
+        <cbr></cbr>
+    </face>
+
+    <face id="orderPromotion" face="back" controller="_order.orderPromotionCtrl">
+
+        <ctl>Promotion Details</ctl>
+        <ctr class="gui" flip-target="close" flip-callback="_order.repositionScroll()">x</ctr>
+        <content>
+            <div class="cardFormContainer">
+                <formElement title="Promotion">
+                    <table width="100%" style="color: #000;">
+                        <tr>
+                            <td>
+                                <div class="lbl">Product</div>
+                                <div class="cont">{{promotionItem.Product__r.LongDescription__c}}</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Amount</div>
+                                <div class="cont">R{{promotionItem.Amount__c}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="lbl">Condition Type</div>
+                                <div class="cont">{{promotionItem.Condition_Type__c}}</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Percentage</div>
+                                <div class="cont">{{promotionItem.Percentage__c}} %</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="lbl">Valid From</div>
+                                <div class="cont">{{promotionItem.Valid_From__c}}</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Promo Amt or Perc</div>
+                                <div class="cont">{{promotionItem.Discount_Value__c}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="lbl">Valid To</div>
+                                <div class="cont">{{promotionItem.Valid_To__c}}</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Amount UOM</div>
+                                <div class="cont">{{promotionItem.Amount_UOM__c}}</div>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"><hr /></td></tr>
+                        <tr>
+                            <td>
+                                <div class="lbl">Promotion</div>
+                                <div class="cont">{{promotionItem.Promotion__c}}</div><div class="cont" ng-show="promotionItem.Promotion__c == null">N/A</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Trade Group Price Description</div>
+                                <div class="cont">{{promotionItem.Trade_Group_PriceDesc__c}}</div><div class="cont" ng-show="promotionItem.Trade_Group_PriceDesc__c == null">N/A</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="lbl">Promotion Description</div>
+                                <div class="cont">{{promotionItem.Promotion_Description__c}}</div><div class="cont" ng-show="promotionItem.Promotion_Description__c == null">N/A</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Display From</div>
+                                <div class="cont">{{promotionItem.Display_From__c}}</div><div class="cont" ng-show="promotionItem.Display_From__c == null">N/A</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="lbl">PDA No.</div>
+                                <div class="cont">{{promotionItem.External_Promotion__c}}</div><div class="cont" ng-show="promotionItem.External_Promotion__c == null">N/A</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Display To</div>
+                                <div class="cont">{{promotionItem.Display_To__c}}</div><div class="cont" ng-show="promotionItem.Display_To__c == null">N/A</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="lbl">Sales Deal</div>
+                                <div class="cont">{{promotionItem.Sales_Deal__c}}</div><div class="cont" ng-show="promotionItem.Sales_Deal__c == null">N/A</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Recommended Price</div>
+                                <div class="cont">{{promotionItem.Recommend_Price__c}}</div><div class="cont" ng-show="promotionItem.Recommend_Price__c == null">N/A</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="lbl">Sales Deal Description</div>
+                                <div class="cont">{{promotionItem.Sales_Deal_Description__c}}</div><div class="cont" ng-show="promotionItem.Sales_Deal_Description__c == null">N/A</div>
+                            </td>
+                            <td>
+                                <div class="lbl">Calculation Type</div>
+                                <div class="cont">{{promotionItem.Calculation_Type__c}}</div><div class="cont" ng-show="promotionItem.Calculation_Type__c == null">N/A</div>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"><hr /></td></tr>
+
+                        <tr>
+                            <td>
+                                <div class="lbl">Comments</div>
+                                <div class="cont">{{promotionItem.Comments__c}}</div><div class="cont" ng-show="promotionItem.Comments__c == null">N/A</div>
+                            </td>
+                        </tr>
+                    </table>
+                    </formElement>
+                </div>
+        </content>
+
+        <cbl flip-target="close" flip-callback="_order.repositionScroll()">CANCEL</cbl>
+        <cbr></cbr>
+    </face>
+
+
+    <face id="orderHelp" face="back">
+
+        <ctl>HELP</ctl>
+        <ctr class="gui" flip-target="close">x</ctr>
+        <content>
+            <formElement title="Status Indicators">
+                <table>
+                    <tr>
+                        <td>Customer Visits</td>
+                        <td>Tasks</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-order.png" />  Order Blocked</td>
+                        <td><x class='bubbleRed'> 3 </x>  Mandatory</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-delivery.png" />  Delivery Blocked</td>
+                        <td><x class='bubbleAmber'> 3 </x>  Optional</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-deleted.png" /> Customer Deleted</td>
+                        <td><x class='gui-extra' style="font-size:13pt; color:green;">&#xf058;</x>  Complete</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><x class='gui-extra' style="font-size:13pt; color:red;">&#61545;</x>  Mandatory Equipment / Task</td>
+                    </tr>
+                    <tr>
+                        <td>Order Items</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="greenLineOrder">&nbsp;</span>  On Promotion</td>
+                        <td><image src="img/icon-inventory-new-green.png" />  New Product</td>
+                    </tr>
+                    <tr>
+                        <td><span class="amberLineOrder">&nbsp;</span>  Strategic Package</td>
+                        <td><image src="img/icon-inventory-on-hold.png" />  On Hold</td>
+                    </tr>
+                    <tr>
+                        <td><span class="greenLineOrder">&nbsp;</span><span class="amberLineOrder">&nbsp;</span>  Both</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </formElement>
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+
+    </face>
+
+</card>

@@ -1,0 +1,124 @@
+<card id="repair" fill="true" flip="rl">
+
+    <face id="repairFront" settings="default:true" controller="_repair.Ctrl">
+        <ctl>REPAIR EQUIPMENT</ctl>
+        <ctr class="gui-extra" flip-target="orderHelp">&#xf059;</ctr>
+
+        <content>
+
+          <div id="repair_image_container" style="width:100%;height:100%; overflow:hidden;" id="custMap">
+
+                <img id="repairImage" ng-show="currImg"  ng-src="{{currImg}}" class="imgFill" ng-click="delPic()"/>
+                <img id="repairImage" ng-show="!currImg" src="img/placeholder.png" class="imgFill" ng-click="addPic()"/>
+
+          </div>
+
+          <div id="repair-details-simple-view" style="width:420px; min-width:420px;  max-width:420px;  height:100%; font-size: 14pt; position: absolute; top:0px; left: 0px; border-radius: 0px; background: rgba(255,255,255,0.7);">
+
+          <div id="repair-details-scroll" style="height:100%;">
+           <ul>
+             <li>
+             <formElement title="Type" desc="">
+
+               <span>{{record.EquipmentType__c}}</span>
+
+             </formElement>
+             </li>
+
+             <li>
+             <formElement title="Manufacturer" desc="">
+
+               <span>{{record.EquipmentManufacturer__c}}</span>
+
+               </select>
+             </formElement>
+           </li>
+
+
+
+             <li>
+
+             <formElement title="Model" desc="">
+
+               <span>{{record.Manufacturer_Model_Number__c}}</span>
+
+               </select>
+             </formElement>
+           </li>
+
+
+
+             <li>
+
+             <formElement title="Serial No." desc="">
+
+               <span>{{record.ManufacturerSerialNumber__c}}</span>
+
+
+             </formElement>
+           </li>
+
+
+
+             <li>
+
+             <formElement title="Barcode" desc="">
+
+               <span>{{record.EquipmentSerialNumber__c}}</span>
+
+
+             </formElement>
+           </li>
+
+
+
+             <li>
+
+             <formElement title="Breakdown Code" desc="">
+
+               <select ng-init="codeBreakdown = codes[0]"
+                       ng-model="codeBreakdown" id="breakdownCode"
+                       ng-options="code.Name for code in codes">
+               </select>
+
+             </formElement>
+
+           </li>
+
+           <li>
+
+           <formElement title="Subject" desc="" >
+
+             <input id="subject" ng-model="subject" type="text" value="" maxlength="40"/>
+
+
+           </formElement>
+
+         </li>
+
+
+
+        </ul>
+      </div>
+
+
+              <div id="btnFormToggle" onClick="_repair.toggleForm();" style="position: absolute; top: 47%; left: 420px;  background: rgba(255,255,255,0.7); width:50px; color:black; height: 50px; border-top-right-radius: 25px;border-bottom-right-radius: 25px;">
+                  <div class="gui-extra" style="font-size: 25pt; color: black; margin-top:9px; margin-left:8px;">
+                    &#xf00d;
+                  </div>
+              </div>
+
+          </div>
+
+
+
+
+
+        </content>
+        <cbl></cbl>
+        <cbr>
+            <x ng-click="repairSave()">REPAIR</x>
+        </cbr>
+    </face>
+
+</card>

@@ -1,0 +1,71 @@
+<card id="accounts" fill="true" flip="rl">
+
+    <face id="accountsFront" settings="default:true" controller="_accounts.Ctrl">
+        <ctl>ACCOUNTS</ctl>
+        <ctr class="gui-extra" flip-target="accountsHelp">&#xf059;</ctr>
+        <content>
+
+
+            <placeholder> ACCOUNTS GO HERE</placeholder>
+
+
+
+
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+
+    </face>
+
+
+    <face id="accountsHelp" face="back">
+
+        <ctl>HELP</ctl>
+        <ctr class="gui" flip-target="close">x</ctr>
+        <content>
+            <formElement title="Status Indicators">
+                <table>
+                    <tr>
+                        <td>Customer Visits</td>
+                        <td>Tasks</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-order.png" />  Order Blocked</td>
+                        <td><x class='bubbleRed'> 3 </x>  Mandatory</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-delivery.png" />  Delivery Blocked</td>
+                        <td><x class='bubbleAmber'> 3 </x>  Optional</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-deleted.png" /> Customer Deleted</td>
+                        <td><x class='gui-extra' style="font-size:13pt; color:green;">&#xf058;</x>  Complete</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><x class='gui-extra' style="font-size:13pt; color:red;">&#61545;</x>  Mandatory Equipment / Task</td>
+                    </tr>
+                    <tr>
+                        <td>Order Items</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="greenLineOrder">&nbsp;</span>  On Promotion</td>
+                        <td><image src="img/icon-inventory-new-green.png" />  New Product</td>
+                    </tr>
+                    <tr>
+                        <td><span class="amberLineOrder">&nbsp;</span>  Strategic Package</td>
+                        <td><image src="img/icon-inventory-on-hold.png" />  On Hold</td>
+                    </tr>
+                    <tr>
+                        <td><span class="greenLineOrder">&nbsp;</span><span class="amberLineOrder">&nbsp;</span>  Both</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </formElement>
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+    </face>
+
+</card>

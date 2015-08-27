@@ -1,0 +1,170 @@
+<card id="signageRequest" fill="true" flip="rl">
+
+    <face id="signageRequestFront" settings="default:true" controller="_signageRequest.Ctrl">
+        <ctl>SIGNAGE REQUEST - {{customerName}}</ctl>
+        <ctr class="gui-extra" flip-target="signageRequestHelp">&#xf059;</ctr>
+
+        <content>
+
+          <div id="signage_image_container" style="width:100%;height:100%; overflow:hidden;" id="custMap">
+
+                <img id="signageImage" ng-show="currImg"  ng-src="{{currImg}}" class="imgFill" ng-click="delPic()"/>
+                <img id="signageImage" ng-show="!currImg" src="img/placeholder.png" class="imgFill" ng-click="addPic()"/>
+
+
+          </div>
+
+
+            <div id="signage-request-details-simple-view" style="width:420px; min-width:420px;  max-width:420px;  height:100%; font-size: 14pt; position: absolute; top:0px; left: 0px; border-radius: 0px; background: rgba(0,0,0,0.7);">
+
+            <div id="signage-request-details-scroll" style="height:100%;">
+             <ul>
+               <li>
+               <formElement title="Reason" desc="Signage Reason">
+
+                 <select ng-init="sigReason = signageReasons[0]"  ng-model="sigReason" id="signage_reason" ng-options="signageReason.Name for signageReason in signageReasons" ng-change="UrgentShow()"  ></select>
+
+               </formElement>
+               </li>
+
+               <li>
+               <formElement title="Material" desc="">
+
+                 <select ng-init="sigMaterial = signageMaterials[0]" id="signage_material" ng-model="sigMaterial" ng-options="signageMaterial.Name for signageMaterial in signageMaterials" >
+
+                 </select>
+               </formElement>
+             </li>
+
+
+
+               <li>
+
+               <formElement title="Brand" desc="">
+
+                 <select ng-init="sigBrand = signageBrands[0]" id="signageBrand" ng-model="sigBrand" ng-options="signageBrand.Name for signageBrand in signageBrands">
+
+                 </select>
+               </formElement>
+             </li>
+
+
+
+               <li>
+
+               <formElement title="Subject" desc="">
+
+                 <input id="signageSubject" ng-model="signageSubject" type="text" filter="alphanumeric" maxlength="40" />
+
+
+               </formElement>
+             </li>
+
+
+
+               <li>
+
+               <formElement title="Comments" desc="">
+
+                 <textarea rows="4" ng-model="comments" cols="40" maxlength="132"></textarea>
+
+
+               </formElement>
+             </li>
+
+
+
+               <li ng-class="sigUrgentShow">
+
+               <formElement title="Urgent Repair" desc=""  >
+
+                 <select ng-init="signageUrgent = signageUrgentReasons[0]" ng-model="signageUrgent"  id="signageUrgent" ng-options="signageUrgentReason.Name for signageUrgentReason in signageUrgentReasons">
+
+                 </select>
+
+               </formElement>
+
+             </li>
+
+
+
+
+          </ul>
+        </div>
+
+
+                <div id="btnFormToggle" onClick="_signageRequest.toggleForm();" style="position: absolute; top: 47%; left: 420px;  background: rgba(0,0,0,0.7); width:50px; height: 50px; border-top-right-radius: 25px;border-bottom-right-radius: 25px;">
+                    <div class="gui-extra" style="font-size: 25pt; color: white; margin-top:9px; margin-left:8px;">
+                      &#xf00d;
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+        </content>
+        <cbl onClick="layout.goBack()">CANCEL</cbl>
+        <cbr><x ng-click="submitSignage();">SUBMIT</x></cbr>
+
+        </face>
+
+    <face id="signageRequestHelp" face="back">
+
+        <ctl>HELP</ctl>
+        <ctr class="gui" flip-target="close">x</ctr>
+        <content>
+            <formElement title="Status Indicators">
+                <table>
+                    <tr>
+                        <td>Customer Visits</td>
+                        <td>Tasks</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-order.png" />  Order Blocked</td>
+                        <td><x class='bubbleRed'> 3 </x>  Mandatory</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-delivery.png" />  Delivery Blocked</td>
+                        <td><x class='bubbleAmber'> 3 </x>  Optional</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-deleted.png" /> Customer Deleted</td>
+                        <td><x class='gui-extra' style="font-size:13pt; color:green;">&#xf058;</x>  Complete</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><x class='gui-extra' style="font-size:13pt; color:red;">&#61545;</x>  Mandatory Equipment / Task</td>
+                    </tr>
+                    <tr>
+                        <td>Order Items</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="greenLineOrder">&nbsp;</span>  On Promotion</td>
+                        <td><image src="img/icon-inventory-new-green.png" />  New Product</td>
+                    </tr>
+                    <tr>
+                        <td><span class="amberLineOrder">&nbsp;</span>  Strategic Package</td>
+                        <td><image src="img/icon-inventory-on-hold.png" />  On Hold</td>
+                    </tr>
+                    <tr>
+                        <td><span class="greenLineOrder">&nbsp;</span><span class="amberLineOrder">&nbsp;</span>  Both</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </formElement>
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+    </face>
+
+
+
+
+
+</card>

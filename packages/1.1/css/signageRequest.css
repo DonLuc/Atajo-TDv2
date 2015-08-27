@@ -1,0 +1,9 @@
+/* FIX: naughty angular using display instead of visibility */
+.hidden {
+    visibility: hidden;
+    display:block;
+}
+.visible {
+    visibility: visible;
+    display:block;
+}

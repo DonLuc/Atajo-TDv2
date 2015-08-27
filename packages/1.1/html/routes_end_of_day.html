@@ -1,0 +1,24 @@
+<div id="routes_end_of_day" class="row">
+
+    <div class="grid endDayRow">
+        <div class="unit w-2-16 align-center">ID</div>
+        <div class="unit w-4-16 align-center">Name</div>
+        <div class="unit w-2-16 align-center">Status</div>
+        <div class="unit w-3-16 align-center">Cases</div>
+        <div class="unit w-5-16 align-center">Action</div>
+    </div>
+
+    <div ng-repeat="customer in customers" class="grid endDayRow">
+        <div class="unit w-2-16">{{customer.CustomerId__c}}</div>
+        <div class="unit w-4-16">{{customer.Name}}<x ng-show="isOutOfSequence(customer)"> (OUT OF SEQUENCE)</x></div>
+        <div class="unit w-2-16 align-center">{{customer.visitStatus}}</div>
+        <div class="unit w-3-16 align-right"><span ng-show="customer.casesTotal && customer.casesTotal != 0">{{customer.casesTotal}} CASES ON {{customer.orderTotal}} ORDERS</span></div>
+        <div style="padding: 0;" class="unit w-3-16 gui-extra align-right" ng-show="customer.endmode == true" ng-click="selected(customer)"><select class="select" style="color:white;" ng-init="customer.noVisitReason = noVisitReasons[0]" ng-options="p.Name for p in noVisitReasons" ng-model="customer.noVisitReason"></select></div>
+        <div class="unit w-1-16 gui-extra align-right" ng-show="customer.endmode == true" ng-click="submitSingle(customer)">&#xf00c;</div>
+        <div class="unit w-1-16 gui-extra align-right" ng-show="customer.endmode == true" ng-click="customer.endmode = false;">&#xf00d;</div>
+        <div class="unit w-2-16 gui-extra align-center" ng-show="checkCompleted(customer)"  ng-click="selected(customer)">&#xf00d;</div>
+        <div class="unit w-1-16 gui-extra align-center" ng-show="checkCompleted(customer)" ></div>
+        <div class="unit gui-extra align-center" ng-class="customer.alignType" ng-show="customer.endmode != true"  ng-click="view(customer)">&#xf002;</div>
+    </div>
+
+</div>

@@ -1,0 +1,277 @@
+<card id="routes" fill="true" flip="rl">
+
+<face id="routesFront" settings="default:true,search:['customerName', 'customerNum'],inertia:0.08" controller="_routes.routesCtrl">
+    <ctl>ROUTES</ctl>
+    <ctr class="gui-extra" flip-target="routesHelp">&#xf059;</ctr>
+    <content>
+        <tabset onchange="_routes.onTabChange">
+            <tab title="{{todayTitle('Monday')}}"   template-url="routes_day_template_monday"></tab>
+            <tab title="{{todayTitle('Tuesday')}}"  template-url="routes_day_template_tuesday"></tab>
+            <tab title="{{todayTitle('Wednesday')}}"  template-url="routes_day_template_wednesday"></tab>
+            <tab title="{{todayTitle('Thursday')}}"  template-url="routes_day_template_thursday"></tab>
+            <tab title="{{todayTitle('Friday')}}"  template-url="routes_day_template_friday"></tab>
+            <tab title="{{todayTitle('Saturday')}}"  template-url="routes_day_template_saturday"></tab>
+            <tab title="{{todayTitle('Sunday')}}"  template-url="routes_day_template_sunday"></tab>
+            <tab title="All" template-url="routes_day_template_all"></tab>
+        </tabset>
+
+
+
+    </content>
+
+    <cbl></cbl>
+
+
+
+
+
+    <cbr><span ontouchstart="_routes.flipEndofDay()">END DAY</span></cbr>
+
+</face>
+
+<face id="routesHelp" face="back">
+
+    <ctl>HELP</ctl>
+    <ctr class="gui" flip-target="close">x</ctr>
+    <content>
+        <formElement title="Status Indicators">
+            <table>
+                <tr>
+                    <td>Customer Visits</td>
+                    <td>Tasks</td>
+                </tr>
+                <tr>
+                    <td><image src="img/icon-blocked-order.png" />  Order Blocked</td>
+                    <td><x class='bubbleRed'> 3 </x>  Mandatory</td>
+                </tr>
+                <tr>
+                    <td><image src="img/icon-blocked-delivery.png" />  Delivery Blocked</td>
+                    <td><x class='bubbleAmber'> 3 </x>  Optional</td>
+                </tr>
+                <tr>
+                    <td><image src="img/icon-blocked-deleted.png" /> Customer Deleted</td>
+                    <td><x class='gui-extra' style="font-size:13pt; color:green;">&#xf058;</x>  Complete</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><x class='gui-extra' style="font-size:13pt; color:red;">&#61545;</x>  Mandatory Equipment / Task</td>
+                </tr>
+                <tr>
+                    <td>Order Items</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><span class="greenLineOrder">&nbsp;</span>  On Promotion</td>
+                    <td><image src="img/icon-inventory-new-green.png" />  New Product</td>
+                </tr>
+                <tr>
+                    <td><span class="amberLineOrder">&nbsp;</span>  Strategic Package</td>
+                    <td><image src="img/icon-inventory-on-hold.png" />  On Hold</td>
+                </tr>
+                <tr>
+                    <td><span class="greenLineOrder">&nbsp;</span><span class="amberLineOrder">&nbsp;</span>  Both</td>
+                    <td></td>
+                </tr>
+            </table>
+        </formElement>
+    </content>
+    <cbl></cbl>
+    <cbr></cbr>
+</face>
+
+    <face id="customerSummary" face="back" controller="_routes.summaryCtrl">
+
+
+        <ctl>SUMMARY <span ng-bind="customerName"></span></ctl>
+        <ctr class="gui" flip-target="routesFront" flip-callback="_routes.backtoRouteList();">x</ctr>
+        <content>
+      <ul>
+        <li>
+
+          <formElement title="Start Visit" desc="{{timeStart}}">
+                <img src="img/placeholder.png" id="startVisitImg_placeholder" style="border-radius:5px; width:640px; height:320px;" ng-show="!startVisitImg" />
+
+                <img ng-src="{{startVisitImg}}" id="startVisitImg" style="border-radius:5px"  class="imgFill" ng-show="startVisitImg" />
+
+          </formElement>
+
+
+          <formElement title="End Visit" desc="{{timeStop}}" ng-show="visitEnded">
+
+            <img src="img/placeholder.png" id="endVisitImg_placeholder" style="border-radius:5px; width:640px; height:320px;" ng-show="!endVisitImg" />
+
+                          <img ng-src="{{endVisitImg}}" id="endVisitImg" style="border-radius:5px"  class="imgFill" ng-show="endVisitImg" />
+
+          </formElement>
+
+         <li>
+
+
+
+
+        <li ng-repeat="item in inventoryData" >
+          <formElement title="Inventory" desc="{{item.Status__c}}" ng-show="hasSummaryInv(item) && item.Status__c == 'Complete'">
+            <table style="color: #000000">
+
+            <tr ng-repeat="record in item.Inventory_Items__r.records"  ng-show="record.Quantity__c > 0">
+
+
+                        <td width="100">
+                            {{record.Product__r.ProductId__c}}
+                        </td>
+                        <td style="font-size:12pt;">
+                            {{record.Product__r.LongDescription__c}}
+                        </td>
+                        <td width="100" align="center">
+                            {{record.Quantity__c}}
+                        </td>
+
+            </tr>
+           </table>
+          </formElement>
+
+          <formElement title="Inventory" desc="{{item.Status__c}}" ng-if="!hasSummaryInv(item) && item.Status__c == 'Complete'">
+            <center><br />NO INVENTORY TAKEN<span ng-show="item.Reason_for_no_Inventory_count__c != '' && item.Reason_for_no_Inventory_count__c != null "> : {{item.Reason_for_no_Inventory_count__c_Name}}</span><br /><br /></center>
+          </formElement>
+
+        </li>
+
+
+
+        <li ng-repeat="order in orders">
+          <formElement title="Order" desc="{{order.Order_Status__c}} {{order.Reason_For_No_Order__c}}" ng-show="hasSummaryOrd(order) && order.Order_Status__c == 'Finalized'">
+
+
+
+            <table width="80%" style="color: #000000" >
+                <tr>
+
+
+                    <td>
+                        <x style="font-size:8pt">PO Number</x>
+                        <br />
+                        <x ng-show="order.Purchase_Order_No__c && order.Purchase_Order_No__c != ''">{{order.Purchase_Order_No__c}}</x>
+                        <x ng-show="!order.Purchase_Order_No__c">N/A</x>
+
+                    </td>
+                    <td>
+                        <x style="font-size:8pt">Planner Message</x>
+                        <br />
+                        <x ng-show="order.Planner_Message__c && order.Planner_Message__c != ''">{{order.Planner_Message__c}}</x>
+                        <x ng-show="!order.Planner_Message__c">N/A</x>
+
+                    </td>
+                    <td>
+                        <x style="font-size:8pt">Delivery Date</x>
+                        <br />
+                        <x ng-show="order.ScheduledDeliveryDate__c && order.ScheduledDeliveryDate__c != ''">{{order.ScheduledDeliveryDate__c}}</x>
+                        <x ng-show="!order.ScheduledDeliveryDate__c">N/A</x>
+
+                    </td>
+                    <td>
+                        <x style="font-size:8pt">Online Price</x>
+                        <br />
+                        <x ng-show="order.Live_Price__c && order.Live_Price__c != '' ">{{order.Live_Price__c}}</x>
+                        <x ng-show="!order.Live_Price__c">N/A</x>
+                    </td>
+
+                </tr>
+            </table>
+            <table>
+
+              <tr ng-repeat="item in order.Order_Items__r.records" ng-show="item.OrderQty__c > 0 && (item.isSuggested == false || item.isSuggested == null)">
+
+
+
+                  <td width="100">
+                      {{item.SKU}}
+                  </td>
+                  <td>
+                      {{item.Product_Name__c}}
+                  </td>
+                  <td width="100" align="right">
+                      {{item.OrderQty__c}}
+                  </td>
+
+              </tr>
+
+              <tr>
+                  <td></td>
+                  <td></td>
+                  <td align="right" style="border-top: 1px solid black; font-size:18pt;">
+                      Total : {{orderTotals(order)}}
+                  </td>
+              </tr>
+
+
+           </table>
+
+
+          </formElement>
+          <formElement title="Order" desc="{{order.Order_Status__c}}" ng-if="!hasSummaryOrd(order) && order.Order_Status__c == 'Finalized'">
+            <center><br />NO ORDER TAKEN<span ng-show="order.Reason_For_No_Order__c != '' && order.Reason_For_No_Order__c != null"> : {{order.Reason_For_No_Order__c}}</span><br /><br /></center>
+          </formElement>
+
+        </li>
+
+
+
+
+
+
+          <formElement title="Equipment">
+
+            <placeholder ng-show="equipments[0].Equipment__r === null || equipments[0].Equipment__r.length == 0">
+              <br /><br />
+              NO EQUIPMENT FOUND
+              <br /><br />
+            </placeholder>
+
+            <div id="Equipment">
+                <table width="80%" style="color: #000000">
+                    <tr>
+                        <td>
+                            <ul ng-repeat="item in equipments ">
+
+
+                                <li ng-repeat="record in item.Equipment__r.records | filter:query"  class="listRow">
+                                    <table width="100%">
+                                        <tr width="100%">
+                                            <td width="17%" class="f11">{{record.EquipmentType__c}}</td>
+                                            <td width="18%" class="f11">{{record.Manufacturer_Model_Number__c}}</td>
+                                            <td width="15%" class="tagNum f11">{{record.EquipmentSerialNumber__c}}</td>
+                                            <td width="15%" class="serialNum f11">{{record.ManufacturerSerialNumber__c}}</td>
+                                            <td width="15%" class="barcodeNum f11">{{record.TechnicalIdentification__c}}</td>
+                                            <td width="20%" class="f11">{{record.EquipmentStatus__c}}</td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+          </formElement>
+
+        </ul>
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+    </face>
+
+<face id="endDay" face="back" controller="_routes.routesEndOfDayCtrl">
+
+    <ctl>END DAY</ctl>
+    <ctr class="gui" flip-target="close" flip-callback="_routes.backtoRouteList();">x</ctr>
+    <content>
+
+        <div compileid="routes_end_of_day"></div>
+
+    </content>
+    <cbl></cbl>
+    <cbr><span onTouchStart="_routes.endDayAll()">{{dayfunction}}</span></cbr>
+</face>
+
+
+</card>

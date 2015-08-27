@@ -1,0 +1,145 @@
+<card id="standardTask" fill="true" flip="rl">
+
+    <face id="standardTaskFront" settings="default:true" controller="_standardTask.Ctrl">
+        <ctl>STANDARD TASK</ctl>
+        <ctr class="gui-extra" flip-target="standardTaskHelp">&#xf059;</ctr>
+
+        <content>
+
+          <div class="cardFormContainer">
+
+           <formElement title="Task Details">
+
+
+             <table>
+
+                 <tr>
+                     <td><label>Subject</label></td>
+                     <td><label>Due Date</label></td>
+
+                 </tr>
+                 <tr>
+                     <td><input ng-model="subject" type="text"></td>
+                     <td><datepicker options="calOptions" ng-model="dueDate"></datepicker></td>
+                 </tr>
+                 <tr>
+                     <td colspan="2"><label>Comments</label></td>
+                 </tr>
+                 <tr>
+                     <td colspan="2"><input ng-model="comments" /></td>
+                 </tr>
+
+
+            </table>
+
+           </formElement>
+
+           <formElement title="Task Destination">
+
+
+
+
+             <table>
+               <tr>
+                   <td colspan="2"><label>Customer</label></td>
+                   <td colspan="2"><label>User</label></td>
+
+               </tr>
+
+                 <tr>
+                     <td width="20">
+                         <x class="gui-extra" ng-click="clearCust()">&#xf056;</x>
+                     </td>
+                     <td>
+                         <autocomplete ng-model="selectedAcc" attr-placeholder="Search for Customer"
+                                       click-activation="true" data="accountNames" on-type="doSomething"
+                                       on-select="doSomethingElse"></autocomplete>
+
+                     </td>
+                     <td width="20">
+                         <x class="gui-extra" ng-click="clearUser()">&#xf0e2;</x>
+                       </td>
+                       <td>
+
+                         <autocomplete ng-model="selectedUser" attr-placeholder="Search for user" click-activation="true"
+                                       data="userNames" on-type="doSomething" on-select="doSomethingElse"></autocomplete>
+                     </td>
+
+                 </tr>
+            </table>
+
+            <br />
+
+             <table>
+               <tr>
+                 <td><label>Priority</label></td>
+               </tr><tr><td>
+                 <select ng-model="selectedPriority" style=""
+                             ng-options="item.Name for item in priority" chosen>
+                 </select>
+               </td></table>
+
+           </formElement>
+
+         </div>
+
+
+        </content>
+        <cbl></cbl>
+        <cbr>
+            <x ng-click="submitTask()">CREATE</x>
+        </cbr>
+    </face>
+
+    <face id="standardTaskHelp" face="back">
+
+        <ctl>HELP</ctl>
+        <ctr class="gui" flip-target="close">x</ctr>
+        <content>
+            <formElement title="Status Indicators">
+                <table>
+                    <tr>
+                        <td>Customer Visits</td>
+                        <td>Tasks</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-order.png" />  Order Blocked</td>
+                        <td><x class='bubbleRed'> 3 </x>  Mandatory</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-delivery.png" />  Delivery Blocked</td>
+                        <td><x class='bubbleAmber'> 3 </x>  Optional</td>
+                    </tr>
+                    <tr>
+                        <td><image src="img/icon-blocked-deleted.png" /> Customer Deleted</td>
+                        <td><x class='gui-extra' style="font-size:13pt; color:green;">&#xf058;</x>  Complete</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><x class='gui-extra' style="font-size:13pt; color:red;">&#61545;</x>  Mandatory Equipment / Task</td>
+                    </tr>
+                    <tr>
+                        <td>Order Items</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="greenLineOrder">&nbsp;</span>  On Promotion</td>
+                        <td><image src="img/icon-inventory-new-green.png" />  New Product</td>
+                    </tr>
+                    <tr>
+                        <td><span class="amberLineOrder">&nbsp;</span>  Strategic Package</td>
+                        <td><image src="img/icon-inventory-on-hold.png" />  On Hold</td>
+                    </tr>
+                    <tr>
+                        <td><span class="greenLineOrder">&nbsp;</span><span class="amberLineOrder">&nbsp;</span>  Both</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </formElement>
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+    </face>
+
+
+</card>

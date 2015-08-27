@@ -1,0 +1,105 @@
+
+
+.routeListStatus {
+
+  font-size:11pt;
+  font-family:roboto_bc;
+  font-weight:bold;
+  background:rgba(255,80,80,0.6);
+  border-radius:5px;
+  padding:5px;
+
+}
+
+
+
+.notStarted {
+
+  background:rgba(255,80,80,0.6);
+  color:white;
+  test-shadow:none;
+
+}
+
+
+.hasStarted {
+
+  background:rgba(255,200,80,0.6);
+  color:#333;
+  test-shadow:none;
+
+}
+
+.completed {
+
+    background:rgba(1,138,39,0.6);
+    color:white;
+    test-shadow:none;
+
+}
+
+
+/*
+Icons - So we don't have to use image tags, which always
+have not-found URLs before the mustache is run.
+*/
+td.icon-cell{
+    width:16px;
+    padding:0;
+}
+td.icon-cell span{
+    display:inline-block;
+    height:16px;
+    width:16px;
+    padding:0;
+    background-repeat: no-repeat;
+}
+/**** Routes and Customers ****/
+/* Order Blocked */
+td.icon-cell span.icon-order-blocked{
+    background-image: url('../www/img/icon-blocked-order.png');
+}
+/* Delivery Blocked */
+td.icon-cell span.icon-delivery-blocked{
+    background-image: url('../www/img/icon-blocked-delivery.png');
+}
+/* Customer Deleted */
+td.icon-cell span.icon-customer-deleted{
+    background-image: url('../www/img/icon-blocked-deleted.png');
+}
+.collapse { margin: 0; padding: 0; width: 100%;
+    color: white;
+    font-size: 18pt;
+}
+.collapseHeader {
+    /*
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b5babc), color-stop(100%,#847777));
+    background: -webkit-linear-gradient(top,  #b5babc 0%,#847777 100%);
+
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    */
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    color: rgba(0,0,0,0.6);
+    font-size: 14pt;
+    height: 50px;
+}
+.collapseHeader .route-info{
+    font-size:11pt;
+}
+.collapseContainer { }
+
+.collapseTable td { text-align: left; }
+.collapse li   { font-size:9pt; border-bottom: 1px solid rgba(0,0,0,0.2); }
+
+.endDayRow {
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+    font-size:10pt;
+    height:60px;
+    font-family: helvetica;
+    color: #333;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    padding-top: 10px;
+}
