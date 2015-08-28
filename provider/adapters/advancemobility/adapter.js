@@ -1,15 +1,26 @@
 var config = require('./config');
 var http = require('http');
 var https = require('https');
+var request = require('request');
 
 var am = {
     authorise : function (username, password, cb) {
-        am.get("users/authorise?login="+username+"&password="+password, "", "", function (response) {
-            _log.d("response : " + JSON.stringify(response));
+        am.request("users/authorise?login="+username+"&password="+password, function (response) {
             if (response) {
                 cb(response.id, response);
             } else {
                 cb(false, []);
+            }
+        });
+    },
+    callcycles : function (id, cb) {
+        _log.d("TOKEN : " + id);
+        am.request("callcycles/runlist/"+id, function (response) {
+            _log.d("response : " + response);
+            if (response) {
+                cb(response);
+            } else {
+                cb(false);
             }
         });
     },
@@ -124,7 +135,26 @@ var am = {
     req.write(objString);
     req.end();
 
-}
+},
+    request : function (url, cb) {
+        var conParams = config.conParams[GLOBAL.RELEASE];
+        request("http://"+conParams.host + ":" + conParams.port + "/" + conParams.url + "/" + url, function(err, resp, body) {
+            if (err) {
+                _log.d("REQUEST ERROR : " + err);
+                cb(false);
+            } else {
+                _log.d("REQUEST RESPONSE : " + JSON.stringify(resp));
+                if (resp.statusCode == 200) {
+                    _log.d("REQUEST BODY : " + JSON.stringify(body));
+                    cb(JSON.parse(body));
+                } else {
+                    _log.d("REQUEST ERROR : " + JSON.stringify(resp));
+                    cb(false);
+                }
+
+            }
+        });
+    }
 
 }
 
