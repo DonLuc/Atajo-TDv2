@@ -1,0 +1,133 @@
+/* TOOLTIPS */ 
+
+
+
+.syncHeader { 
+
+  color: white; 
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  font-size:9pt;
+  padding: 10px;
+  font-family: roboto_med;
+    height: 60px; 
+
+}
+
+.syncHeader td { 
+
+  padding: 10px; 
+
+}
+
+.syncFooter { 
+
+  color: white; 
+  background: black; 
+  font-size:16pt;
+  padding: 10px;
+  text-align: center; 
+  font-family:  HelveticaNeue-Light; 
+  height: 50px; 
+
+}
+
+
+
+.syncBtnText_SYNC { 
+
+    color: white;
+
+}
+
+.syncBtnText_CANCEL { 
+
+    color: red;
+
+}
+
+
+
+.tooltipContent { 
+
+  padding: 0px;
+  font-size: 12pt; 
+  text-align: center;
+  background: white;
+  color: rgba(0,0,0,0.66); 
+
+}
+
+.tooltipContent td { 
+
+  color: rgba(0,0,0,0.66); 
+
+}
+
+.tooltipContent li { 
+
+   padding: 15px; 
+   list-style: none; 
+   margin: 0;
+   border-bottom: 1px solid rgba(0,0,0,0.1);
+   font-size:14pt;
+  /* background: rgba(255,255,255,0.7); */ 
+   color: rgba(0,0,0,0.6);
+  
+   font-family: roboto_bc;
+}
+
+#tooltip{
+  /*background-image: url(img/lghtmesh.png) ;*/
+  background-color: rgba(5, 50, 50, 0.96);
+  overflow: hidden;
+}
+#tooltip .bgGray{
+  opacity:0.8;
+}
+
+
+
+
+div.arrow-up {
+  width:0px; 
+  height:0px; 
+  border-left:8px solid transparent;  /* left arrow slant */
+  border-right:8px solid transparent; /* right arrow slant */
+  border-bottom:8px solid #b5bdc8; /* bottom, add background color here */
+  font-size:0px;
+  line-height:0px;
+}
+
+/* create an arrow that points down */
+div.arrow-down {
+  width:0px; 
+  height:0px; 
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:8px solid rgba(0,0,0,0.96);
+  font-size:0px;
+  line-height:0px;
+}
+
+/* create an arrow that points left */
+div.arrow-left {
+  width:0px; 
+  height:0px; 
+  border-bottom:5px solid transparent;  /* left arrow slant */
+  border-top:5px solid transparent; /* right arrow slant */
+  border-right:5px solid #2f2f2f; /* bottom, add background color here */
+  font-size:0px;
+  line-height:0px;
+}
+
+/* create an arrow that points right */
+div.arrow-right {
+  width:0px; 
+  height:0px; 
+  border-bottom:5px solid transparent;  /* left arrow slant */
+  border-top:5px solid transparent; /* right arrow slant */
+  border-left:5px solid #2f2f2f; /* bottom, add background color here */
+  font-size:0px;
+  line-height:0px;
+}

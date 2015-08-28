@@ -13,49 +13,10 @@
 
   "VERSIONS"   :
   {
-    "DEV" : { "ID"  : "1.1", "DEBUG":true,  "COREVERSION" : "1.0" },
-    "QAS" : { "ID"  : "1.1", "DEBUG":true,  "COREVERSION" : "1.0" },
-    "PRD" : { "ID"  : "1.1", "DEBUG":true,  "COREVERSION" : "1.0" }
+    "DEV" : { "ID"  : "1.0", "DEBUG":true,  "COREVERSION" : "1.0" },
+    "QAS" : { "ID"  : "1.0", "DEBUG":true,  "COREVERSION" : "1.0" },
+    "PRD" : { "ID"  : "1.0", "DEBUG":true,  "COREVERSION" : "1.0" }
   },
-
-  "OAUTH" :
-  {
-     "DEV" :
-     {
-       "apiVersion"   : "v23.0",
-       "clientId"     : "3MVG98RqVesxRgQ48ITpzutLl6vA6De1ZBfP_Whf_nzLcy0mTNOezhTn7_U7OkB4nMOMINX6CFRfLB3GTdFzV",
-       "clientSecret" : "6262357505724964025",
-       "redirectUri"  : "https://test.salesforce.com/services/oauth2/success",
-       "instanceUri"  : "https://test.salesforce.com",
-       "instanceHost" : "test.salesforce.com",
-       "instancePort" : 443
-     },
-
-     "QAS" :
-     {
-       "apiVersion"   : "v23.0",
-       "clientId"     : "3MVG98RqVesxRgQ48ITpzutLl6vA6De1ZBfP_Whf_nzLcy0mTNOezhTn7_U7OkB4nMOMINX6CFRfLB3GTdFzV",
-       "clientSecret" : "6262357505724964025",
-       "redirectUri"  : "https://test.salesforce.com/services/oauth2/success",
-       "instanceUri"  : "https://test.salesforce.com",
-       "instanceHost" : "test.salesforce.com",
-       "instancePort" : 443
-     },
-
-     "PRD" :
-     {
-       "apiVersion"   : "v23.0",
-       "clientId"     : "3MVG99qusVZJwhskEu_CgRj3f1H1oFLYiOzixOoSSWjeqOTPSmx.tZhS01itFqI4UfzwVTYIS6OZiNdqBQd7R",
-       "clientSecret" : "4939382119837410431",
-       "redirectUri"  : "https://eu2.salesforce.com/services/oauth2/success",
-       "instanceUri"  : "https://eu2.salesforce.com",
-       "instanceHost" : "eu2.salesforce.com",
-       "instancePort" : 443
-     }
-
-
-  },
-
 
   "DEVICE" :
   {
@@ -124,32 +85,22 @@
       "allowSyncIfPending" : false
     },
 
-    "login_old": {
+    "login": {
       "enabled": true,
       "heading": "Login",
       "fields": [
         {
           "name": "username",
-          "label": "Salesforce Username",
+          "label": "Username",
           "type": "text"
         },
         {
           "name": "password",
-          "label": "Salesforce Password",
+          "label": "Password",
           "type": "password"
         }
       ]
     },
-
-
-
-    "login":
-    {
-
-      "enabled"      : true,
-      "strategy"     : "SALESFORCE"
-    },
-
 
     "menuIcon"       : "&#xf141;",
     "jobQueueIcon"   : "&#xf093;"
@@ -514,69 +465,6 @@
     {
       "action": "submitTask",
       "handler": "submitTask"
-    },
-
-    {
-      "action": "submitVisit",
-      "handler": "submitVisit"
-    },
-
-    {
-      "action": "submitSignage",
-      "handler": "submitSignage"
-    },
-
-    {
-      "action": "submitContact",
-      "handler": "submitContact"
-    },
-
-    {
-      "action": "submitOrder",
-      "handler": "submitOrder"
-    },
-
-    {
-      "action": "submitInventory",
-      "handler": "submitInventory"
-    },
-
-    {
-      "action" : "submitEquipmentRepair",
-      "handler" : "submitEquipmentRepair"
-    },
-
-    {
-      "action" : "submitStandardTask",
-      "handler" : "submitStandardTask"
-    },
-
-    {
-      "action" : "submitOnlinePricing",
-      "handler" : "submitOnlinePricing"
-    },
-
-    {
-      "action" : "submitCooler",
-      "handler" : "submitCooler"
-    },
-
-    {
-      "action" : "submitUllages",
-      "handler" : "submitUllages"
-    },
-
-    {
-      "action" : "submitDayComplete",
-      "handler" : "submitDayComplete"
     }
-
-
-
-
-
-
-
-
   ]
 }

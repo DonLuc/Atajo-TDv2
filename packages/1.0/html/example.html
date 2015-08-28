@@ -1,0 +1,51 @@
+<card id="example" fill="true" flip="rl">
+
+<face id="exampleFront" settings="default:true" controller="_example.Ctrl">
+    <ctl>WELCOME!</ctl>
+    <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
+    <content>
+
+
+              <placeholder ng-show="data.length == 0"> No Data</placeholder>
+
+              <ul>
+                 <li ng-repeat="dat in data">
+
+              <formElement title="Person" desc="">
+                 <input type="text" filter="alphanumeric" ng-model="dat.name" />
+                 <input type="text" filter="alphanumeric" ng-model="dat.surname" />
+                  Married : {{dat.married}}
+
+              </formElement>
+                  </li>
+                </ul>
+
+
+
+
+
+
+    </content>
+    <cbl></cbl>
+    <cbr><x onclick="_example.saveData()">SAVE</x></cbr>
+
+</face>
+
+
+<face id="exampleHelp" face="back">
+
+    <ctl>HELP</ctl>
+    <ctr class="gui" flip-target="close">x</ctr>
+    <content>
+
+        <placeholder>
+              This is a help section - and provides the user with information relevant to the current you are on.
+        </placeholder>
+
+
+    </content>
+    <cbl></cbl>
+    <cbr></cbr>
+</face>
+
+</card>
