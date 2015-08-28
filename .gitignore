@@ -1,0 +1,7 @@
+**/*.DS_Store
+.idea/
+.version
+provider/npm-debug.log
+node_modules
+
+**/*.log
