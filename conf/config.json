@@ -86,8 +86,11 @@
     },
 
     "login": {
+
       "enabled": true,
-      "heading": "Login",
+      "canRegister": false,
+      "useSocial": false,
+      "heading": "SIGN IN",
       "fields": [
         {
           "name": "username",
@@ -99,7 +102,13 @@
           "label": "Password",
           "type": "password"
         }
-      ]
+      ],
+      "parameters"   :
+      {
+        "id"   : "",
+        "userObj" : {}
+      }
+
     },
 
     "menuIcon"       : "&#xf141;",
@@ -140,76 +149,6 @@
         "subtext": "User dashboard",
         "views": ["home"],
         "default": true
-      },
-      "equipment": {
-        "menu": false,
-        "icon": "&#xf1b9;",
-        "label": "equipment",
-        "subtext": "Your equipment",
-        "views": ["equipment"]
-      },
-      "routes": {
-        "menu": true,
-        "icon": "&#xf1b9;",
-        "label": "Routes",
-        "subtext": "Your route card for the next 7 days",
-        "views": ["routes"]
-      },
-      "customer": {
-        "menu": false,
-        "icon": "&#xf1b9;",
-        "label": "Customer",
-        "subtext": "Your customer card for current client",
-        "views": ["customer"]
-      },
-      "checklist": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Checklist",
-        "subtext": "In-store checklist",
-        "views": ["checklist"]
-      },
-      "inventory": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Inventory",
-        "subtext": "Inventory during order",
-        "views": ["inventory"]
-      },
-      "order": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Order",
-        "subtext": "Customer order",
-        "views": ["order"]
-      },
-      "accounts": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Accounts",
-        "subtext": "Testing accounts model, but this could be changed to something useful",
-        "views": ["accounts"]
-      },
-      "signageRequest": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Signage Request",
-        "subtext": "Testing accounts model signageRequest",
-        "views": ["signageRequest"]
-      },
-      "standardTask": {
-        "menu": true,
-        "icon": "&#xf0ae;",
-        "label": "Tasks",
-        "subtext": "Testing accounts model signageRequest",
-        "views": ["standardTask"]
-      },
-      "ullages": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Ullages",
-        "subtext": "Testing accounts model signageRequest",
-        "views": ["ullages"]
       }
     },
     "large":
@@ -221,92 +160,6 @@
         "subtext": "User dashboard",
         "views": ["home"],
         "default": true
-      },
-
-      "equipment": {
-        "menu": false,
-        "icon": "&#xf1b9;",
-        "label": "equipment",
-        "subtext": "Your equipment",
-        "views": ["equipment"]
-      },
-      "routes": {
-        "menu": true,
-        "icon": "&#xf1b9;",
-        "label": "Routes",
-        "subtext": "Your route card for the next 7 days",
-        "views": ["routes"]
-      },
-
-      "customer": {
-        "menu": false,
-        "icon": "&#xf1b9;",
-        "label": "Customer",
-        "subtext": "Your customer card for current client",
-        "views": ["customer"]
-      },
-      "checklist": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Checklist",
-        "subtext": "In-store checklist",
-        "views": ["checklist"]
-      },
-      "repair": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "repair",
-        "subtext": "Repairs",
-        "views": ["repair"]
-      },
-      "inventory": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Inventory",
-        "subtext": "Inventory during order",
-        "views": ["inventory"]
-      },
-      "order": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Order",
-        "subtext": "Customer order",
-        "views": ["order"]
-      },
-      "accounts": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Accounts",
-        "subtext": "Testing accounts model, but this could be changed to something useful",
-        "views": ["accounts"]
-      },
-      "signageRequest": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Signage Request",
-        "subtext": "Testing accounts model signageRequest",
-        "views": ["signageRequest"]
-      },
-      "standardTask": {
-        "menu": true,
-        "icon": "&#xf0ae;",
-        "label": "Tasks",
-        "subtext": "Testing accounts model signageRequest",
-        "views": ["standardTask"]
-      },
-      "ullages": {
-        "menu": false,
-        "icon": "&#xf0ae;",
-        "label": "Ullages",
-        "subtext": "Testing accounts model signageRequest",
-        "views": ["ullages"]
-      },
-      "salesforce" : {
-        "menu" : true,
-        "icon" : "<img src='https://login.salesforce.com/img/logo190.png' width='50' style='position:relative; left:-10px' />",
-        "label" : "Salesforce",
-        "subtext" : "View Salesforce Online",
-        "action" : "_sfHandler.openSalesforce()"
       }
     }
   },
@@ -314,157 +167,13 @@
 
   "SERVICES": [
 
-    {
-      "service"  : "accounts",
-      "label"    : "Accounts",
-      "key"      : "Id",
-      "handler"  : "accountsHandler",
-      "indexes"  : [ "CustomerId__c" ]
-    },
-    {
-      "service"  : "brands",
-      "label"    : "Brands",
-      "key"      : "Id",
-      "handler"  : "brandsHandler"
-    },
-    {
-      "service"  : "breakdownCodes",
-      "label"    : "Breakdown Codes",
-      "key"      : "Id",
-      "handler"  : "breakdownCodesHandler",
-      "indexes"  : [ "Parent_Code__c" ]
-    },
-    {
-      "service"  : "calendar",
-      "label"    : "Calendar",
-      "key"      : "Id",
-      "handler"  : "calendarHandler"
-        },
-    {
-      "service"  : "equipment",
-      "label"    : "Equipment",
-      "key"      : "CustomerId__c",
-      "handler"  : "equipmentHandler"
-    },
-    {
-      "service"  : "equipmentVerificationFrequency",
-      "label"    : "Equipment Verification Frequency",
-      "key"      : "Id",
-      "handler"  : "equipmentVerificationFrequencyHandler"
-    },
-    {
-      "service"  : "inventory",
-      "label"    : "Inventory",
-      "key"      : "Id",
-      "handler"  : "inventoryHandler",
-      "indexes"  : [ "Customer__c" ]
-    },
-    {
-      "service"  : "noInventoryReasons",
-      "label"    : "No Inventory Reasons",
-      "key"      : "Id",
-      "handler"  : "noInventoryReasonsHandler"
-    },
-    {
-      "service"  : "noOrderReasons",
-      "label"    : "No Order Reasons",
-      "key"      : "Id",
-      "handler"  : "noOrderReasonsHandler"
-    },
-    {
-      "service"  : "noVisitReasons",
-      "label"    : "No Visit Reasons",
-      "key"      : "Id",
-      "handler"  : "noVisitReasonsHandler"
-    },
-    {
-      "service"  : "products",
-      "label"    : "Products",
-      "key"      : "Id",
-      "handler"  : "productsHandler"
-    },
-    {
-      "service"  : "orders",
-      "label"    : "Orders",
-      "key"      : "Id",
-      "handler"  : "ordersHandler",
-      "indexes"  : [ "Customer__c" ]
-    },
-    {
-      "service"  : "orderHistory",
-      "label"    : "Order History",
-      "key"      : "Id",
-      "handler"  : "orderHistoryHandler",
-      "indexes"  : [ "Customer__c" ]
-    },
-    {
-      "service"  : "promotions",
-      "label"    : "Promotions",
-      "key"      : "Id",
-      "handler"  : "promotionsHandler"
-    },
-    {
-      "service"  : "routes",
-      "label"    : "Routes",
-      "key"      : "Id",
-      "handler"  : "routesHandler"
-    },
-    {
-      "service"  : "salesVisits",
-      "label"    : "Sales Visits",
-      "key"      : "Id",
-      "handler"  : "salesVisitsHandler",
-      "indexes"  : [ "CustomerId__c" ]
 
-    },
-    {
-      "service"  : "signageBrands",
-      "label"    : "Signage Brands",
-      "key"      : "Id",
-      "handler"  : "signageBrandsHandler"
-    },
-
-    {
-      "service"  : "signageMaterials",
-      "label"    : "Signage Materials",
-      "key"      : "Id",
-      "handler"  : "signageMaterialsHandler"
-    },
-    {
-      "service"  : "signageReasons",
-      "label"    : "Signage Reasons",
-      "key"      : "Id",
-      "handler"  : "signageReasonsHandler"
-    },
-
-    {
-      "service"  : "tasks",
-      "label"    : "Tasks",
-      "key"      : "Id",
-      "handler"  : "tasksHandler",
-      "indexes"  : [ "CustomerId__c" ]
-    },
-    {
-      "service"  : "ullageCodes",
-      "label"    : "Ullage Codes",
-      "key"      : "Id",
-      "handler"  : "ullageCodesHandler"
-    },
-    {
-      "service"  : "users",
-      "label"    : "Users",
-      "key"      : "Id",
-      "handler"  : "usersHandler"
-    }
 
   ],
 
 
   "ACTIONS":
   [
-    {
-      "action": "submitTask",
-      "handler": "submitTask"
-    }
+
   ]
 }
