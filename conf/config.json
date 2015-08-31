@@ -172,6 +172,13 @@
       "key"      : "entityId",
       "handler"  : "getCallCycles",
       "indexes"  : [ "entityId" ]
+    },
+    {
+      "service"  : "Modules",
+      "label"    : "Today's Modules",
+      "key"      : "entityId",
+      "handler"  : "getModules",
+      "indexes"  : [ "entityId" ]
     }
   ],
 
