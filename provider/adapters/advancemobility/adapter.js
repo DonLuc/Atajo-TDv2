@@ -1,6 +1,4 @@
 var config = require('./config');
-var http = require('http');
-var https = require('https');
 var request = require('request');
 
 var am = {
@@ -14,9 +12,7 @@ var am = {
         });
     },
     callcycles : function (id, cb) {
-        _log.d("TOKEN : " + id);
         am.request("callcycles/runlist/"+id, function (response) {
-            _log.d("response : " + response);
             if (response) {
                 cb(response);
             } else {
@@ -24,118 +20,15 @@ var am = {
             }
         });
     },
-    post: function (url, apitoken, obj, cb) {
-
-        var conParams = config.conParams[GLOBAL.RELEASE];
-
-        var objString = JSON.stringify(obj);
-
-        var headers = {
-            'Content-Type': 'application/json',
-            'Content-Length': objString.length
-        };
-
-        var options = {
-            host: conParams.host,
-            port: conParams.port,
-            path: conParams.url+url,
-            method: 'POST',
-            headers: headers
-        };
-
-        var req = http.request(options, function (res) {
-            res.setEncoding('utf-8');
-
-            var responseString = '';
-
-            res.on('data', function (data) {
-                responseString += data;
-            });
-
-            res.on('end', function () {
-                //_log.d(responseString);
-
-                try {
-
-                    cb(JSON.parse(responseString));
-
-                } catch (e) {
-
-                    _log.e("Could not parse: " + responseString + " | " + e);
-                    cb(false);
-
-                }
-
-            });
-        });
-
-        req.on('error', function (e) {
-
-            _log.e("Error on post: " + e);
-            cb(false);
-
-        });
-
-        req.write(objString);
-        req.end();
-
-    },
-    get: function (url, apitoken, obj, cb) {
-
-    var conParams = config.conParams[GLOBAL.RELEASE];
-
-    var objString = JSON.stringify(obj);
-
-    var headers = {
-        'Content-Type': 'application/json',
-        'Content-Length': objString.length
-    };
-
-    var options = {
-        host: conParams.host,
-        port: conParams.port,
-        path: conParams.url+url,
-        method: 'GET',
-        headers: headers
-    };
-
-    var req = http.request(options, function (res) {
-        res.setEncoding('utf-8');
-
-        var responseString = '';
-
-        res.on('data', function (data) {
-            responseString += data;
-        });
-
-        res.on('end', function () {
-            //_log.d(responseString);
-
-            try {
-
-                cb(JSON.parse(responseString));
-
-            } catch (e) {
-
-                _log.e("Could not parse: " + responseString + " | " + e);
+    datagen : function (date, user_id, entity_id, cb) {
+        am.request("datagen?date="+date+"&user_id="+user_id+"&entity_id="+entity_id, function (response) {
+            if (response) {
+                cb(response);
+            } else {
                 cb(false);
-
             }
-
         });
-    });
-
-    req.on('error', function (e) {
-
-        _log.e("Error on post: " + e);
-        cb(false);
-
-    });
-
-    req.write(objString);
-    req.end();
-
-},
+    },
     request : function (url, cb) {
         var conParams = config.conParams[GLOBAL.RELEASE];
         request("http://"+conParams.host + ":" + conParams.port + "/" + conParams.url + "/" + url, function(err, resp, body) {
@@ -155,7 +48,6 @@ var am = {
             }
         });
     }
-
 }
 
 module.exports = am;
