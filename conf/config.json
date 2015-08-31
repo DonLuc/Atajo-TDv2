@@ -155,7 +155,7 @@
         "icon": "&#xf015;",
         "label": "Entities",
         "subtext": "Entities",
-        "views": ["entitylist"],
+        "views": ["entityList"],
         "default": false
       }
     },
