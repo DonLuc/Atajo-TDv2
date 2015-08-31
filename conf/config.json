@@ -149,6 +149,14 @@
         "subtext": "User dashboard",
         "views": ["home"],
         "default": true
+      },
+      "entities": {
+        "menu": true,
+        "icon": "&#xf015;",
+        "label": "Entities",
+        "subtext": "Entities",
+        "views": ["entitylist"],
+        "default": false
       }
     },
     "large":
@@ -160,6 +168,14 @@
         "subtext": "User dashboard",
         "views": ["home"],
         "default": true
+      },
+      "entityList": {
+        "menu": true,
+        "icon": "&#xf015;",
+        "label": "Entities",
+        "subtext": "Entities",
+        "views": ["entityList"],
+        "default": false
       }
     }
   },
