@@ -20,6 +20,15 @@ var am = {
             }
         });
     },
+    datagen : function (date, user_id, entity_id, cb) {
+        am.request("datagen?date="+date+"&user_id="+user_id+"&entity_id="+entity_id, function (response) {
+            if (response) {
+                cb(response);
+            } else {
+                cb(false);
+            }
+        });
+    },
     request : function (url, cb) {
         var conParams = config.conParams[GLOBAL.RELEASE];
         request("http://"+conParams.host + ":" + conParams.port + "/" + conParams.url + "/" + url, function(err, resp, body) {
