@@ -15,6 +15,23 @@ _entityList = {
             }
             layout.attach('#entityFront');
         });
+
+        setTimeout(function() {
+            var cnt = 0;
+
+            $('#entityFront__FACE').find('.tabSetTab').each(function() {
+                if( cnt == 0) {
+
+                    _log.d("TRIGGERING "+$(this).html());
+
+                    _cardEngine.switchTab(this, 'entityList', 'entityFront__FACE', false);
+                    layout.attach("#entityFront");
+
+                }
+                cnt++;
+
+            });
+        }, 200);
     },
 
     onMessage : function() {

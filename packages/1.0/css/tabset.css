@@ -1,0 +1,431 @@
+
+
+
+.tabSetContainer {
+
+
+
+}
+
+
+
+.tabSetContentContainer {
+
+
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+
+    padding: 10px;
+}
+
+
+.tabSetContent {
+
+  /*  background: red; */
+
+}
+
+
+
+.tabSetContentContainer .tabRow {
+
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+    font-size:18pt;
+    height:50px;
+    font-family: helvetica;
+    color: #333;
+
+
+}
+
+
+
+.tabSetContentContainer .tabRow td{
+
+
+    height : 40px;
+    color  : #333;
+
+
+
+
+}
+
+.tabSetContentContainer .tabRow table{
+
+
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  padding:5px; display:block; width:100%; height:100%;
+
+
+
+
+}
+
+
+.tabSetContentContainer .tabRow:last-child table{
+
+
+  border-bottom: none;
+
+
+
+
+}
+
+
+
+.tabSetTabContainer {
+
+    height: 40px;
+    border-bottom: 1px solid #333;
+
+}
+
+
+.tabSetTab {
+
+  padding: 10px;
+  color: #525252;
+  font-size:17pt;
+  text-align:center;
+  padding-left:10px;
+  padding-right:10px;
+
+}
+
+.tabSetWidget {
+
+  width:100%;
+
+
+}
+
+
+.tabSelected {
+
+    color: #222;
+    border-bottom: #222 2px solid;
+
+}
+
+
+.tabFooter {
+
+   height: 40px;
+   color: #444;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.nav-tabs {
+    /* border-bottom: 1px solid #ddd; */
+}
+.nav-tabs, .nav-pills {
+}
+.nav {
+    margin-left: 0;
+    margin-bottom: 10px;
+    list-style: none;
+}
+.nav-tabs>li {
+    margin-bottom: -1px;
+}
+.nav-tabs>li, .nav-pills>li {
+    float: left;
+}
+.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+
+
+
+  /*   border: 1px solid #ddd; */
+    cursor: default;
+    color: rgba(61, 29,	46, 1	);
+  /*  font-weight: bold; */
+    font-size: 13pt;
+  /*  box-shadow: 0px 2px 2px rgba(0,0,0,0.4); */
+    text-decoration: none;
+/*
+	    background: #a90329;
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a90329), color-stop(44%,#8f0222), color-stop(100%,#6d0019));
+background: -webkit-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%);
+
+*/
+border-bottom: 2px solid rgba(0,0,0,0.4);
+}
+.nav-tabs>li>a {
+    padding-top: 8px;
+
+    padding-bottom: 8px;
+    line-height: 20px;
+    border: 1px solid transparent;
+    -webkit-border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    border-radius: 4px 4px 0 0;
+
+    color: #666;
+    font-weight: bold;
+    font-size: 12pt;
+    text-decoration: none;
+    padding: 10px;
+
+
+}
+.nav-tabs>li>a, .nav-pills>li>a {
+    padding-right: 12px;
+    padding-left: 12px;
+    margin-right: 2px;
+    line-height: 14px;
+}
+.nav>li>a {
+    display: block;
+
+}
+
+
+.tabSet {
+
+    padding: 10px;
+    display:block;
+    width: 98%;
+    max-width:98%;
+
+}
+
+.tabContent  {
+
+
+  border-top:1px solid rgba(0,0,0,0.4);
+  border-bottom:1px solid rgba(0,0,0,0.4);
+
+  font-size:12pt;
+
+
+}
+
+
+
+
+
+
+.tabFooter {
+
+/*  background: rgba(237,230,202,1); */
+  font-size:16pt;
+
+  color: black;
+/*  border-top:1px solid rgba(0,0,0,0.2); */
+  text-align:right;
+  padding: 5px;
+
+
+}
+
+.tabContent .tabRow {
+
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+    font-size:18pt;
+    height:50px;
+    font-family: helvetica;
+    color: #333;
+
+
+}
+
+.tabContent .tabRow td{
+
+
+    height : 40px;
+    color  : #333;
+
+
+
+
+}
+
+.tabContent .tabRow table{
+
+
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  padding:5px; display:block; width:100%; height:100%;
+
+
+
+
+}
+
+.tabContent .tabRow:last-child table{
+
+
+  border-bottom: none;
+
+
+
+
+}
+
+
+
+/* BOOTSTRAP ROW-FLUID */
+.row-fluid {
+    width: 100%;
+    *zoom: 1;
+
+}
+.row-fluid:before, .row-fluid:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+.row-fluid:after {
+    clear: both;
+}
+.row-fluid [class*="span"] {
+    display: block;
+    width: 100%;
+    min-height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    float: left;
+    margin-left: 2.127659574468085%;
+    *margin-left: 2.074468085106383%}
+.row-fluid [class*="span"]:first-child {
+    margin-left: 0;
+}
+.row-fluid .controls-row [class*="span"]+[class*="span"] {
+    margin-left: 2.127659574468085%}
+.row-fluid .span1 {
+    width: 6.382978723404255%;
+    *width: 6.329787234042553%}
+.row-fluid .span2 {
+    width: 14.893617021276595%;
+    *width: 14.840425531914892%}
+.row-fluid .span3 {
+    width: 23.404255319148934%;
+    *width: 23.351063829787233%}
+.row-fluid .span4 {
+    width: 31.91489361702128%;
+    *width: 31.861702127659576%}
+.row-fluid .span5 {
+    width: 40.42553191489362%;
+    *width: 40.37234042553192%}
+.row-fluid .span6 {
+    width: 48.93617021276595%;
+    *width: 48.88297872340425%}
+.row-fluid .span7 {
+    width: 57.44680851063829%;
+    *width: 57.39361702127659%}
+.row-fluid .span8 {
+    width: 65.95744680851064%;
+    *width: 65.90425531914893%}
+.row-fluid .span9 {
+    width: 74.46808510638297%;
+    *width: 74.41489361702126%}
+.row-fluid .span10 {
+    width: 82.97872340425532%;
+    *width: 82.92553191489361%}
+.row-fluid .span11 {
+    width: 91.48936170212765%;
+    *width: 91.43617021276594%}
+.row-fluid .span12 {
+    width: 100%;
+    *width: 99.94680851063829%}
+.row-fluid .offset1 {
+    margin-left: 10.638297872340425%;
+    *margin-left: 10.53191489361702%}
+.row-fluid .offset1:first-child {
+    margin-left: 8.51063829787234%;
+    *margin-left: 8.404255319148938%}
+.row-fluid .offset2 {
+    margin-left: 19.148936170212764%;
+    *margin-left: 19.04255319148936%}
+.row-fluid .offset2:first-child {
+    margin-left: 17.02127659574468%;
+    *margin-left: 16.914893617021278%}
+.row-fluid .offset3 {
+    margin-left: 27.659574468085104%;
+    *margin-left: 27.5531914893617%}
+.row-fluid .offset3:first-child {
+    margin-left: 25.53191489361702%;
+    *margin-left: 25.425531914893618%}
+.row-fluid .offset4 {
+    margin-left: 36.170212765957444%;
+    *margin-left: 36.06382978723405%}
+.row-fluid .offset4:first-child {
+    margin-left: 34.04255319148936%;
+    *margin-left: 33.93617021276596%}
+.row-fluid .offset5 {
+    margin-left: 44.68085106382979%;
+    *margin-left: 44.57446808510638%}
+.row-fluid .offset5:first-child {
+    margin-left: 42.5531914893617%;
+    *margin-left: 42.4468085106383%}
+.row-fluid .offset6 {
+    margin-left: 53.191489361702125%;
+    *margin-left: 53.085106382978715%}
+.row-fluid .offset6:first-child {
+    margin-left: 51.063829787234035%;
+    *margin-left: 50.95744680851063%}
+.row-fluid .offset7 {
+    margin-left: 61.702127659574465%;
+    *margin-left: 61.59574468085106%}
+.row-fluid .offset7:first-child {
+    margin-left: 59.57446808510638%;
+    *margin-left: 59.46808510638298%}
+.row-fluid .offset8 {
+    margin-left: 70.2127659574468%;
+    *margin-left: 70.10638297872339%}
+.row-fluid .offset8:first-child {
+    margin-left: 68.08510638297872%;
+    *margin-left: 67.9787234042553%}
+.row-fluid .offset9 {
+    margin-left: 78.72340425531914%;
+    *margin-left: 78.61702127659572%}
+.row-fluid .offset9:first-child {
+    margin-left: 76.59574468085106%;
+    *margin-left: 76.48936170212764%}
+.row-fluid .offset10 {
+    margin-left: 87.23404255319149%;
+    *margin-left: 87.12765957446807%}
+.row-fluid .offset10:first-child {
+    margin-left: 85.1063829787234%;
+    *margin-left: 84.99999999999999%}
+.row-fluid .offset11 {
+    margin-left: 95.74468085106382%;
+    *margin-left: 95.6382978723404%}
+.row-fluid .offset11:first-child {
+    margin-left: 93.61702127659574%;
+    *margin-left: 93.51063829787232%}
+.row-fluid .offset12 {
+    margin-left: 104.25531914893617%;
+    *margin-left: 104.14893617021275%}
+.row-fluid .offset12:first-child {
+    margin-left: 102.12765957446808%;
+    *margin-left: 102.02127659574467%}
+[class*="span"].hide, .row-fluid [class*="span"].hide {
+    display: none;
+}
+[class*="span"].pull-right, .row-fluid [class*="span"].pull-right {
+    float: right;
+}
+.tabSubheading {
+    color: #666;
+}
