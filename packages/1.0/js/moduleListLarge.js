@@ -25,5 +25,8 @@ _moduleListLarge = {
 
     moduleCtrl: function($scope) {
         $scope.modules    = _moduleListLarge.model;
+    },
+    loadModuleView : function(data) {
+        layout.sendMessage("moduleViewerLarge", { id : $(data).attr("module_id") });
     }
 };;;

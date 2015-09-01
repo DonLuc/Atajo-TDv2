@@ -1,6 +1,7 @@
 _moduleViewerLarge = {
 
     model: null,
+    itemsModel : "Nothing to Display",
 
     onExit : function() { var _ = this;
 
@@ -10,10 +11,11 @@ _moduleViewerLarge = {
 
     },
 
-    onMessage : function() {
-
+    onMessage : function(data) {
+        _moduleViewerLarge.id = data.module_id;
+        layout.attach('#moduleViewerLargeFront');
     },
     Ctrl : function($scope) {
-
+        $scope.itemsHTML = _moduleViewerLarge.itemsModel;
     }
 };;;
