@@ -4,22 +4,14 @@
     <ctl>ENTITY LIST</ctl>
     <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
     <content>
-        <ul ng-show="entities.length > 0" style="border-radius:5px; margin:3px; border:none;">
-            <li ng-repeat="entity in entities track by $index | orderBy:'visitOrder'" entityId="{{entity.entityId}}" class="cardListElement" onTouchStart="_entityList.loadModule(this);">
-                <div class="grid">
-                    <div class="unit w-4-16">
-                        <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
-                    </div>
-                    <div class="unit w-4-16">
-                        {{entity.entityCode}}
-                    </div>
-                    <div class="unit w-8-16">
-                        {{entity.entityName}}
-                    </div>
-                </div>
-            </li>
-        </ul>
-        <placeholder ng-show="entities.length == 0 || entities == false" >No Entities</placeholder>
+
+        <tabset>
+            <tab title="TODO" template-url="routes_day_template_todo">
+            </tab>
+            <tab title="DONE"></tab>
+        </tabset>
+
+        <placeholder ng-show="entities.length == 0 || entities == false" >No Entities</placeholder>-->
     </content>
     <cbl></cbl>
     <cbr></cbr>
@@ -39,5 +31,25 @@
     <cbl></cbl>
     <cbr></cbr>
 </face>
+
+    <div id="routes_day_template_todo" class="row">
+        <ul  ng-show="entities.length > 0" style="border-radius:5px; margin:3px; border:none;">
+            <li ng-repeat="entity in entities track by $index | orderBy:'visitOrder'" entityId="{{entity.entityId}}" class="cardListElement" onTouchStart="_entityList.loadModule(this);">
+                <div class="grid">
+                    <div class="unit w-4-16">
+                        <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
+                    </div>
+                    <div class="unit w-4-16" style="color: black">
+                        {{entity.entityCode}}
+                    </div>
+                    <div class="unit w-8-16" style="color: black">
+                        {{entity.entityName}}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
 
 </card>
