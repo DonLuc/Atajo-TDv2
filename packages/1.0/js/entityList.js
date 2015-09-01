@@ -23,5 +23,8 @@ _entityList = {
 
     entityCtrl: function($scope) {
         $scope.entities    = _entityList.model;
+    },
+    loadModule : function (data) {
+        layout.sendMessage("moduleList", { entityId : $(data).attr("entityId") });
     }
 };;;
