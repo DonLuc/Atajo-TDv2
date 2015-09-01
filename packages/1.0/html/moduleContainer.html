@@ -1,0 +1,41 @@
+<card id="moduleContainer" width="600" height="1200" fill="true" flip="rl">
+
+
+    <face id="moduleContainerFront" settings="default:true" controller="_moduleContainer.surveySectionCtrl">
+        <ctl>QUESTIONS</ctl>
+        <ctr class="gui-extra" flip-target="surveysHelp">&#xf059;</ctr>
+
+        <content>
+
+
+            <placeholder ng-show="survey.questions.length == 0">SELECT A SECTION</placeholder>
+
+            <div class="sectionQuestions">
+
+
+            </div>
+
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+
+    </face>
+
+
+    <face id="surveysHelp" face="back">
+
+        <ctl>HELP</ctl>
+        <ctr class="gui-extra" flip-target="close">&#xf057;</ctr>
+
+        <content>
+
+            <placeholder>This should be a list of surveys that they user has direct access to, for instance a patrao
+                will have access to thier daily checklists from here
+            </placeholder>
+
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+
+    </face>
+</card>
