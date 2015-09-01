@@ -16,14 +16,34 @@ function mapEntities_read(token,cb) {
         }
     });
 }
+function mapModules_write(token, modules,cb) {
+    var data = {
+        userId : token,
+        modules : modules
+    }
+    if (!fs.existsSync(__dirname + "/modulestore/")) {
+        fs.mkdirSync(__dirname + "/modulestore/");
+    }
+    fs.writeFile(__dirname + "/modulestore/user_"+token+".json", JSON.stringify(data), function(err) {
+        if (err) {
+            console.log("Error writing user file: " + err);
+            cb();
+        } else {
+            console.log("Wrote user file");
+            cb();
+        }
+    });
+}
 function goFish (a, obj, callCycle, returnObj, cb) {
     var currDate = moment().format("YYYYMMDD");
     am.datagen(currDate+"000000", obj.token, callCycle[a].entityId, function(results) {
         returnObj.push({"entityId" : callCycle[a].entityId ,"data": results});
         if (returnObj.length == callCycle.length) {
-            _log.d("RETURNING MODULE DATA FOR USER : " + obj.token);
-            obj.RESPONSE = returnObj;
-            cb(obj);
+            mapModules_write(obj.token, returnObj, function() {
+                _log.d("RETURNING MODULE DATA FOR USER : " + obj.token);
+                obj.RESPONSE = returnObj;
+                cb(obj);
+            });
         }
     });
 }
@@ -31,8 +51,16 @@ function goFish (a, obj, callCycle, returnObj, cb) {
 exports.req = function(obj, cb) {
     mapEntities_read(obj.token, function (callCycle) {
         var returnObj = [];
-        for(var a in callCycle) {
-            goFish(a, obj, callCycle, returnObj, cb);
+        if (callCycle.length == 0) {
+            mapModules_write(obj.token, returnObj, function() {
+                _log.d("RETURNING MODULE DATA FOR USER : " + obj.token);
+                obj.RESPONSE = returnObj;
+                cb(obj);
+            });
+        } else {
+            for(var a in callCycle) {
+                goFish(a, obj, callCycle, returnObj, cb);
+            }
         }
     });
 }
