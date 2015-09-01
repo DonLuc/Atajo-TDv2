@@ -1,16 +1,16 @@
-<card id="moduleList" fill="true" flip="rl">
+<card id="moduleListLarge" fill="true" flip="rl">
 
-<face id="moduleFront" settings="default:true" controller="_moduleList.moduleCtrl">
+<face id="moduleListLargeFront" settings="default:true" controller="_moduleListLarge.moduleCtrl">
     <ctl>MODULE LIST</ctl>
     <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
     <content>
         <ul ng-show="modules.length > 0" style="border-radius:5px; margin:3px; border:none;">
-            <li ng-repeat="module in modules track by $index | orderBy : 'moduleTCorder'" class="cardListElement" ng-show="module.visible">
+            <li ng-repeat="module in modules track by $index | orderBy : 'moduleTCorder'" class="cardListElement" ng-show="module.visible" module_id="{{module.id}}" onTouchStart="_moduleListLarge.loadModuleView(this);">
                 <div class="grid">
-                    <div class="unit w-2-16">
+                    <div class="unit w-4-16">
                         <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
                     </div>
-                    <div class="unit w-2-16">
+                    <div class="unit w-12-16">
                         {{module.name}}
                     </div>
                 </div>

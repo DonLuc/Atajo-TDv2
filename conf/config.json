@@ -163,7 +163,7 @@
         "icon": "&#xf015;",
         "label": "Modules",
         "subtext": "Module List",
-        "views": ["moduleList"],
+        "views": ["moduleListSmall"],
         "default": false
       }
     },
@@ -190,7 +190,8 @@
         "icon": "&#xf015;",
         "label": "Modules",
         "subtext": "Module List",
-        "views": ["moduleList"],
+        "views": ["moduleListLarge", "moduleViewerLarge"],
+        "layout": "<table width='100%'><tr><td class='_moduleListLarge' width='33%'></td><td class='_moduleViewerLarge' width='67%'></td></tr></table>",
         "default": false
       }
     }

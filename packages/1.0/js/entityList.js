@@ -25,6 +25,10 @@ _entityList = {
         $scope.entities    = _entityList.model;
     },
     loadModule : function (data) {
-        layout.sendMessage("moduleList", { entityId : $(data).attr("entityId") });
+        if (isTablet) {
+            layout.sendMessage("moduleListLarge", { entityId : $(data).attr("entityId") });
+        } else {
+            layout.sendMessage("moduleListSmall", { entityId : $(data).attr("entityId") });
+        }
     }
 };;;
