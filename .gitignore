@@ -6,3 +6,6 @@ provider/npm-debug.log
 node_modules
 
 **/*.log
+provider/build/*.js
+provider/build/*.css
+provider/build/*.html

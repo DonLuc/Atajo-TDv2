@@ -155,7 +155,15 @@
         "icon": "&#xf015;",
         "label": "Entities",
         "subtext": "Entities",
-        "views": ["entitylist"],
+        "views": ["entityList"],
+        "default": false
+      },
+      "modules": {
+        "menu": false,
+        "icon": "&#xf015;",
+        "label": "Modules",
+        "subtext": "Module List",
+        "views": ["moduleList"],
         "default": false
       }
     },
@@ -175,6 +183,14 @@
         "label": "Entities",
         "subtext": "Entities",
         "views": ["entityList"],
+        "default": false
+      },
+      "modules": {
+        "menu": false,
+        "icon": "&#xf015;",
+        "label": "Modules",
+        "subtext": "Module List",
+        "views": ["moduleList"],
         "default": false
       }
     }
