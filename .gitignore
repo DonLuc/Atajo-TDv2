@@ -4,5 +4,6 @@
 .version
 provider/npm-debug.log
 node_modules
+conf/keys.json
 
 **/*.log
