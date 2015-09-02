@@ -35,11 +35,11 @@ exports.req = function(obj, cb) {
                     var module=entity.modules[t];
                     if(module.headerFields.length>0){
                         console.log("fields exist:"+module.name);
-                        var newmoduleHtml=moduleBuilder.process(module, 'questions', 'surveySectionFront');
+                        var newmoduleHtml=moduleBuilder.process(module, 'items', 'surveySectionFront');
                         module.html=newmoduleHtml;
                         entity.modules[t]=module;
                         entities[k]=entity;
-                        var modulObj={"moduleId":module.id,"html":newmoduleHtml,"model":""};
+                        var modulObj={"moduleId":module.id,"html":newmoduleHtml,"model":module.headerFields};
                         modulesList.push(modulObj);
                     }
                 }

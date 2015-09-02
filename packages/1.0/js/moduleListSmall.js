@@ -4,6 +4,7 @@ _moduleListSmall = {
     entityId : null,
     itemsModel : "Nothing to Display",
     id : null,
+    moduleModel:[],
 
     onExit : function() { var _ = this;
 
@@ -31,21 +32,37 @@ _moduleListSmall = {
         $scope.modules    = _moduleListSmall.model;
     },
     moduleViewerCtrl : function($scope) {
-        $scope.itemsHTML = _moduleListSmall.itemsModel;
+        $scope.test="hello world";
+        //   $scope.itemsHTML = _moduleListSmall.itemsModel;
+        $scope.items=_moduleListSmall.moduleModel;
+
     },
     loadModuleView : function(data) {
+        _cardEngine.flip("moduleListSmall","moduleListSmallViewer");
+
         _moduleListSmall.id = $(data).attr("module_id");
         _model.get("moduleItems",{"moduleId": _moduleListSmall.id},function(d) {
-            _moduleListSmall.flip("moduleListSmallViewer",
-                function (cb) {
-                    _moduleListSmall.itemsModel = d[0].html;
-                    _log.d("FLIPPING TO : ");
-                    cb();
-                },
-                function () {
-                    _log.d("FLIPPED TO : ");
-                }
-            );
+
+            _moduleListSmall.itemsModel = d[0].html;
+            _moduleListSmall.moduleModel=d[0].model;
+            _log.d("FLIPPING TO : ");
+            var newxml =_cardEngine.processTagsFromXML(d[0].html, 'moduleListSmallViewer');
+            var target = $('#moduleListSmallViewer__FACE').find('.moduleSection');
+            target.html(newxml);
+            layout.attach("#moduleListSmallViewer",true);
+
+
+            //_moduleListSmall.flip("moduleListSmallViewer",
+            //    function (cb) {
+            //        _moduleListSmall.itemsModel = d[0].html;
+            //        _moduleListSmall.moduleModel=d[0].model;
+            //         _log.d("FLIPPING TO : ");
+            //        cb();
+            //    },
+            //    function () {
+            //        _log.d("FLIPPED TO : ");
+            //    }
+            //);
         });
     },
     flip : function(flipTarget, before, cb) {
