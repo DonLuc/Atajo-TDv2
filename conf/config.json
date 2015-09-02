@@ -212,6 +212,13 @@
       "key"      : "entityId",
       "handler"  : "getModules",
       "indexes"  : [ "entityId" ]
+    },
+    {
+      "service"  : "moduleItems",
+      "label"    : "Today's Modules items",
+      "key"      : "moduleId",
+      "handler"  : "generateHtml",
+      "indexes"  : [ "moduleId" ]
     }
   ],
 

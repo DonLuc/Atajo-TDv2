@@ -12,6 +12,8 @@ _moduleListLarge = {
     },
 
     onMessage : function(data) {
+
+
         _moduleListLarge.entityId = data.entityId;
         _model.get("Modules", { "entityId" : _moduleListLarge.entityId }, function (moduleData) {
             if (moduleData) {

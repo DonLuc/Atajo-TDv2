@@ -3,6 +3,7 @@ _moduleListSmall = {
     model: null,
     entityId : null,
     itemsModel : "Nothing to Display",
+    id : null,
 
     onExit : function() { var _ = this;
 
@@ -13,6 +14,8 @@ _moduleListSmall = {
     },
 
     onMessage : function(data) {
+
+
         _moduleListSmall.entityId = data.entityId;
         _model.get("Modules", { "entityId" : _moduleListSmall.entityId }, function (moduleData) {
             if (moduleData) {
@@ -31,17 +34,19 @@ _moduleListSmall = {
         $scope.itemsHTML = _moduleListSmall.itemsModel;
     },
     loadModuleView : function(data) {
-        var id = $(data).attr("module_id");
-        _moduleListSmall.flip("moduleListSmallViewer",
-            function (cb) {
-                _moduleListSmall.itemsModel = "Some bullshit!";
-                _log.d("FLIPPING TO : ");
-                cb();
-            },
-            function () {
-                _log.d("FLIPPED TO : ");
-            }
-        );
+        _moduleListSmall.id = $(data).attr("module_id");
+        _model.get("moduleItems",{"moduleId": _moduleListSmall.id},function(d) {
+            _moduleListSmall.flip("moduleListSmallViewer",
+                function (cb) {
+                    _moduleListSmall.itemsModel = d[0].html;
+                    _log.d("FLIPPING TO : ");
+                    cb();
+                },
+                function () {
+                    _log.d("FLIPPED TO : ");
+                }
+            );
+        });
     },
     flip : function(flipTarget, before, cb) {
         if(before) {
