@@ -11,36 +11,6 @@ _moduleContainer = {
     xmls: {},
 
 
-    onExit: function (view, state) {
-
-        // Strangely on exit is being called when the camera is opened...
-        _log.d("SURVEY SECTION: ON EXIT")
-
-        if (state == "fg") {
-
-            _log.d("SURVEY SECTION: ON EXIT, foreground event, do cleanup")
-
-            _moduleContainer.model = [];
-            _moduleContainer.surveys = {};
-            _moduleContainer.models = {};
-            _moduleContainer.sectionNames = {};
-            _moduleContainer.xmls = {};
-
-        }
-        else if (state == "bg") {
-
-            setTimeout(function () {
-
-                _log.d("ADDITIONALS, testing photo save");
-
-                layout.sendMessage('surveySectionList', {recalculate: true});
-
-            }, 200);
-
-        }
-
-
-    },
 
 
     createResource: function (img) {
@@ -150,73 +120,6 @@ _moduleContainer = {
 
 
     _currCard: null,
-    onLoaded: function (view, card) {
-
-        this._currCard = card;
-    },
-
-
-    onMessage: function (data) {
-
-        _moduleContainer.currSID = sectionID = data.id;
-
-        var xml;
-
-
-        if (typeof _moduleContainer.surveys[sectionID] == 'undefined') {
-            _log.d("FIELDS DO NOT EXIST --> CREATING");
-            _moduleContainer.surveys[sectionID] = data;
-
-            var sections = _moduleBuilder.process([data], 'questions', 'surveySectionFront');
-
-            // Check if this has been loaded before first
-            if (!_moduleContainer.models.hasOwnProperty(sectionID)) {
-                _moduleContainer.models[sectionID] = sections[0].model;
-            } else {
-
-
-                // See if this sorts out the binding issue.
-
-                for (var v in sections[0].model) {
-                    //_moduleContainer.models[sectionID][v] = sections[0].model[v]
-                    sections[0].model[v] = _moduleContainer.models[sectionID][v];
-                }
-
-
-                _moduleContainer.models[sectionID] = sections[0].model;
-
-
-            }
-
-            _moduleContainer.model = data.headerFields//_moduleContainer.models[sectionID];// = sections[0].model;
-            _moduleBuilder.currentForms[0].model = _moduleContainer.model;
-            //    _moduleContainer.referenceFix(_moduleContainer.model);
-            _moduleContainer.sectionName = _moduleContainer.sectionNames[sectionID] = data.name;
-            xml = _moduleContainer.xmls[sectionID] = _cardEngine.processTagsFromXML(sections[0].data, 'surveySectionFront');
-
-
-        }
-        else {
-            _log.d("FIELDS EXIST --> LOADING");
-            _moduleContainer.model = data.headerFields;
-            _moduleBuilder.currentForms[0].model = _moduleContainer.model;
-            //  _moduleContainer.referenceFix(_moduleContainer.model);
-            _moduleContainer.sectionName = _moduleContainer.sectionNames[sectionID];
-            xml = _moduleContainer.xmls[sectionID];
-        }
-
-
-        var target = $('#moduleContainerFront__FACE').find('.sectionQuestions');
-        target.html(xml);
-
-
-        layout.attach('#moduleContainerFront', true);
-
-        //TODO --> MOVE TO CORE HANDLER (ITS DIRTY);
-        this._currCard.initScroll($('#moduleContainer'), 'front');
-
-
-    },
 
 
     // This fixes reference links for the select and its selected value
@@ -260,61 +163,7 @@ _moduleContainer = {
     },
 
 
-    //ANGULARJS CONTROLLERS
 
-
-    surveySectionCtrl: function ($scope) {
-
-
-        $scope.questions = _moduleContainer.model;
-
-        //TODO: wondering if there is some kind of threading context issue happening here where _moduleContainer.model no longer exists
-        _log.d("FIELDS MODEL FOR BUILDER : " + JSON.stringify(_moduleBuilder.currentForms[0].model));
-        _log.d("FIELDS MODEL IS : " + JSON.stringify($scope.questions));
-
-
-        $scope.selectChange = function (nam) {
-
-            _log.d('select changed : ' + nam);
-
-            //TODO: since we aren't really showing the survey section totals we probably don't need to send this
-            // message every time anymore. So we can save some cycles.
-
-           // layout.sendMessage('surveySectionList', {recalculate: true});
-            _moduleContainer._currCard.currScroll.refresh();
-
-
-        };
-
-        $scope.inputChange = function (nam) {
-
-            _log.d("ADDITIONALS, testing comment save");
-            _log.d('input changed : ' + nam);
-
-            //TODO: since we aren't really showing the survey section totals we probably don't need to send this
-            // message every time anymore. So we can save some cycles.
-
-            //  layout.sendMessage('surveySectionList', { recalculate: true });
-            //_moduleContainer._currCard.currScroll.refresh();
-
-
-        };
-
-        $scope.sizeChange = function () {
-
-            //alert("SizeChange, lets do stuff here");
-
-            setTimeout(function () {
-
-                _moduleContainer._currCard.currScroll.refresh();
-
-            }, 100);
-
-        };
-
-        $scope.survey = _moduleContainer.survey;
-
-    },
 
     signature : function(text){
 
@@ -358,17 +207,92 @@ _moduleContainer = {
         _scanner.scan(function(data){
             console.log("scanned:"+data);
         })
+    },
+    addPic: function (elm, model, attachElm) {
+
+        _log.d("ADDING PIC TO : " + model);
+
+        _camera.getPic(function (imageData) {
+
+
+            _log.d("GOT IMAGE : " + imageData);
+
+            _log.d("searching for " + model);
+
+
+            $(elm).attr("src",imageData);
+            //for (var i in _moduleBuilder.currentForms) {
+            //    _log.d("Current form index: " + i);
+            //
+            //    var form = _moduleBuilder.currentForms[i];
+            //
+            //    for (var x in form.model) {
+            //
+            //        _log.d("DOES " + x + " == " + model);
+            //        if (x == model) {
+            //            _log.d("IT DOES ! --> " + attachElm);
+            //            //console.log("image location"+_location.currLat);
+            //            form.model[x] = {
+            //                "data": imageData,
+            //                "latitude": _location.currLat,
+            //                "longitude": _location.currLon
+            //            };
+            //            layout.attach('#' + attachElm);
+            //
+            //            break;
+            //        }
+            //
+            //    }
+            //
+            //}
+
+
+            //  $(elm).attr('src', imageData);
+
+        }, 384, 216);
+    },
+    removePic: function (elm, model, attachElm) {
+
+        _log.d("REMOVING PIC FROM : " + model);
+
+
+        _log.d("searching for " + model);
+        $(elm).attr("src",'img/placeholder.png');
+
+        //for (var i in _moduleBuilder.currentForms) {
+        //    _log.d("Current form index: " + i);
+        //
+        //    var form = _moduleBuilder.currentForms[i];
+        //
+        //    for (var x in form.model) {
+        //
+        //        _log.d("DOES " + x + " == " + model);
+        //        if (x == model) {
+        //            _log.d("IT DOES ! --> " + attachElm);
+        //
+        //            form.model[x] = {"data": 'img/placeholder.png'};
+        //
+        //            layout.attach('#' + attachElm);
+        //
+        //            break;
+        //        }
+        //
+        //    }
+        //
+        //}
+
+
     }
 
 
 
-    /*
-     addPic : function(imageData) {
+        /*
+         addPic : function(imageData) {
 
-     _log.d("_moduleContainer.model ADDPIC : " + JSON.stringify(_moduleContainer.model));
+         _log.d("_moduleContainer.model ADDPIC : " + JSON.stringify(_moduleContainer.model));
 
-     }
-     */
+         }
+         */
 
 
 };

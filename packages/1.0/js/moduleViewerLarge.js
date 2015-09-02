@@ -22,5 +22,6 @@ _moduleViewerLarge = {
     },
     Ctrl : function($scope) {
         $scope.itemsHTML = _moduleViewerLarge.itemsModel;
+
     }
 };;;
