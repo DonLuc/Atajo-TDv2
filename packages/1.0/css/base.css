@@ -63,23 +63,7 @@
 
 }
 
-.uploaded {
-
-    background:rgba(1,138,39,0.6);
-    color:white;
-    test-shadow:none;
-
-}
-
 .notUploaded {
-
-    background:rgba(255,200,80,0.6);
-    color:#333;
-    test-shadow:none;
-
-}
-
-.notDownloaded {
 
     background:rgba(255,80,80,0.6);
     color:white;
@@ -87,10 +71,15 @@
 
 }
 
-.downloaded {
+.uploaded {
 
-    background:rgba(255,200,80,0.6);
+    background:rgba(1,138,39,0.6);
     color:#333;
     test-shadow:none;
 
 }
+
+.gridHeight{
+    height:10px;
+}
+

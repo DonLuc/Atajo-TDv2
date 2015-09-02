@@ -33,18 +33,57 @@
 </face>
 
     <div id="routes_day_template_todo" class="row">
+
+
         <ul  ng-show="entities.length > 0" style="border-radius:5px; margin:3px; border:none;">
             <li ng-repeat="entity in entities track by $index | orderBy:'visitOrder'" entityId="{{entity.entityId}}" class="cardListElement" onTouchStart="_entityList.loadModule(this);">
-                <div class="grid">
-                    <div class="unit w-4-16">
-                        <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
-                    </div>
-                    <div class="unit w-4-16" style="color: black">
+                <div class="grid amberLine">
+                        <i class="unit w-3-16 fa fa-compass gridHeight" style="font-size:20pt; color: rgba(0,0,0,0.4);"></i>
+
+                    <div class="unit w-5-16 gridHeight" style="color: black;">
                         {{entity.entityCode}}
                     </div>
-                    <div class="unit w-8-16" style="color: black">
+                    <div class="unit w-5-16 gridHeight" style="color: black;">
                         {{entity.entityName}}
                     </div>
+                    <div
+                            ng-if="!entity.uploaded"
+                            align="center"
+                            ontouchstart="_routes.flipSummary(this);"
+                            class="unit w-3-16 gridHeight routeListStatus notUploaded">
+
+                        NOT UPLOADED
+                        <x
+                                width="10"
+                                class="gui-extra"
+                                style="font-size:12pt; color: black;">
+
+                            &#xf080;
+
+                        </x><br />
+
+                    </div>
+
+                    <div
+                            ng-if="entity.uploaded"
+                            align="center"
+                            ontouchstart="_routes.flipSummary(this);"
+                            class="unit w-3-16 gridHeight routeListStatus uploaded">
+
+                        UPLOADED
+                        <x
+                                width="10"
+                                class="gui-extra"
+                                style="font-size:12pt; color: black;">
+
+                            &#xf080;
+
+                        </x><br />
+
+                        <x class="routeStatusInfo" ng-show="(customer.casesTotal == 0 && customer.orderTotal == 0) ">NO ORDERS TAKEN</x>
+
+                    </div>
+
                 </div>
             </li>
         </ul>
