@@ -13,7 +13,12 @@ _moduleViewerLarge = {
 
     onMessage : function(data) {
         _moduleViewerLarge.id = data.module_id;
-        layout.attach('#moduleViewerLargeFront');
+        // layout.attach('#moduleViewerLargeFront');
+
+        _model.get("moduleItems",{"moduleId": _moduleViewerLarge.id},function(d){
+            _moduleViewerLarge.itemsModel=d[0].html;
+            layout.attach('#moduleViewerLargeFront');
+        });
     },
     Ctrl : function($scope) {
         $scope.itemsHTML = _moduleViewerLarge.itemsModel;
