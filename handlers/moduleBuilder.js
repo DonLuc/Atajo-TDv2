@@ -1,14 +1,14 @@
 exports.process = function (form, modelRoot, attachElm) {
 
 
-    console.log("after MODULE " + form.headerFields.length);
-    _log.d("PROCESSING : " + form.name);
+    console.log("after MODULE " + form.length);
+    //_log.d("PROCESSING MODULE: " + fname);
 
     var xml = '';
     var model = {};
-    for (var e in form.headerFields) {
+    for (var e in form) {
 
-        elm = form.headerFields[e];
+        elm = form[e];
         console.log("after FIELD");
         _log.d("PROCESSING FILED : " + elm.type);
 
