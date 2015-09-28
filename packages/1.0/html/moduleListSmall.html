@@ -5,7 +5,8 @@
         <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
         <content>
             <ul ng-show="modules.length > 0" style="border-radius:5px; margin:3px; border:none;">
-                <li ng-repeat="module in modules track by $index | orderBy : 'moduleTCorder'" class="cardListElement" ng-show="module.visible" module_id="{{module.id}}" onclick="_moduleListSmall.loadModuleView(this);">
+                <li ng-repeat="module in modules track by $index | orderBy : 'moduleTCorder'" class="cardListElement"
+                    ng-show="module.visible" module_id="{{module.id}}" onclick="_moduleListSmall.loadModuleView(this);">
                     <div class="grid">
                         <div class="unit w-4-16">
                             <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
@@ -16,7 +17,7 @@
                     </div>
                 </li>
             </ul>
-            <placeholder ng-show="modules.length == 0 || modules == false" >No Modules</placeholder>
+            <placeholder ng-show="modules.length == 0 || modules == false">No Modules</placeholder>
         </content>
         <cbl></cbl>
         <cbr></cbr>
@@ -27,12 +28,21 @@
         <ctl>MODULE LIST</ctl>
         <ctr class="gui" flip-target="close">x</ctr>
         <content>
-            <placeholder ng-show="items.length == 0 || items == false" >No Module content</placeholder>
-            <!--<div once-html="itemsHTML"></div>-->
-            <div class="moduleSection"></div>
+            <placeholder ng-show="records.length == 0">No Module content</placeholder>
+            <md-list ng-show="records.length!=0">
+                <md-subheader class="md-no-sticky">List of record</md-subheader>
+                <md-list-item class="md-2-line" ng-repeat="rec in records ">
+                    <div class="md-list-item-text">
+                        <h3>{{rec.name}}</h3>
+
+                        <p>Secondary text</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </content>
         </content>
         <cbl></cbl>
-        <cbr></cbr>
+        <cbr onclick="_moduleListSmall.next()"> New</cbr>
 
     </face>
 
@@ -43,7 +53,7 @@
         <ctr class="gui" flip-target="close">x</ctr>
         <content>
             <placeholder>
-                  This is a help section - and provides the user with information relevant to the current you are on.
+                This is a help section - and provides the user with information relevant to the current you are on.
             </placeholder>
         </content>
         <cbl></cbl>

@@ -1,0 +1,82 @@
+<card id="lineItemsSmall" fill="true" flip="rl">
+
+    <face id="lineItemsSmallFront" settings="default:true" controller="_lineItemsSmall.Ctrl">
+        <ctl>Modules</ctl>
+        <ctr class="gui-extra" flip-target="lineItemsSmallHelp">&#xf059;</ctr>
+        <content>
+
+            <div ng-show="showHeader" class="moduleHeader"></div>
+            <div ng-show="showLine" class="moduleLine">
+                <md-list ng-show="showCat">
+                    <md-subheader class="md-no-sticky">List of categories</md-subheader>
+                    <md-list-item class="md-2-line" ng-repeat="cat in categories "
+                                  ng-click="nextCat(cat.name,cat.items)" md-swipe-right="prevCat()">
+                        <div class="md-list-item-text">
+                            <h3>{{cat.name}}</h3>
+
+                            <p>Secondary text</p>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                </md-list>
+                <md-list ng-hide="showCat" md-swipe-right="backToCat()">
+                    <md-subheader class="md-no-sticky">Line Items</md-subheader>
+                    <md-list-item class="md-2-line" ng-repeat="cat in lineItems " ng-click="openLineItem($index)">
+                        <div class="md-list-item-text">
+                            <h3>{{cat.name}}</h3>
+
+                            <p>Secondary text</p>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                </md-list>
+
+
+            </div>
+            <div ng-show="showFooter" class="moduleFooter"></div>
+
+
+        </content>
+
+        <cbl>
+            <x ng-hide="showHeader" ng-click="showPrev()">Prev</x>
+        </cbl>
+        <cbr>
+            <x ng-hide="showFooter" ng-click="showNext()">Next</x>
+        </cbr>
+
+    </face>
+    <face id="lineItemsModule" face="back" controller="_lineItemsSmall.lineCtrl">
+
+        <ctl>Line Item</ctl>
+        <ctr class="gui" flip-target="close">x</ctr>
+        <content>
+
+            <div class="moduleLine"></div>
+            <!--<placeholder>-->
+            <!--This is a help section - and provides the user with information relevant to the current you are on.-->
+            <!--</placeholder>-->
+
+
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+    </face>
+
+    <face id="lineItemsSmallHelp" face="back">
+
+        <ctl>HELP</ctl>
+        <ctr class="gui" flip-target="close">x</ctr>
+        <content>
+
+            <placeholder>
+                This is a help section - and provides the user with information relevant to the current you are on.
+            </placeholder>
+
+
+        </content>
+        <cbl></cbl>
+        <cbr></cbr>
+    </face>
+
+</card>
