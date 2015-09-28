@@ -158,12 +158,23 @@
         "views": ["entityList"],
         "default": false
       },
-      "modules": {
+      "moduleListSmall": {
         "menu": false,
         "icon": "&#xf015;",
         "label": "Modules",
         "subtext": "Module List",
         "views": ["moduleListSmall"],
+        "default": false
+      }
+
+
+    ,
+      "lineItemsSmall": {
+        "menu": false,
+        "icon": "&#xf015;",
+        "label": "Line Items",
+        "subtext": "Line Items",
+        "views": ["lineItemsSmall"],
         "default": false
       }
     },
