@@ -14,7 +14,7 @@ function mapModules_read(token, cb) {
     });
 }
 
-
+//to do add user specific module id=-5
 exports.req = function (obj, cb) {
     var modulesList = [];
     var catList = [];
@@ -199,25 +199,38 @@ exports.req = function (obj, cb) {
                                     moduleCats.push(cats[f]);
                                 }
                                 if (f == cats.length - 1) {
-                                    console.log("creating module object");
-                                    var modulObj = {
-                                        "moduleId": module.id,
-                                        "moduleName": module.name,
-                                        "htmlHeader": header,
-                                        "htmlLine": line,
-                                        "htmlFooter": footer,
-                                        "modelHeader": module.headerFields,
-                                        "modelLine": module.lineFields,
-                                        "modelFooter": module.footerFields,
-                                        "categories": moduleCats
-                                    };
-                                    modulesList.push(modulObj);
-                                    if (q < modules.length - 1) {
-                                        callGenHtml(q + 1);
-                                    } else {
-                                        cbHtml(modulesList);
+
+                                    var lineData = [];
+                                    //loop through all line items and build data object
+                                    for (var s = 0; s < line.length; s++) {
+
+                                        lineData.push(module.lineFields);
+
+                                        if (s == line.length - 1) {
+                                            console.log("creating module object");
+                                            var modulObj = {
+                                                "moduleId": module.id,
+                                                "moduleName": module.name,
+                                                "htmlHeader": header,
+                                                "htmlLine": line,
+                                                "htmlFooter": footer,
+                                                "modelHeader": module.headerFields,
+                                                "modelLine": lineData,
+                                                "modelFooter": module.footerFields,
+                                                "categories": moduleCats
+                                            };
+                                            modulesList.push(modulObj);
+                                            if (q < modules.length - 1) {
+                                                callGenHtml(q + 1);
+                                            } else {
+                                                cbHtml(modulesList);
+                                            }
+
+                                        }
                                     }
                                 }
+
+
                             }
 
                         } else {

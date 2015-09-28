@@ -11,8 +11,6 @@ _moduleContainer = {
     xmls: {},
 
 
-
-
     createResource: function (img) {
 
         var resource = {
@@ -163,27 +161,24 @@ _moduleContainer = {
     },
 
 
-
-
-    signature : function(text){
+    signature: function (text) {
 
         var modal = atajo.modal;
-    console.log("incoming text:"+text);
+        console.log("incoming text:" + text);
         //alert("after ok 2");
         modal.signature(
             {
-                icon 	: 'fa-pencil-square-o',  	// icon which will appear top left  - default : fa-warning
-                title 	: 'SIGNATURE',     	// title which will appear top right - default : notice
+                icon: 'fa-pencil-square-o',  	// icon which will appear top left  - default : fa-warning
+                title: 'SIGNATURE',     	// title which will appear top right - default : notice
 
-                canCancel : 'true', 		       // show cancel button - default: false
-                onOk      : function(data) {
-                    console.log("returned data from modal"+data);
-                    var dt=data;
+                canCancel: 'true', 		       // show cancel button - default: false
+                onOk: function (data) {
+                    console.log("returned data from modal" + data);
+                    var dt = data;
                     console.log("after ok");
 
 
-                    if(!data)
-                    {
+                    if (!data) {
                         console.log("no data image");
 
                         return;
@@ -191,21 +186,16 @@ _moduleContainer = {
                     }
 
 
-
-
-
-
                 }, // callback with signature data
 
-                content   : text              // content of the modal below the signature pad
-
+                content: text              // content of the modal below the signature pad
 
 
             });
     },
-    scan:function(){
-        _scanner.scan(function(data){
-            console.log("scanned:"+data);
+    scan: function () {
+        _scanner.scan(function (data) {
+            console.log("scanned:" + data);
         })
     },
     addPic: function (elm, model, attachElm) {
@@ -220,7 +210,7 @@ _moduleContainer = {
             _log.d("searching for " + model);
 
 
-            $(elm).attr("src",imageData);
+            $(elm).attr("src", imageData);
             //for (var i in _moduleBuilder.currentForms) {
             //    _log.d("Current form index: " + i);
             //
@@ -257,7 +247,7 @@ _moduleContainer = {
 
 
         _log.d("searching for " + model);
-        $(elm).attr("src",'img/placeholder.png');
+        $(elm).attr("src", 'img/placeholder.png');
 
         //for (var i in _moduleBuilder.currentForms) {
         //    _log.d("Current form index: " + i);
@@ -282,17 +272,54 @@ _moduleContainer = {
         //}
 
 
+    },
+
+
+    showNext: function (face) {
+        console.log("navigate to next section of module..");
+        if (!_moduleContainer.showLine && _moduleContainer.hasLine) {
+            _moduleContainer.showLine = true;
+            _moduleContainer.showHeader = false;
+            $(".moduleHeader").hide();
+            $(".moduleFooter").hide();
+            $(".moduleLine").show();
+            return _moduleContainer.moduleHeadingL;
+        } else if (!_moduleContainer.showFooter && _moduleContainer.hasFooter) {
+            _moduleContainer.showFooter = true;
+            _moduleContainer.showHeader = false;
+            _moduleContainer.showLine = false;
+            $(".moduleHeader").hide();
+            $(".moduleLine").hide();
+            $(".moduleFooter").show();
+            var e = document.getElementById('moduleListSmallViewer__FACE');
+            var scope = angular.element(e).scope();
+            scope.$apply();
+            return _moduleContainer.moduleHeadingF;
+        }
+        var e = document.getElementById('moduleListSmallViewer__FACE');
+        var scope = angular.element(e).scope();
+        scope.$apply();
+
+
+        //layout.attach("#"+face,true);
+    },
+    showPrev: function (face) {
+        if (_moduleContainer.showLine && _moduleContainer.hasLine) {
+            $(".moduleHeader").show();
+            $(".moduleFooter").hide();
+            $(".moduleLine").hide();
+            _moduleContainer.showLine = false;
+            _moduleContainer.showHeader = true;
+            return _moduleContainer.moduleHeadingH;
+        } else if (_moduleContainer.showFooter && _moduleContainer.hasFooter) {
+            $(".moduleHeader").hide();
+            $(".moduleFooter").hide();
+            $(".moduleLine").show();
+            _moduleContainer.showFooter = false;
+            _moduleContainer.showLine = true;
+            return _moduleContainer.moduleHeadingL;
+        }
     }
-
-
-
-        /*
-         addPic : function(imageData) {
-
-         _log.d("_moduleContainer.model ADDPIC : " + JSON.stringify(_moduleContainer.model));
-
-         }
-         */
 
 
 };
@@ -300,4 +327,7 @@ _moduleContainer = {
 ;
 ;
 ;
-;;
+;
+;
+;
+;;;

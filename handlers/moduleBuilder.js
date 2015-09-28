@@ -24,32 +24,40 @@ exports.process = function (form, modelRoot, attachElm) {
         var def = (typeof elm.def != 'undefined') ? elm.def : '';
 
 
-        xml += '<formElement show="' + show + '" name="' + name + '" title="' + label + '" desc="' + desc + '" text="' + text + '">'
+        xml += '<div name="' + name + '"  class="fieldWrap"  id="' + modelRoot + '.' + elm.id + '"  title="' + label + '" desc="' + desc + '" text="' + text + '">'
 
         if (elm.type == 'TEXT') {
             model[elm.name] = def;
-            xml += '<input type="text" ng-blur="inputChange(\'' + elm.name + '\')" valid="' + elm.valid + '" filter="' + elm.filter + '" ng-model="' + modelRoot + '.' + elm.id + '"   />';
+            xml += ' <md-input-container flex> <label>' + text + '</label>' +
+            '<input type="text"  class="textField" />' +
+            '</md-input-container>';
         }
         else if (elm.type == 'DATE') {
 
             model[elm.name] = def;
 
 
-            xml += '<input type="date" ng-blur="inputChange(\'' + elm.name + '\')" valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '" />';
+            xml += ' <md-input-container flex> <label>' + text + '</label>' +
+            '<input type="date"  class="dateField" />' +
+            '</md-input-container>';
         }
         else if (elm.type == 'TIME') {
 
             model[elm.name] = def;
 
 
-            xml += '<input type="time" ng-blur="inputChange(\'' + elm.name + '\')" valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '" />';
+            xml += ' <md-input-container flex> <label>' + text + '</label>' +
+            '<input type="time"  class="timeField" />' +
+            '</md-input-container>';
         }
         else if (elm.type == 'NUMBER') {
 
             model[elm.name] = def;
 
 
-            xml += '<input type="number" ng-blur="inputChange(\'' + elm.name + '\')" valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '" />';
+            xml += ' <md-input-container flex> <label>' + text + '</label>' +
+            '<input type="number"  class="numberField" ng-model="' + modelRoot + '[' + e + '].id" />' +
+            '</md-input-container>';
         }
 
         else if (elm.type == 'EMAIL') {
@@ -57,7 +65,9 @@ exports.process = function (form, modelRoot, attachElm) {
             model[elm.name] = def;
 
 
-            xml += '<input type="email" ng-blur="inputChange(\'' + elm.name + '\')" valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '" />';
+            xml += ' <md-input-container flex> <label>' + text + '</label>' +
+            '<input type="email"  class="emailField" />' +
+            '</md-input-container>';
         }
 
         else if (elm.type == "DROPDOWN") {
@@ -109,10 +119,10 @@ exports.process = function (form, modelRoot, attachElm) {
         else if (elm.type == 'address') {
             xml += '<< TODO ADDRESS >>';
         }
-        xml += '<div></div>';
-        xml += '<div class="cardFormElementFooter"><table style="border-bottom: 1px solid #999;padding-top: 3px;"><tr>';
+        // xml += '<div></div>';
+        // xml += '<div class="cardFormElementFooter"><table style="border-bottom: 1px solid #999;padding-top: 3px;"><tr>';
 
-        xml += '<td class="gui-extra" width="20" style="border-bottom-left-radius: 5px;" ng-show="showHistoryButton(\'' + elm.questionKey + '\')" ><x style="padding-top:6px;">&#xf071;</x></td><td ng-click="showHistory(\'' + elm.questionKey + '\')" ng-show="showHistoryButton(\'' + elm.questionKey + '\')"  onclick="" style="text-align:left;" >History</td>';
+        // xml += '<td class="gui-extra" width="20" style="border-bottom-left-radius: 5px;" ng-show="showHistoryButton(\'' + elm.questionKey + '\')" ><x style="padding-top:6px;">&#xf071;</x></td><td ng-click="showHistory(\'' + elm.questionKey + '\')" ng-show="showHistoryButton(\'' + elm.questionKey + '\')"  onclick="" style="text-align:left;" >History</td>';
 
         //images
         if (elm.type == "IMAGE") {
@@ -148,11 +158,11 @@ exports.process = function (form, modelRoot, attachElm) {
 
         }
 
-        xml += '</tr></table>' +
-        '</div></div>';
+        //xml += '</tr></table>' +
+        //'</div></div>';
 
 
-        xml += '</formElement>';
+        xml += '</div>';
         _log.d("closed form tag");
 
 
