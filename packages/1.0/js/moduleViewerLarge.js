@@ -20,7 +20,7 @@ _moduleViewerLarge = {
 
             _moduleViewerLarge.moduleItems=d;
             _moduleViewerLarge.itemsModel=d[0].html;
-            
+            $('#htmlLine').html(_moduleViewerLarge.moduleItems[0].htmlLine);
 
             _model.getAll("Modules", function (moduleData) 
             {
@@ -114,7 +114,7 @@ _moduleViewerLarge = {
                         hideScrollbar: true,
                     });
 
-                $('#htmlLine').html(_moduleViewerLarge.moduleItems[0].htmlLine);
+                
                 $('#divRecords').hide();
                 $('#divItems').hide();
                 $('#htmlLine').hide();
@@ -125,9 +125,12 @@ _moduleViewerLarge = {
         $scope.Modules = _moduleViewerLarge.model[0];
         $scope.moduleItem = _moduleViewerLarge.moduleItems[0];
 
-        // $scope.categories = _moduleViewerLarge.moduleItems[0].categories;
-
+        _moduleViewerLarge.records = _moduleViewerLarge.moduleItems[0].modelLine;  
+        
         _moduleViewerLarge.items = [];
+
+        
+
         for(var i in _moduleViewerLarge.moduleItems)
         {
           for(var j in _moduleViewerLarge.moduleItems[i].items)
@@ -136,7 +139,6 @@ _moduleViewerLarge = {
           }
         }
         $scope.items = _moduleViewerLarge.items;
-
 
         $scope.getWidth = function(page)
         {   
@@ -462,6 +464,14 @@ _moduleViewerLarge = {
       //       break;
       //   }
       // }
+
+      e = document.getElementById('moduleViewerLargeFront__FACE');
+      scope = angular.element(e).scope();
+      scope.$apply(function() 
+      { 
+        _moduleViewerLarge.records = _moduleViewerLarge.moduleItems[0].modelLine[0];  
+        scope.lineItems = _moduleViewerLarge.records;
+      }); 
       
       _moduleListLarge.updateBreadcrumb(_moduleViewerLarge.currData);
     },
