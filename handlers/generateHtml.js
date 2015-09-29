@@ -201,13 +201,33 @@ exports.req = function (obj, cb) {
                                 if (f == cats.length - 1) {
 
                                     var lineData = [];
+                                if(line.length==0) {
+                                    console.log("creating module without line itesm ");
+                                    var modulObj = {
+                                        "moduleId": module.id,
+                                        "moduleName": module.name,
+                                        "htmlHeader": header,
+                                        "htmlLine": line,
+                                        "htmlFooter": footer,
+                                        "modelHeader": module.headerFields,
+                                        "modelLine": lineData,
+                                        "modelFooter": module.footerFields,
+                                        "categories": moduleCats
+                                    };
+                                    modulesList.push(modulObj);
+                                    if (q < modules.length - 1) {
+                                        callGenHtml(q + 1);
+                                    } else {
+                                        cbHtml(modulesList);
+                                    }
+                                }else{
                                     //loop through all line items and build data object
                                     for (var s = 0; s < line.length; s++) {
 
                                         lineData.push(module.lineFields);
 
                                         if (s == line.length - 1) {
-                                            console.log("creating module object");
+                                            console.log("creating module object with line items");
                                             var modulObj = {
                                                 "moduleId": module.id,
                                                 "moduleName": module.name,
@@ -227,7 +247,9 @@ exports.req = function (obj, cb) {
                                             }
 
                                         }
+
                                     }
+                                }
                                 }
 
 
@@ -275,7 +297,7 @@ exports.req = function (obj, cb) {
     function getHeader(module, cbHeader) {
         var headerHtml = "";
         if (module.headerFields.length > 0) {
-            _log.d("PROCESSING HEADER ITEMS FOR MODULE:" + name);
+            _log.d("PROCESSING HEADER ITEMS FOR MODULE:" + module.name);
             var headerHtml = moduleBuilder.process(module.headerFields, 'headerItems', 'sectionFront');
             cbHeader(headerHtml);
         }
@@ -290,7 +312,7 @@ exports.req = function (obj, cb) {
     function getFooter(module, cbFooter) {
         var footerHtml = "";
         if (module.footerFields.length > 0) {
-            _log.d("PROCESSING FOOTER ITEMS FOR MODULE:" + name);
+            _log.d("PROCESSING FOOTER ITEMS FOR MODULE:" + module.name);
             var footerHtml = moduleBuilder.process(module.footerFields, 'footerItems', 'sectionFront');
 
             cbFooter(footerHtml);
