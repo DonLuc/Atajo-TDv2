@@ -12,6 +12,9 @@
                         {{module.name}}
                     </div>
                 </div>
+                <div id='{{$index}}_breadcrumb'>
+                    breadcrumb
+                </div>
             </li>
         </ul>
         <placeholder ng-show="modules.length == 0 || modules == false" >No Modules</placeholder>
@@ -22,14 +25,38 @@
 </face>
 
 
-<face id="exampleHelp" face="back">
+<face id="breadcrumbs" face="back" controller="_moduleListLarge.breadcrumbsCtrl">
 
-    <ctl>HELP</ctl>
+    <ctl>Breadcrumbs</ctl>
     <ctr class="gui" flip-target="close">x</ctr>
     <content>
-        <placeholder>
-              This is a help section - and provides the user with information relevant to the current you are on.
-        </placeholder>
+        <ul >
+            <li style="padding:10px;font-size:15px;background: rgb(73, 134, 171);border-radius: 10px;margin: 10px;" onClick='layout.show("entityList");'>
+                Entity: {{entity}}
+            </li>
+            <li style="padding:10px;font-size:15px;background: rgb(73, 134, 171);border-radius: 10px;margin: 10px;" onClick='_cardEngine.flip("moduleListLarge","moduleListLargeFront");'>
+                Module: {{module}}
+            </li>
+            <li ng-show="record != ''" style="padding:10px;font-size:15px;background: rgb(73, 134, 171);border-radius: 10px;margin: 10px;" onClick='_moduleViewerLarge.gotoRecords();'>
+                record: {{record}}
+            </li>
+            <li ng-show="categories.length > 0" style="padding:10px;font-size:15px;background: rgb(73, 134, 171);border-radius: 10px;margin: 10px;">
+                Categories:
+                <ul>
+                    <li ng-repeat='category in categories' style="padding:10px;font-size:15px;background: rgb(100, 147, 197);border-radius: 10px;margin: 10px;">
+                        {{category}}
+                    </li>
+                </ul>
+            </li>
+            <li ng-repeat='item in items' _id='{{item.id}}' >
+                <div style='background:rgb(0, 0, 0);padding:10px;font-size:15px;border-radius: 10px;margin: 10px;' ng-if="item.selected">
+                    item: {{item.name}}
+                </div>
+                <div style='background:rgb(16, 103, 187);padding:10px;font-size:15px;border-radius: 10px;margin: 10px;' ng-if="!item.selected">
+                    item: {{item.name}}
+                </div>
+            </li>
+        </ul>
     </content>
     <cbl></cbl>
     <cbr></cbr>
