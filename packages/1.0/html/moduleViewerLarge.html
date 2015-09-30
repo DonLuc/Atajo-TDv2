@@ -4,7 +4,7 @@
     <ctl>MODULE VIEWER {{page}}</ctl>
     <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
     <content>
-        <div >
+        <div id='moduleViewContent'>
 
             <div id='divRecords' style="color:black">
 <!--                 <ul>
@@ -12,7 +12,7 @@
                         records: {{record.name}}
                     </li>
                 </ul> -->
-            <div class='scroll' id='scroll2'>
+            <!-- <div class='scroll' id='scroll2'> -->
             <div id='main_list' ng-style="{'width':getWidth(page)}" >
                 <md-grid-list
                     md-cols-sm="2" md-cols-md="2" md-cols-gt-md="{{Math.ceil(moduleItem.moduleRecords.length/2)}}"
@@ -32,7 +32,7 @@
                     </md-grid-tile>
                 </md-grid-list>
             </div>
-            </div>
+            <!-- </div> -->
             </div>
 
             <div id='divItems' style="color:black" >
@@ -58,18 +58,10 @@
                             </div>
                         </li>
 
-
-
-                        <li  ng-repeat=" cat in moduleItem.categories " >
-                            <div>
-                                <ul>
-                                    <li class="item_elem"  ng-repeat=" item in cat.items " name="{{item.name}}" cat_id="{{item.catId}}" _id='{{item.id}}' onClick="_moduleViewerLarge.itemClick(this)" >
-                                        <div style="padding:10px;font-size:15px;background: rgb(16, 103, 187);;border-radius: 10px;margin: 10px;">
-                                            {{ item.name }}
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>   
+                        <li class="item_elem"  ng-repeat=" item in moduleItem.items " name="{{item.name}}" cat_id="{{item.catId}}" _id='{{item.id}}' index='{{$index}}' onClick="_moduleViewerLarge.itemClick(this)" >
+                            <div style="padding:10px;font-size:15px;background: rgb(16, 103, 187);;border-radius: 10px;margin: 10px;">
+                                {{ item.name }}
+                            </div>
                         </li>
 
                     </ul>
