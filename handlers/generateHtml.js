@@ -34,11 +34,11 @@ exports.req = function (obj, cb) {
                 var tcItems = entity.tcItems;
                 console.log("items before sort: " + JSON.stringify(tcItems));
 
-                getTcItems(tcItems, function (items) {
+               // getTcItems(tcItems, function (items) {
 
-                    getCategories(entity.tcCategories, items, function (categ) {
-                        console.log("finished cat: " + JSON.stringify(categ));
-                        getHtml(entity.modules, categ, function (responseHtml) {
+                    getCategories(entity.tcCategories, tcItems, function (categ) {
+                     //   console.log("finished cat: " + JSON.stringify(categ));
+                        getHtml(entity.modules, categ,tcItems, function (responseHtml) {
                             console.log("finished loading modules :" + JSON.stringify(responseHtml));
 
 
@@ -52,7 +52,7 @@ exports.req = function (obj, cb) {
                                 builModule(j + 1);
                             }
                         })
-                    })
+                 //   })
 
                 })
 
@@ -143,28 +143,28 @@ exports.req = function (obj, cb) {
                     var subObj = cat[y];
                     subObj.parent = catPath[catPath.length - 2];
                     // var subObj = {"parent": catPath[catPath.length - 2], "cat": cat[y]};
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].catId == cat[y].id) {
-                            subObj.items = items[i].items;
-                        }
-                        if (i == items.length - 1) {
+                    //for (var i = 0; i < items.length; i++) {
+                    //    if (items[i].catId == cat[y].id) {
+                    //        subObj.items = items[i].items;
+                    //    }
+                    //    if (i == items.length - 1) {
                             masterCat.push(subObj);
-                        }
-                    }
+                    //    }
+                    //}
 
 
                 } else {
                     var subObj = cat[y];
                     //subObj.parent= -1;
                     //  var subObj = {"parent": -1, "cat": cat[y]};
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].catId == cat[y].id) {
-                            subObj.items = items[i].items;
-                        }
-                        if (i == items.length - 1) {
+                    //for (var i = 0; i < items.length; i++) {
+                    //    if (items[i].catId == cat[y].id) {
+                    //        subObj.items = items[i].items;
+                    //    }
+                    //    if (i == items.length - 1) {
                             masterCat.push(subObj);
-                        }
-                    }
+                    //    }
+                    //}
                 }
                 if (y == cat.length - 1) {
                     cbCat(masterCat);
@@ -181,7 +181,7 @@ exports.req = function (obj, cb) {
     }
 
     // call methods to generate html for entity per module
-    function getHtml(modules, cats, cbHtml) {
+    function getHtml(modules, cats,items, cbHtml) {
         var modulesList = [];
 
         (callGenHtml = function (q) {
@@ -201,7 +201,7 @@ exports.req = function (obj, cb) {
                                 if (f == cats.length - 1) {
 
                                     var lineData = [];
-                                if(line.length==0) {
+                                if(items.length==0) {
                                     console.log("creating module without line itesm ");
                                     var modulObj = {
                                         "moduleId": module.id,
@@ -212,7 +212,8 @@ exports.req = function (obj, cb) {
                                         "modelHeader": module.headerFields,
                                         "modelLine": lineData,
                                         "modelFooter": module.footerFields,
-                                        "categories": moduleCats
+                                        "categories": moduleCats,
+                                        "items":items
                                     };
                                     modulesList.push(modulObj);
                                     if (q < modules.length - 1) {
@@ -222,11 +223,11 @@ exports.req = function (obj, cb) {
                                     }
                                 }else{
                                     //loop through all line items and build data object
-                                    for (var s = 0; s < line.length; s++) {
+                                    for (var s = 0; s < items.length; s++) {
 
                                         lineData.push(module.lineFields);
 
-                                        if (s == line.length - 1) {
+                                        if (s == items.length - 1) {
                                             console.log("creating module object with line items");
                                             var modulObj = {
                                                 "moduleId": module.id,
@@ -237,7 +238,8 @@ exports.req = function (obj, cb) {
                                                 "modelHeader": module.headerFields,
                                                 "modelLine": lineData,
                                                 "modelFooter": module.footerFields,
-                                                "categories": moduleCats
+                                                "categories": moduleCats,
+                                                "items":items
                                             };
                                             modulesList.push(modulObj);
                                             if (q < modules.length - 1) {
@@ -273,7 +275,8 @@ exports.req = function (obj, cb) {
                                     "modelHeader": module.headerFields,
                                     "modelLine": module.lineFields,
                                     "modelFooter": module.footerFields,
-                                    "categories": moduleCats
+                                    "categories": moduleCats,
+                                    "items":items
                                 };
                                 modulesList.push(modulObj);
 
