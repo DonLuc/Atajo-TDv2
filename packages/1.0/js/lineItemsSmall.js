@@ -55,7 +55,7 @@ _lineItemsSmall = {
                 $scope.categories = currCat;
         }
 
-        $scope.nextCat = function (parent, items) {
+        $scope.nextCat = function (parent, items,id) {
             var subCat = [];
             for (var j = 0; j < _lineItemsSmall.model.categories.length; j++) {
                 var currObj = _lineItemsSmall.model.categories[j];
@@ -65,8 +65,13 @@ _lineItemsSmall = {
                 if (j == _lineItemsSmall.model.categories.length - 1)
                     if (subCat.length == 0) {
                         _moduleContainer.currCatName = parent;
-                        $scope.lineItems = items;
+                        $scope.lineItems = _lineItemsSmall.model.items;
                         $scope.showCat = false;
+                        $(".lineItems").hide();
+                        $(".cat_"+id).show();
+                        //var e = document.getElementById('lineItemsSmallFront__FACE');
+                        //var scope = angular.element(e).scope();
+                        //scope.$apply();
                     } else {
                         $scope.categories = subCat;
                     }
@@ -106,7 +111,8 @@ _lineItemsSmall = {
             _cardEngine.flip("lineItemsSmall", "lineItemsModule");
             var target1 = $('#lineItemsModule__FACE').find('.moduleLine');
             target1.html(_lineItemsSmall.model.htmlLine);
-            _lineItemsSmall.records = _lineItemsSmall.model.modelLine[idx];
+          //  _lineItemsSmall.items = _lineItemsSmall.model.items;
+          //  _lineItemsSmall.items = _lineItemsSmall.model.items;
             layout.attach("#lineItemsModule");
         }
         console.log("angular loaded");
@@ -157,7 +163,7 @@ _lineItemsSmall = {
     },
 
     lineCtrl: function ($scope) {
-        $scope.lineItems = _lineItemsSmall.records;
+        $scope.lineItems = _lineItemsSmall.items;
 
     }
 
