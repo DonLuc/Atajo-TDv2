@@ -37,9 +37,12 @@ exports.process = function (form, modelRoot, attachElm) {
             model[elm.name] = def;
 
 
-            xml += ' <md-input-container flex> <label>' + text + '</label>' +
-            '<input type="date"  class="dateField" />' +
-            '</md-input-container>';
+            //xml += ' <md-input-container flex> <label>' + text + '</label>' +
+            //'<input type="date"  class="dateField" />' +
+            //'</md-input-container>';
+
+            xml += ' <md-datepicker  md-placeholder="' + text + '"  class="dateField"> </md-datepicker>';
+
         }
         else if (elm.type == 'TIME') {
 
@@ -80,8 +83,10 @@ exports.process = function (form, modelRoot, attachElm) {
             size = (typeof elm.size != 'undefined') ? elm.size : 1;
             size = 'size="' + size + '"';
 
-            xml += '<select ng-change="selectChange(\'' + elm.name + '\')" ' + size + ' valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '_SELECTED"  ng-options="item.value' + ' for item' + ' in ' + modelRoot + '[' + e + '].options' + '"></select>';
+            //xml += '<select ng-change="selectChange(\'' + elm.name + '\')" ' + size + ' valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '_SELECTED"  ng-options="item.value' + ' for item' + ' in ' + modelRoot + '[' + e +'].options' + '" ></select>';
 
+
+            xml += ' <md-input-container> <label>' + text + '</label><md-select ng-model="ctrl.userState"> <md-option ng-repeat="item in ' + modelRoot + '[' + e +'].options' +' " value="{{item.value}}"> {{item.value}}</md-option> </md-select> </md-input-container>';
         }
 
         else if (elm.type == "MULTICHOICE") {
@@ -94,8 +99,9 @@ exports.process = function (form, modelRoot, attachElm) {
             model[elm.name] = elm.options;
             size = (typeof elm.size != 'undefined') ? elm.size : 1;
             size = 'size="' + size + '"';
+            xml += ' <md-input-container> <label>' + text + '</label><md-select ng-model="ctrl.userState" multiple> <md-option ng-repeat="item in ' + modelRoot + '[' + e +'].options' +' " value="{{item.value}}"> {{item.value}}</md-option> </md-select> </md-input-container>';
 
-            xml += '<select multiple ng-change="selectChange(\'' + elm.name + '\')" ' + size + ' valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '_SELECTED"  ng-options="item.value' + ' for item' + ' in ' + modelRoot + '[' + e + ' ].options' + '"  ></select>';
+            //xml += '<select multiple  valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '_SELECTED"  ng-options="item.value' + ' for item' + ' in ' + modelRoot + '[' + e + '].options' + '"  ></select>';
 
         }
 
@@ -125,38 +131,38 @@ exports.process = function (form, modelRoot, attachElm) {
         // xml += '<td class="gui-extra" width="20" style="border-bottom-left-radius: 5px;" ng-show="showHistoryButton(\'' + elm.questionKey + '\')" ><x style="padding-top:6px;">&#xf071;</x></td><td ng-click="showHistory(\'' + elm.questionKey + '\')" ng-show="showHistoryButton(\'' + elm.questionKey + '\')"  onclick="" style="text-align:left;" >History</td>';
 
         //images
-        if (elm.type == "IMAGE") {
-
-
-            if (elm.type == "IMAGE") {
-                xml += '<td class="gui-extra" width="20" style="border-bottom-left-radius: 5px;"><x style="padding-top:6px;">&#xf030;</x></td><td ng-click="sizeChange()" onclick="_moduleBuilder.showPhotos(this)" style="text-align:left;">PHOTOS</td>';
-            }
-
-
-            xml += '</tr></table>';
-
-            if (elm.type == "IMAGE") {
-                xml += '<div class="photoContainer" style="display:none;">' +
-                ' <table><tr>' +
-                '<td><center><img onclick="_moduleContainer.addPic(this, \'' + elm.name + '_PHOTO_0\', \'' + attachElm + '\');" ng-src="{{' + modelRoot + '.' + elm.name + '_PHOTO_0' + '.' + 'data' + '}}" width="120" height="120" style="border-radius:5px;" />' +
-                '<x style="padding-left:6px;" onclick="_moduleBuilder.attachPic(this, \'' + elm.name +
-                '<x style="padding-left:6px;" onclick="_moduleContainer.removePic(this, \'' + elm.name + '_PHOTO_0\', \'' + attachElm + '\');" >    REMOVE</x></center>' +
-                ' </td>' +
-                '<td><center><img onclick="_moduleContainer.addPic(this, \'' + elm.name + '_PHOTO_1\', \'' + attachElm + '\');" ng-src="{{' + modelRoot + '.' + elm.name + '_PHOTO_1' + '.' + 'data' + '}}" width="120" height="120" style="border-radius:5px;" />' +
-                '    <x style="padding-left:6px;" onclick="_moduleContainer.removePic(this, \'' + elm.name + '_PHOTO_1\', \'' + attachElm + '\');" >    REMOVE</x>   </center></td>' +
-                '<td><center><img onclick="_moduleBuilder.addPic(this, \'' + elm.name + '_PHOTO_2\', \'' + attachElm + '\');" ng-src="{{' + modelRoot + '.' + elm.name + '_PHOTO_2' + '.' + 'data' + '}}" width="120" height="120" style="border-radius:5px;" />' +
-                '     <x style="padding-left:6px;" onclick="_moduleContainer.removePic(this, \'' + elm.name + '_PHOTO_2\', \'' + attachElm + '\');" >    REMOVE</x>  </center></td>'
-                + '</<table></tr></table></tr></div>';
-
-
-                model[elm.id + '_PHOTO_0'] = {"data": 'img/placeholder.png'};
-                model[elm.id + '_PHOTO_1'] = {"data": 'img/placeholder.png'};
-                model[elm.id + '_PHOTO_2'] = {"data": 'img/placeholder.png'};
-
-            }
-
-
-        }
+        //if (elm.type == "IMAGE") {
+        //
+        //
+        //    if (elm.type == "IMAGE") {
+        //        xml += '<td class="gui-extra" width="20" style="border-bottom-left-radius: 5px;"><x style="padding-top:6px;">&#xf030;</x></td><td ng-click="sizeChange()" onclick="_moduleBuilder.showPhotos(this)" style="text-align:left;">PHOTOS</td>';
+        //    }
+        //
+        //
+        //    xml += '</tr></table>';
+        //
+        //    if (elm.type == "IMAGE") {
+        //        xml += '<div class="photoContainer" style="display:none;">' +
+        //        ' <table><tr>' +
+        //        '<td><center><img onclick="_moduleContainer.addPic(this, \'' + elm.name + '_PHOTO_0\', \'' + attachElm + '\');" ng-src="{{' + modelRoot + '.' + elm.name + '_PHOTO_0' + '.' + 'data' + '}}" width="120" height="120" style="border-radius:5px;" />' +
+        //        '<x style="padding-left:6px;" onclick="_moduleBuilder.attachPic(this, \'' + elm.name +
+        //        '<x style="padding-left:6px;" onclick="_moduleContainer.removePic(this, \'' + elm.name + '_PHOTO_0\', \'' + attachElm + '\');" >    REMOVE</x></center>' +
+        //        ' </td>' +
+        //        '<td><center><img onclick="_moduleContainer.addPic(this, \'' + elm.name + '_PHOTO_1\', \'' + attachElm + '\');" ng-src="{{' + modelRoot + '.' + elm.name + '_PHOTO_1' + '.' + 'data' + '}}" width="120" height="120" style="border-radius:5px;" />' +
+        //        '    <x style="padding-left:6px;" onclick="_moduleContainer.removePic(this, \'' + elm.name + '_PHOTO_1\', \'' + attachElm + '\');" >    REMOVE</x>   </center></td>' +
+        //        '<td><center><img onclick="_moduleBuilder.addPic(this, \'' + elm.name + '_PHOTO_2\', \'' + attachElm + '\');" ng-src="{{' + modelRoot + '.' + elm.name + '_PHOTO_2' + '.' + 'data' + '}}" width="120" height="120" style="border-radius:5px;" />' +
+        //        '     <x style="padding-left:6px;" onclick="_moduleContainer.removePic(this, \'' + elm.name + '_PHOTO_2\', \'' + attachElm + '\');" >    REMOVE</x>  </center></td>'
+        //        + '</<table></tr></table></tr></div>';
+        //
+        //
+        //        model[elm.id + '_PHOTO_0'] = {"data": 'img/placeholder.png'};
+        //        model[elm.id + '_PHOTO_1'] = {"data": 'img/placeholder.png'};
+        //        model[elm.id + '_PHOTO_2'] = {"data": 'img/placeholder.png'};
+        //
+        //    }
+        //
+        //
+        //}
 
         //xml += '</tr></table>' +
         //'</div></div>';

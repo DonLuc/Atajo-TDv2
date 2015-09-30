@@ -16,12 +16,16 @@ _lineItemsSmall = {
     onMessage: function (data) {
         _lineItemsSmall.model = data;
         var target = $('#lineItemsSmallFront__FACE').find('.moduleHeader');
-        target.html("<h2>hello header {{test}}</h2>");
+       // target.html("<h2>hello header {{test}}</h2>");
+        target.html(data.htmlHeader);
+
         // var target1 = $('#lineItemsSmallFront__FACE').find('.moduleLine');
         //target1.html("<h2>hello line {{test}}</h2>");
 
         var target2 = $('#lineItemsSmallFront__FACE').find('.moduleFooter');
         target2.html("<h2>hello footer {{test}}</h2>");
+        target2.html(data.htmlFooter);
+
         //setTimeout
         layout.attach("#lineItemsSmallFront");
     },
@@ -30,7 +34,8 @@ _lineItemsSmall = {
 
         $scope.test = "hello world 222";
 
-
+        $scope.headerItems=_lineItemsSmall.model.modelHeader;
+        $scope.footerItems=_lineItemsSmall.model.modelFooter;
         $scope.showCat = true;
         $scope.showLine = _moduleContainer.showLine;
         $scope.showHeader = _moduleContainer.showHeader;

@@ -65,7 +65,7 @@ _moduleListSmall = {
             _moduleListSmall.moduleName = d[0].moduleName;
 
 
-            if (d[0].htmlHeader == "") {
+            if (d[0].htmlHeader != "") {
                 _moduleContainer.hasHeader = true;
                 _moduleContainer.showHeader = true;
                 _moduleContainer.showLine = false;
@@ -87,7 +87,7 @@ _moduleListSmall = {
                 _moduleContainer.hasLine = true;
             }
 
-            if (d[0].htmlFooter == "") {
+            if (d[0].htmlFooter != "") {
                 _moduleContainer.hasFooter = true;
             }
             layout.attach("#moduleListSmallViewer");
