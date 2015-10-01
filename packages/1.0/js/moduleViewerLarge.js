@@ -235,7 +235,7 @@ _moduleViewerLarge = {
     filterFunction: function()
     {
       // debugger;
-      $("#category_header").html("Category : " + _moduleViewerLarge.parent);
+      $("#category_header h3").html("Category : " + _moduleViewerLarge.parent);
       $( ".cat_elem" ).each(function() {
         // _log.d('filterFunction ' + _category.parent + ' - ' + $(this).attr("parent_cat"));
         if(_moduleViewerLarge.parent == $(this).attr("parent_cat") )

@@ -1,117 +1,75 @@
 <card id="moduleViewerLarge" fill="true" flip="rl">
 
-<face id="moduleViewerLargeFront" settings="default:true" controller="_moduleViewerLarge.Ctrl">
-    <ctl>MODULE VIEWER {{page}}</ctl>
-    <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
-    <content>
-        <div id='moduleViewContent'>
+    <face id="moduleViewerLargeFront" settings="default:true" controller="_moduleViewerLarge.Ctrl">
+        <ctl>MODULE VIEWER {{page}}</ctl>
+        <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
+        <content>
+            <div id='moduleViewContent'>
 
-            <div id='divRecords' style="color:black">
-<!--                 <ul>
-                    <li ng-repeat=" record in moduleItem.moduleRecords " recordIndex='{{$index}}' onClick="_moduleViewerLarge.recordClick(this)">
-                        records: {{record.name}}
-                    </li>
-                </ul> -->
-            <!-- <div class='scroll' id='scroll2'> -->
-            <div id='main_list' ng-style="{'width':getWidth(page)}" >
-                <md-grid-list
-                    md-cols-sm="2" md-cols-md="2" md-cols-gt-md="{{Math.ceil(moduleItem.moduleRecords.length/2)}}"
-                    md-row-height-gt-md="{{getHeight}}" md-row-height="1:1"
-                    md-gutter="8px" md-gutter-gt-sm="1%" >
-        
-                    <md-grid-tile ng-repeat="tile in moduleItem.moduleRecords"
-                          md-rowspan="1"
-                          md-colspan="1"
-                          md-colspan-sm="1"
-                          ng-class="tile.background" recordIndex='{{$index}}' onClick="_moduleViewerLarge.recordClick(this)">
+                <div id='divRecords' style="color:black">
+                    <!-- <div class='scroll' id='scroll2'> -->
+                    <div id='main_list' ng-style="{'width':getWidth(page)}" >
+                        <md-grid-list
+                        md-cols-sm="2" md-cols-md="2" md-cols-gt-md="{{Math.ceil(moduleItem.moduleRecords.length/2)}}"
+                        md-row-height-gt-md="{{getHeight}}" md-row-height="1:1"
+                        md-gutter="8px" md-gutter-gt-sm="1%" >
 
-                        <md-icon md-font-icon="fa-download" class="fa" style="color:#000;font-size:20pt" ></md-icon>  
+                            <md-grid-tile ng-repeat="tile in moduleItem.moduleRecords"
+                            md-rowspan="1"
+                            md-colspan="1"
+                            md-colspan-sm="1"
+                            ng-class="tile.background" recordIndex='{{$index}}' onClick="_moduleViewerLarge.recordClick(this)">
 
-                        <md-grid-tile-footer><h3>{{tile.name}}</h3></md-grid-tile-footer>
+                                <md-icon md-font-icon="fa-download" class="fa" style="color:#000;font-size:20pt" ></md-icon>  
 
-                    </md-grid-tile>
-                </md-grid-list>
-            </div>
-            <!-- </div> -->
-            </div>
+                                <md-grid-tile-footer><h3>{{tile.name}}</h3></md-grid-tile-footer>
 
-            <div id='divItems' style="color:black" >
-                <div id="cat_header" style='color:black'>
-                     header items
+                            </md-grid-tile>
+                        </md-grid-list>
+                    </div>
+                    <!-- </div> -->
                 </div>
-                <div id="cat_items" style='color:white'>
-                     <ul>
-                        <li >
-                            <div id='category_header' style="padding:10px;font-size:15px;background: rgb(0,0,0);border-radius: 10px;margin: 10px;">
-                                Category :
-                            </div>
-                        </li>
-                        <li onClick="_moduleViewerLarge.upLevel()">
-                            <div style="padding:10px;font-size:15px;background: rgb(0,0,0);border-radius: 10px;margin: 10px;">
-                                Up one level
-                            </div>
-                        </li>
-                        
-                        <li class="cat_elem"  ng-repeat=" cat in moduleItem.categories " name="{{cat.name}}" parent_cat="{{cat.parent}}" cat_id='{{cat.id}}' onClick="_moduleViewerLarge.catClick(this)" >
-                            <div style="padding:10px;font-size:15px;background: rgb(100, 147, 197);border-radius: 10px;margin: 10px;">
-                                {{ cat.name }}
-                            </div>
-                        </li>
 
-                        <li class="item_elem cat_{{item.catId}}"  ng-repeat=" item in moduleItem.items " name="{{item.name}}" cat_id="{{item.catId}}" _id='{{item.id}}' index='{{$index}}' onClick="_moduleViewerLarge.itemClick(this)" >
-                            <div style="padding:10px;font-size:15px;background: rgb(16, 103, 187);;border-radius: 10px;margin: 10px;">
-                                {{ item.name }}
-                            </div>
-                        </li>
+                <div id='divItems' style="color:black" >
+                    <div id="cat_header" style='color:black'>
+                        header items
+                    </div>
+                    <div id="cat_items" style='color:white'>
+                        <md-content>
+                            <md-list>
+                                <md-list-item class="md-2-line" onClick="_moduleViewerLarge.upLevel()">
+                                    <div id='category_header' >
+                                       <h3>Category :</h3>
+                                       <h4>Up one level</h4>
+                                    </div>
+                                </md-list-item>
+                                <md-divider ></md-divider>
+                                <md-list-item class="md-1-line cat_elem" ng-repeat="cat in moduleItem.categories" name="{{cat.name}}" parent_cat="{{cat.parent}}" cat_id='{{cat.id}}' onClick="_moduleViewerLarge.catClick(this)"  >
+                                    <div class="md-list-item-text" layout="column">
+                                        <h3>{{ cat.name }}</h3>
+                                    </div>
+                                </md-list-item>
+                                <md-divider ></md-divider>
+                                <md-list-item class="md-1-line item_elem cat_{{item.catId}} md-no-proxy" ng-repeat="item in moduleItem.items" name="{{item.name}}" index='{{$index}}' onClick="_moduleViewerLarge.itemClick(this)" >
+                                    <div class="md-list-item-text" layout="column">
+                                        <h3>{{ item.name }}</h3>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                        </md-content>
+                    </div>
 
-                    </ul>
+                    <div id="cat_footer" style='color:black'>
+                        footer items
+                    </div>
                 </div>
-                <div id="cat_footer" style='color:black'>
-                    footer items
+                <div id='htmlLine' style='color:black'>
                 </div>
             </div>
-             <div id='htmlLine' style='color:black'>
-             </div>
-  <!--           <div id='main_list' ng-style="{'width':getWidth(page)}" >
-                <md-grid-list
-                    md-cols-sm="2" md-cols-md="2" md-cols-gt-md="{{Math.ceil(showList.length/2)}}"
-                    md-row-height-gt-md="{{getHeight}}" md-row-height="1:1"
-                    md-gutter="8px" md-gutter-gt-sm="1%" >
-        
-                    <md-grid-tile ng-repeat="tile in showList"
-                          md-rowspan="1"
-                          md-colspan="1"
-                          md-colspan-sm="1"
-                          ng-class="tile.background" ng-click="moduleClick(tile)">
 
-                        <md-icon md-font-icon="fa-download" class="fa" style="color:#000;font-size:20pt" ></md-icon>  
-
-                        <md-grid-tile-footer><h3>{{tile.name}}</h3></md-grid-tile-footer>
-
-                    </md-grid-tile>
-                </md-grid-list>
-            </div> -->
-        </div>
-        
-    </content>
+        </content>
         <cbl onClick='_moduleViewerLarge.prevStep()' id='listPrev' >Prev</cbl>
         <cbr onClick='_moduleViewerLarge.nextStep()' id='listNext' >Next</cbr>
 
-</face>
-
-
-<face id="exampleHelp" face="back">
-
-    <ctl>ITEMS</ctl>
-    <ctr class="gui" flip-target="close">x</ctr>
-    <content>
-        Hier kom die items
-
-
-
-    </content>
-    <cbl></cbl>
-    <cbr></cbr>
-</face>
-
+    </face>
 </card>
