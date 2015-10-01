@@ -58,7 +58,7 @@
                             </div>
                         </li>
 
-                        <li class="item_elem"  ng-repeat=" item in moduleItem.items " name="{{item.name}}" cat_id="{{item.catId}}" _id='{{item.id}}' index='{{$index}}' onClick="_moduleViewerLarge.itemClick(this)" >
+                        <li class="item_elem cat_{{item.catId}}"  ng-repeat=" item in moduleItem.items " name="{{item.name}}" cat_id="{{item.catId}}" _id='{{item.id}}' index='{{$index}}' onClick="_moduleViewerLarge.itemClick(this)" >
                             <div style="padding:10px;font-size:15px;background: rgb(16, 103, 187);;border-radius: 10px;margin: 10px;">
                                 {{ item.name }}
                             </div>

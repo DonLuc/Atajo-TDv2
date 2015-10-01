@@ -250,24 +250,15 @@ _moduleViewerLarge = {
       });
 
       _moduleViewerLarge.filterItems();
-    },
+    }
+    ,
     filterItems: function()
     {
-      // debugger;
-      $( ".item_elem" ).each(function() {
-         _log.d('filterItems ' + _moduleViewerLarge.parentId + ' - ' + $(this).attr("cat_id"));
-        if(_moduleViewerLarge.parentId == $(this).attr("cat_id") )
-        {
-          // alert('hier2');
-          $(this).show();
-        }else
-        {
-          // alert('hier3');
-          $(this).hide();
-        }
-      });
-    },
-       upLevel: function()
+      $( ".item_elem" ).hide();
+      $( ".cat_" +  _moduleViewerLarge.parentId).show();
+    }
+    ,
+    upLevel: function()
     {
       if(_moduleViewerLarge.backtrack.length < 2 )
       {
@@ -324,14 +315,12 @@ _moduleViewerLarge = {
 
     itemClick: function(data)
     {
-      var itemId = $(data).attr("_id");
-      var catId = parseInt($(data).attr("cat_id"));
       var itemName = $(data).attr("name");
-
       var index = $(data).attr("index");
-      
+
       _moduleViewerLarge.currStep = 'item';
       _moduleViewerLarge.showStep();
+      
       _moduleViewerLarge.currData.item = itemName;
 
       e = document.getElementById('moduleViewerLargeFront__FACE');
@@ -439,14 +428,14 @@ _moduleViewerLarge = {
         else if(_moduleViewerLarge.currModel.hasFooter)
           _moduleViewerLarge.currStep = 'footer'
         else
-          alert('Nothing More');
+          alert('TODO: Nothing More');
 
       }else if(_moduleViewerLarge.currStep == 'items')
       {
         if(_moduleViewerLarge.currModel.hasFooter)
           _moduleViewerLarge.currStep = 'footer'
         else
-          alert('Nothing More');
+          alert('TODO: Nothing More');
       }
       _moduleViewerLarge.showStep();
     }
