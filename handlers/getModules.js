@@ -2,7 +2,7 @@ var am = require('../provider/adapters/advancemobility/adapter');
 var _log = require('../provider/lib/log');
 var fs = require('fs');
 var path = require('path');
-var moment = require('moment');
+var moment = require('../provider/node_modules/moment/moment');
 
 function mapEntities_read(token,cb) {
     fs.readFile(__dirname + "/userstore/user_"+token+".json", function(err, data) {

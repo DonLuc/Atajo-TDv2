@@ -320,14 +320,104 @@ _moduleContainer = {
             return _moduleContainer.moduleHeadingL;
         }
     }
+    ,
+    generateUploadObject: function(moduleItem)
+    {
+        var uploadObject = 
+        {
+            activity:[],
+            mobile_version : "7.4",
+            auditRecords : [],
+            mobile_build : "07271304",
+            moduleRecords : [],
+            visit : {},
+            gps : [],
+            client_name : "LIBRA_BRANDHOUSE",
+            generated_time : "20150901164354"
+        };
+
+        var moduleRecord = {};
+
+        moduleRecord.moduleRecordTcInstanceId = '1';
+        moduleRecord.endDate = "";
+        moduleRecord.showScore = false;
+        var date = new Date();
+        moduleRecord.captureEndDate = (date.getYear() + 1990) +''+ ('0' + date.getMonth()).slice(-2) +''+ ('0' +date.getDate()).slice(-2) +''+('0' +date.getHours()).slice(-2) +''+ ('0' +date.getMinutes()).slice(-2)+''+('0' +date.getSeconds()).slice(-2);
+        moduleRecord.headerAnswers = [];
+        moduleRecord.score = 0;
+        moduleRecord.moduleVersion = moduleRecord.captureEndDate;
+        moduleRecord.copyType = 0;
+        moduleRecord.isDatasourceOnDevice = true;
+        moduleRecord.id = moduleItem.id;//what id is this?
+        moduleRecord.moduleId = moduleItem.id;
+        moduleRecord.lines = [];
+        overlayItemsFromProjects = false;
+        isRemovableOnDevice = false;
+        maxScore = 0;
+        moduleRecordTcKeepOnDevice = true;
+        isEditableOnDevice = true;
+        timeTaken = 20;
+        compulsory = false;
+        footerAnswers = [];
+        groupItemsIntoOneCategory = false;
+        name = "nick push down project";
+        instructionId = -1;
+        closed = false;
+        behaviour = 0;
+        captureDate = moduleRecord.captureEndDate;
+        moduleRecordTcIsHistoric = false;
+        projectId = 103;
+        showOnEntityScore = false;
+        startDate = "";
+        captureStartDate = moduleRecord.captureEndDate;
 
 
+        for(var i in moduleItem.items)
+        {
+            var item = moduleItem.items[i];
+            var modelLine = moduleItem.modelLine[i];
+            var newItem = {};
+
+            newItem.itemId = item.id;
+            newItem.lineTClinesAreCompulsory = item.compulsory;
+            newItem.score = 0;
+            newItem.itemName = item.name;
+            newItem.itemStock = item.stock;
+            newItem.itemCode = item.code;
+            newItem.answers = [];
+            newItem.itemPrice = item.price;
+            newItem.completed = true;
+            newItem.maxScore = 0;
+            newItem.categoryId = item.catId;
+
+
+            for(var j in modelLine)
+            {
+                var field = modelLine[j];
+                var answer = {};
+                answer.score = field.score;
+                answer.defaultValue = false;
+                answer.optionId = 0;
+                answer.behaviour = 0;
+                answer.id = 0;
+                answer.decisionId = 0;
+                answer.value = 0;
+                if(typeof field.value != 'undefined') answer.value = field.value;
+                answer.order = 0;
+                answer.fieldId = field.id;
+
+                newItem.answers.push(answer);
+            }
+
+            moduleRecord.lines.push(newItem);
+        }
+
+        uploadObject.moduleRecords.push(moduleRecord);
+
+        _log.d(JSON.stringify(uploadObject));
+        alert('check log');
+
+        return uploadObject;
+    }
 };
-;
-;
-;
-;
-;
-;
-;
 ;;;
