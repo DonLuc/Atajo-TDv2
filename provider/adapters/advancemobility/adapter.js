@@ -47,6 +47,26 @@ var am = {
 
             }
         });
+    },
+    upload : function(obj,cb){
+
+        var conParams = config.conParams[GLOBAL.RELEASE];
+        request.post({
+          headers: {'content-type' : 'application/json'},
+          url:     "http://"+conParams.host + ":" + conParams.port + "/" + conParams.url + "/uploads/mobiledata",
+          body:    JSON.stringify(obj)
+        }, function(error, response, body){
+          var returnObj =
+          {
+            error:error,
+            response:response,
+            body:body
+          }
+          _log.d('UPLOAD RESPONSE');
+          _log.d(JSON.stringify(returnObj));
+          cb(returnObj);
+        });
+
     }
 }
 

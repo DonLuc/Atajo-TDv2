@@ -321,8 +321,11 @@ _moduleContainer = {
         }
     }
     ,
-    generateUploadObject: function(moduleItem)
+    generateUploadObject: function(moduleItem,entityId,userId)
     {
+        var date = new Date();
+        var timeStamp = (date.getYear() + 1990) +''+ ('0' + date.getMonth()).slice(-2) +''+ ('0' +date.getDate()).slice(-2) +''+('0' +date.getHours()).slice(-2) +''+ ('0' +date.getMinutes()).slice(-2)+''+('0' +date.getSeconds()).slice(-2);
+
         var uploadObject = 
         {
             activity:[],
@@ -332,8 +335,8 @@ _moduleContainer = {
             moduleRecords : [],
             visit : {},
             gps : [],
-            client_name : "LIBRA_BRANDHOUSE",
-            generated_time : "20150901164354"
+            client_name : _login.credentials.username,//What must be here?
+            generated_time : timeStamp
         };
 
         var moduleRecord = {};
@@ -341,37 +344,36 @@ _moduleContainer = {
         moduleRecord.moduleRecordTcInstanceId = '1';
         moduleRecord.endDate = "";
         moduleRecord.showScore = false;
-        var date = new Date();
-        moduleRecord.captureEndDate = (date.getYear() + 1990) +''+ ('0' + date.getMonth()).slice(-2) +''+ ('0' +date.getDate()).slice(-2) +''+('0' +date.getHours()).slice(-2) +''+ ('0' +date.getMinutes()).slice(-2)+''+('0' +date.getSeconds()).slice(-2);
+        moduleRecord.captureEndDate = timeStamp;
         moduleRecord.headerAnswers = [];
         moduleRecord.score = 0;
-        moduleRecord.moduleVersion = moduleRecord.captureEndDate;
+        moduleRecord.moduleVersion = timeStamp;
         moduleRecord.copyType = 0;
         moduleRecord.isDatasourceOnDevice = true;
         moduleRecord.id = moduleItem.id;//what id is this?
         moduleRecord.moduleId = moduleItem.id;
         moduleRecord.lines = [];
-        overlayItemsFromProjects = false;
-        isRemovableOnDevice = false;
-        maxScore = 0;
-        moduleRecordTcKeepOnDevice = true;
-        isEditableOnDevice = true;
-        timeTaken = 20;
-        compulsory = false;
-        footerAnswers = [];
-        groupItemsIntoOneCategory = false;
-        name = "nick push down project";
-        instructionId = -1;
-        closed = false;
-        behaviour = 0;
-        captureDate = moduleRecord.captureEndDate;
-        moduleRecordTcIsHistoric = false;
-        projectId = 103;
-        showOnEntityScore = false;
-        startDate = "";
-        captureStartDate = moduleRecord.captureEndDate;
+        moduleRecord.overlayItemsFromProjects = false;
+        moduleRecord.isRemovableOnDevice = false;
+        moduleRecord.maxScore = 0;
+        moduleRecord.moduleRecordTcKeepOnDevice = true;
+        moduleRecord.isEditableOnDevice = true;
+        moduleRecord.timeTaken = 20;
+        moduleRecord.compulsory = false;
+        moduleRecord.footerAnswers = [];
+        moduleRecord.groupItemsIntoOneCategory = false;
+        moduleRecord.name = moduleItem.name;
+        moduleRecord.instructionId = -1;
+        moduleRecord.closed = false;
+        moduleRecord.behaviour = 0;
+        moduleRecord.captureDate = timeStamp;
+        moduleRecord.moduleRecordTcIsHistoric = false;
+        moduleRecord.projectId = 103;
+        moduleRecord.showOnEntityScore = false;
+        moduleRecord.startDate = "";
+        moduleRecord.captureStartDate = timeStamp;
 
-
+        //Add Line Items
         for(var i in moduleItem.items)
         {
             var item = moduleItem.items[i];
@@ -412,10 +414,58 @@ _moduleContainer = {
             moduleRecord.lines.push(newItem);
         }
 
+        //Add Header Items
+        for(var i in moduleItem.modelHeader)
+        {
+            var field = moduleItem.modelHeader[i];
+            var answer = {};
+            answer.score = field.score;
+            answer.defaultValue = field.defaultValue;
+            answer.optionId = 0;
+            answer.behaviour = 0;
+            answer.id = 0;
+            answer.decisionId = 0;
+            if(typeof field.value != 'undefined') answer.value = field.value;
+            answer.order = field.order;
+            answer.fieldId = field.id;
+
+            moduleRecord.headerAnswers.push(answer);
+        }
+
+        //Add Footer Items
+        for(var i in moduleItem.modelFooter)
+        {
+            var field = moduleItem.modelFooter[i];
+            var answer = {};
+            answer.score = field.score;
+            answer.defaultValue = field.defaultValue;
+            answer.optionId = 0;
+            answer.behaviour = 0;
+            answer.id = 0;
+            answer.decisionId = 0;
+            if(typeof field.value != 'undefined') answer.value = field.value;
+            answer.order = field.order;
+            answer.fieldId = field.id;
+
+            moduleRecord.footerAnswers.push(answer);
+        }
+
         uploadObject.moduleRecords.push(moduleRecord);
 
+        var visit = {};
+        visit.actualScore = 0;
+        visit.uploaded = timeStamp;
+        visit.lastExit = timeStamp;
+        visit.visitTimeTakenAsSec = 17;
+        visit.entityId = entityId;
+        visit.firstEntry = timeStamp;
+        visit.maxScore = 0;
+        visit.userId = userId;
+        visit.downloaded = timeStamp;
+
+        uploadObject.visit = visit;
+
         _log.d(JSON.stringify(uploadObject));
-        alert('check log');
 
         return uploadObject;
     }

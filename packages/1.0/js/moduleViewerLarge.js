@@ -425,7 +425,7 @@ _moduleViewerLarge = {
     ,
     upload: function()
     {
-        var data = _moduleContainer.generateUploadObject(_moduleViewerLarge.currModel);
+        var data = _moduleContainer.generateUploadObject(_moduleViewerLarge.currModel,_moduleListLarge.entityId,_entityList.model[0].userId);
 
           jobData = { action:'uploadRecord', data: data};
 
