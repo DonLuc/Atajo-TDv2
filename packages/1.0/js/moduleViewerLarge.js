@@ -1,7 +1,6 @@
 _moduleViewerLarge = {
 
     model: null,
-    itemsModel : "Nothing to Display",
     currStep: 'record',
     items:[],
     moduleItems:[],
@@ -10,27 +9,40 @@ _moduleViewerLarge = {
     backtrack : [],
     backtrackId : [],
     currData : {},
+    currModel:null,
+    modelHeader:[],
+    htmlLineTarget:null,
+    htmlHeaderTarget:null,
+    htmlFooterTarget:null,
     onExit : function() { var _ = this;
 
     },
 
     onLoaded: function () { var _ = this;
 
+        _moduleViewerLarge.currModel = {
+          moduleRecords:[],
+          modelLine:[],
+          categories:[],
+        };
+
          _model.getAll("moduleItems",function(d){
 
             _moduleViewerLarge.moduleItems=d;
-            _moduleViewerLarge.itemsModel=d[0].html;
+            _moduleViewerLarge.currModel = _moduleViewerLarge.moduleItems[1];
             
+            _.htmlHeaderTarget = $('#cat_header');
+            _.htmlLineTarget = $('#htmlLine');
+            _.htmlFooterTarget = $('#cat_footer');
 
             _model.getAll("Modules", function (moduleData) 
             {
-              _log.d(_moduleListLarge.entityId);
-              _log.d(JSON.stringify(moduleData));
+
               if (moduleData.length > 0) {
                 try
                 {
-                  _moduleViewerLarge.model = moduleData;
-                  _moduleViewerLarge.moduleItems[0].moduleRecords = _moduleViewerLarge.model[0].data.moduleRecords;
+                  _moduleViewerLarge.model = moduleData;  
+                  _moduleViewerLarge.currModel.moduleRecords = _moduleViewerLarge.model[0].data.moduleRecords;                
 
                 }catch(err)
                 {
@@ -42,8 +54,7 @@ _moduleViewerLarge = {
                   alert('No Module Data');
                   _moduleViewerLarge.model = [];
               }
-
-              layout.attach('#moduleViewerLargeFront'); 
+              layout.attach('#moduleViewerLargeFront');
             });
             
           });
@@ -54,92 +65,115 @@ _moduleViewerLarge = {
 
     onMessage : function(data) {
 
+        for(var i in _moduleViewerLarge.moduleItems)
+        {
+          if(_moduleViewerLarge.moduleItems[i].moduleId == data.id)
+          {
+            _moduleViewerLarge.currModel = _moduleViewerLarge.moduleItems[i];
+            _moduleViewerLarge.currModel.moduleRecords = _moduleViewerLarge.model[0].data.moduleRecords;
+
+            _moduleViewerLarge.htmlLineTarget.html(_moduleViewerLarge.moduleItems[i].htmlLine);
+            _moduleViewerLarge.htmlHeaderTarget.html(_moduleViewerLarge.moduleItems[i].htmlHeader);
+            _moduleViewerLarge.htmlFooterTarget.html(_moduleViewerLarge.moduleItems[i].htmlFooter);
+
+            if(_moduleViewerLarge.currModel.modelFooter.length == 0)
+              _moduleViewerLarge.currModel.hasFooter = false;
+            else
+              _moduleViewerLarge.currModel.hasFooter = true;
+
+            if(_moduleViewerLarge.currModel.modelHeader.length == 0)
+              _moduleViewerLarge.currModel.hasHeader = false;
+            else
+              _moduleViewerLarge.currModel.hasHeader = true;
+
+            if(_moduleViewerLarge.currModel.modelLine.length == 0)
+              _moduleViewerLarge.currModel.hasLine = false;
+            else
+              _moduleViewerLarge.currModel.hasLine = true;
+
+            break;
+          }
+        };
+
         _moduleViewerLarge.id = data.id;
 
-        $('#divRecords').show();
-        $('#divItems').hide();
-        $('#htmlLine').hide();
-            
+      try{
+          $('#divRecords').show();
+          $('#divItems').hide();
+          $('#htmlLine').hide();
+        }catch(err)
+        {
+          alert('1 ' + err);
+        }
 
-            showList = [];
-            for(var i in _moduleViewerLarge.model[0].moduleRecords)
-            {
-                var moduleRecord = _moduleViewerLarge.model[0].moduleRecords[i] ;
-                if(moduleRecord.moduleId == _moduleViewerLarge.id)
-                {
-                    var record = {};
-                    record.background = _moduleViewerLarge.getColor(i);
-                    record.name = moduleRecord.name;
-                    record.index = i;
-                    record.headerDone = false;
-                    showList.push(record);
-                }
-            }
+        // layout.attach('#moduleViewerLargeFront');
 
-            
-            e = document.getElementById('moduleViewerLargeFront__FACE');
-            scope = angular.element(e).scope();
-            scope.$apply(function() 
-            {  
-                scope.page = 'records';
-                scope.showList = showList;
-            }); 
-            // if(_.isFlipped)
-              // _cardEngine.flip("moduleViewerLarge","moduleViewerLargeFront");
-
-           
-    
-
-
-
-        
+        angular.element(_moduleViewerLarge.htmlHeaderTarget).injector().invoke(function($compile) {
+          var scope = angular.element(_moduleViewerLarge.htmlHeaderTarget).scope();
+          $compile(_moduleViewerLarge.htmlHeaderTarget)(scope);
+        });
+        angular.element(_moduleViewerLarge.htmlLineTarget).injector().invoke(function($compile) {
+          var scope = angular.element(_moduleViewerLarge.htmlLineTarget).scope();
+          $compile(_moduleViewerLarge.htmlLineTarget)(scope);
+        });
+        angular.element(_moduleViewerLarge.htmlFooterTarget).injector().invoke(function($compile) {
+          var scope = angular.element(_moduleViewerLarge.htmlFooterTarget).scope();
+          $compile(_moduleViewerLarge.htmlFooterTarget)(scope);
+        });
 
     },
     Ctrl : function($scope) {
-        $scope.itemsHTML = _moduleViewerLarge.itemsModel;
+
         $scope.page = 'records';
-        $scope.showList = [];
-        $scope.tiles = _home.tiles;
-        $scope.isTablet = isTablet;
         $scope.Math = window.Math;
+
+        _moduleViewerLarge.backtrack = [];
+        _moduleViewerLarge.backtrackId = [];
+        _moduleViewerLarge.parent = '';
+        _moduleViewerLarge.parentId = 0;
+
+
         if(isTablet)
         {
             setTimeout(function () {
-                _home.scroll = new iScroll($('#scroll2')[0], {
-                        scrollX: false, 
-                        scrollY: true,
-                        scrollbars: false,
-                        hScrollbar:false,
-                        vScrollbar:false,
-                        hideScrollbar: true,
-                    });
+                // _home.scroll = new iScroll($('#scroll2')[0], {
+                //         scrollX: false, 
+                //         scrollY: true,
+                //         scrollbars: false,
+                //         hScrollbar:false,
+                //         vScrollbar:false,
+                //         hideScrollbar: true,
+                //     });
 
-                $('#htmlLine').html(_moduleViewerLarge.moduleItems[0].htmlLine);
-                $('#divRecords').hide();
-                $('#divItems').hide();
-                $('#htmlLine').hide();
+                try
+                {
+                  $('#divRecords').hide();
+                  $('#divItems').hide();
+                  $('#htmlLine').hide();  
+                }catch(err)
+                {
+                  _log.e(err);
+                }
+                
                 _moduleViewerLarge.filterFunction();
             }, 500);
         };
-        
-        $scope.Modules = _moduleViewerLarge.model[0];
-        $scope.moduleItem = _moduleViewerLarge.moduleItems[0];
 
-        // $scope.categories = _moduleViewerLarge.moduleItems[0].categories;
+        $scope.moduleItem = _moduleViewerLarge.currModel;
 
-        _moduleViewerLarge.items = [];
-        for(var i in _moduleViewerLarge.moduleItems)
+        if(_moduleViewerLarge.currModel.modelLine.length > 0)  
         {
-          for(var j in _moduleViewerLarge.moduleItems[i].items)
-          {
-            _moduleViewerLarge.items.push(_moduleViewerLarge.moduleItems[i].items[j]);
-          }
+          _moduleViewerLarge.records = _moduleViewerLarge.currModel.modelLine[0]; 
+          _moduleViewerLarge.modelHeader = _moduleViewerLarge.currModel.modelHeader;  
+          $scope.lineItems = _moduleViewerLarge.records;
+          $scope.headerItems = _moduleViewerLarge.modelHeader;
         }
-        $scope.items = _moduleViewerLarge.items;
-
+          
+        _moduleViewerLarge.items = [];
 
         $scope.getWidth = function(page)
         {   
+            return ((_._cH) * 0.5)  + 'px';
             if(page == 'records')
             {
               if(isTablet)
@@ -164,189 +198,36 @@ _moduleViewerLarge = {
             
         };
 
-        // $scope.getHeight = function(page)
-        // {   
-
-        //       if(isTablet)
-        //       {
-        //           return ((_._cH) * 0.49) + 'px';
-        //       }else
-        //       {
-        //           return '1:1';
-        //       }
-            
-        // };
-
-        $scope.moduleClick = function(item)
-        {
-          
-            _moduleViewerLarge.currStep = 'header';
-            _moduleViewerLarge.showStep();
-            _moduleListLarge.updateBreadcrumb({moduleId:_moduleViewerLarge.id , recordId : item.index ,entityId:_moduleListLarge.entityId});
-
-              //layout.sendMessage("categoryLargeList", { recordId : item.index ,entityId:_moduleListLarge.entityId});
-
-              // xml = "<b>"+ "Header Fields" +"</b>";  
-
-              // if(item.headerDone)
-              //  {
-              //   // layout.sendMessage("categoryLargeList", { index : item.index });
-              //   layout.sendMessage("categoryLargeList", { recordId : item.index ,entityId:_moduleListLarge.entityId});
-              //  }else
-              //  {
-              //   _modal.show(
-              //       'warning',
-              //       'title',
-              //        xml,
-              //        true,
-              //       function()
-              //       {
-              //          item.headerDone = true;
-              //          _modal.hide();
-              //          // layout.sendMessage("categoryLargeList", { index : item.index });
-              //          layout.sendMessage("categoryLargeList", { recordId : item.index ,entityId:_moduleListLarge.entityId});
-              //       },
-              //       function() {
-              //          _modal.hide();
-
-              //       }
-              //     );
-
-              //  }
-
-            // debugger;
-
-            // var moduleRecord = _moduleViewerLarge.model.moduleRecords[item.index];
-            // var categories = [];
-            // for(var i in moduleRecord.lines)
-            // {
-            //   line = moduleRecord.lines[i];
-            //   for(var j in _moduleViewerLarge.model.tcCategories)
-            //   {
-            //     var category = _moduleViewerLarge.model.tcCategories[j];
-            //     if(category.id == line.categoryId)
-            //     {
-            //       var paths = category.path.split(':');
-            //       var currCat = null;
-            //       for(var k in paths)
-            //       {
-            //         var path = paths[k]
-            //         var found = false;
-            //         for(var l in categories)
-            //         {
-            //           if(categories[l].name == path)
-            //           {
-            //             found = true;
-
-            //             if( k+1 == paths.length)
-            //             {
-            //               categories[l].hasItems = true;
-            //             }
-
-            //             currCat = categories[l];
-            //             break;
-            //           }
-            //         }
-            //         if(found == false)
-            //         {
-            //           for(var l in _moduleViewerLarge.model.tcCategories)
-            //           {
-            //             var categoryAdd = _moduleViewerLarge.model.tcCategories[l];
-            //             if(categoryAdd.name == path)
-            //             {
-            //               if(currCat == null)
-            //               {
-            //                 categoryAdd.parent = 0;
-            //                 categoryAdd.hasSubCat = false;
-            //               }else
-            //               {
-            //                 categoryAdd.parent = currCat.id;
-            //                 currCat.hasSubCat = true;
-            //               }
-            //               if( k+1 == paths.length)
-            //               {
-            //                 categoryAdd.hasItems = true;
-            //               }else
-            //               {
-            //                 categoryAdd.hasItems = false;
-            //               }
-
-            //               currCat = categoryAdd;
-            //               categories.push(categoryAdd);
-
-            //               break;
-            //             }
-            //           }
-            //         }
-            //       }
-            //       break;
-            //     }
-            //   }
-            // }
-            // $scope.categories = categories;
-            // $scope.parent = 0;
-            // $scope.showCat = [];
-            // for(var i in categories)
-            // {
-            //   var cat = categories[i];
-            //   if(cat.parent == $scope.parent)
-            //   {
-            //     cat.background = _moduleViewerLarge.getColor($scope.showCat.length);
-            //     $scope.showCat.push(cat);
-            //   }
-            // }
-            // $scope.page = 'categories';
-        };
-
-        // $scope.catClick = function(item)
-        // {
-        //   if(item.hasSubCat)
-        //   {
-        //     $scope.parent = item.id;
-        //     showCat = [];
-        //     if(item.hasItems)
-        //     {
-        //       var cat = {
-        //         name :'Show ' + item.name + ' items',
-        //         hasSubCat:false,
-        //         id:item.id
-        //       }
-        //       showCat.push(cat);
-        //     }
-        //     for(var i in $scope.categories)
-        //     {
-        //       var cat = $scope.categories[i];
-        //       if(cat.parent == $scope.parent)
-        //       {
-        //         cat.background = _moduleViewerLarge.getColor(showCat.length);
-        //         showCat.push(cat);
-        //       }
-        //     }
-        //     $scope.showCat = showCat;
-        //   }else
-        //   {
-        //     _cardEngine.flip("moduleViewerLarge","exampleHelp");
-        //   }
-          
-        // };
-
     }
     ,
     recordClick:function(item)
     {
       
       var recordIndex = $(item).attr("recordIndex");
-      _moduleViewerLarge.currStep ='header';
+
+      if(_moduleViewerLarge.currModel.hasHeader)
+      {
+        _moduleViewerLarge.currStep = 'header';
+      }else if(_moduleViewerLarge.currModel.hasLine)
+      {
+        _moduleViewerLarge.currStep ='items';
+      }else if(_moduleViewerLarge.currModel.hasFooter)
+      {
+        _moduleViewerLarge.currStep ='footer';
+      }else
+      {
+        alert('No Data for record.');
+      }
+        
       _moduleViewerLarge.showStep();
 
+
       _moduleViewerLarge.currData = {
-        record:_moduleViewerLarge.moduleItems[0].moduleRecords[recordIndex].name,
+        record:_moduleViewerLarge.currModel.moduleRecords[recordIndex].name,
         categories:[],
         items:[],
         item:''
       }
-
-// _moduleListLarge.updateBreadcrumb({moduleId:_moduleViewerLarge.id , recordId : item.index ,entityId:_moduleListLarge.entityId});
       _moduleListLarge.updateBreadcrumb(_moduleViewerLarge.currData);
 
     }
@@ -369,24 +250,15 @@ _moduleViewerLarge = {
       });
 
       _moduleViewerLarge.filterItems();
-    },
+    }
+    ,
     filterItems: function()
     {
-      // debugger;
-      $( ".item_elem" ).each(function() {
-         _log.d('filterItems ' + _moduleViewerLarge.parentId + ' - ' + $(this).attr("cat_id"));
-        if(_moduleViewerLarge.parentId == $(this).attr("cat_id") )
-        {
-          // alert('hier2');
-          $(this).show();
-        }else
-        {
-          // alert('hier3');
-          $(this).hide();
-        }
-      });
-    },
-       upLevel: function()
+      $( ".item_elem" ).hide();
+      $( ".cat_" +  _moduleViewerLarge.parentId).show();
+    }
+    ,
+    upLevel: function()
     {
       if(_moduleViewerLarge.backtrack.length < 2 )
       {
@@ -404,12 +276,11 @@ _moduleViewerLarge = {
       _moduleViewerLarge.currData.categories = _moduleViewerLarge.backtrack;
 
       _moduleViewerLarge.currData.items = [];
-      for(var i in _moduleViewerLarge.moduleItems[0].categories)
+      for(var i in _moduleViewerLarge.currModel.items)
       {
-        if(_moduleViewerLarge.moduleItems[0].categories[i].id == _moduleViewerLarge.backtrackId[_moduleViewerLarge.backtrackId.length -1])
+        if(_moduleViewerLarge.currModel.items[i].catId == _moduleViewerLarge.parentId)
         {
-            _moduleViewerLarge.currData.items = _moduleViewerLarge.moduleItems[0].categories[i].items;
-            break;
+            _moduleViewerLarge.currData.items.push(_moduleViewerLarge.currModel.items[i]);
         }
       }
 
@@ -431,12 +302,11 @@ _moduleViewerLarge = {
 
       _moduleViewerLarge.currData.categories = _moduleViewerLarge.backtrack;
       _moduleViewerLarge.currData.items = [];
-      for(var i in _moduleViewerLarge.moduleItems[0].categories)
+      for(var i in _moduleViewerLarge.currModel.items)
       {
-        if(_moduleViewerLarge.moduleItems[0].categories[i].id == _moduleViewerLarge.backtrackId[_moduleViewerLarge.backtrackId.length -1])
+        if(_moduleViewerLarge.currModel.items[i].catId == _moduleViewerLarge.parentId)
         {
-            _moduleViewerLarge.currData.items = _moduleViewerLarge.moduleItems[0].categories[i].items;
-            break;
+            _moduleViewerLarge.currData.items.push(_moduleViewerLarge.currModel.items[i]);
         }
       }
       _moduleListLarge.updateBreadcrumb(_moduleViewerLarge.currData);
@@ -445,25 +315,24 @@ _moduleViewerLarge = {
 
     itemClick: function(data)
     {
-      var itemId = $(data).attr("_id");
-      var catId = parseInt($(data).attr("cat_id"));
       var itemName = $(data).attr("name");
-      
-      // $('#htmlLine').html(_category.model.htmlLine);
+      var index = $(data).attr("index");
+
       _moduleViewerLarge.currStep = 'item';
       _moduleViewerLarge.showStep();
+      
       _moduleViewerLarge.currData.item = itemName;
-      // currData.items = [];
-      // for(var i in _moduleViewerLarge.moduleItems[0].categories)
-      // {
-      //   if(_moduleViewerLarge.moduleItems[0].categories[i].id == catId)
-      //   {
-      //       currData.items = _moduleViewerLarge.moduleItems[0].categories[i].items;
-      //       break;
-      //   }
-      // }
+
+      e = document.getElementById('moduleViewerLargeFront__FACE');
+      scope = angular.element(e).scope();
+      scope.$apply(function() 
+      { 
+        _moduleViewerLarge.records = _moduleViewerLarge.currModel.modelLine[index];
+        scope.lineItems = _moduleViewerLarge.records;
+      }); 
       
       _moduleListLarge.updateBreadcrumb(_moduleViewerLarge.currData);
+
     },
 
     showStep: function()
@@ -554,10 +423,19 @@ _moduleViewerLarge = {
     {
       if(_moduleViewerLarge.currStep == 'header')
       {
-        _moduleViewerLarge.currStep = 'items'
+        if(_moduleViewerLarge.currModel.hasLine)
+          _moduleViewerLarge.currStep = 'items'
+        else if(_moduleViewerLarge.currModel.hasFooter)
+          _moduleViewerLarge.currStep = 'footer'
+        else
+          alert('TODO: Nothing More');
+
       }else if(_moduleViewerLarge.currStep == 'items')
       {
-        _moduleViewerLarge.currStep = 'footer'
+        if(_moduleViewerLarge.currModel.hasFooter)
+          _moduleViewerLarge.currStep = 'footer'
+        else
+          alert('TODO: Nothing More');
       }
       _moduleViewerLarge.showStep();
     }
@@ -566,6 +444,7 @@ _moduleViewerLarge = {
     {
       if(_moduleViewerLarge.currStep == 'item')
       {
+
         _moduleViewerLarge.currStep = 'items'
         _moduleViewerLarge.currData.item = '';
         _moduleListLarge.updateBreadcrumb(_moduleViewerLarge.currData);
@@ -573,14 +452,28 @@ _moduleViewerLarge = {
       }else
       if(_moduleViewerLarge.currStep == 'footer')
       {
-        _moduleViewerLarge.currStep = 'items'
+
+        if(_moduleViewerLarge.currModel.hasLine)
+          _moduleViewerLarge.currStep = 'items'
+        else if(_moduleViewerLarge.currModel.hasHeader)
+          _moduleViewerLarge.currStep = 'header'
+        else
+          _moduleViewerLarge.currStep = 'record'
+
       }else if(_moduleViewerLarge.currStep == 'items')
       {
-        _moduleViewerLarge.currStep = 'header'
+        if(_moduleViewerLarge.currModel.hasHeader)
+          _moduleViewerLarge.currStep = 'header'
+        else
+          _moduleViewerLarge.currStep = 'record'
+
       }else if(_moduleViewerLarge.currStep == 'header')
       {
         _moduleViewerLarge.currStep = 'record';
-        _moduleViewerLarge.currData = {
+      }
+      if(_moduleViewerLarge.currStep == 'record')
+      {
+         _moduleViewerLarge.currData = {
           entity:_moduleListLarge.entityId,
           module:_moduleViewerLarge.id,
           record:'',
@@ -589,8 +482,8 @@ _moduleViewerLarge = {
           item:''
         }
         _moduleListLarge.updateBreadcrumb(_moduleViewerLarge.currData);
-
       }
+
       _moduleViewerLarge.showStep();
     },
     gotoRecords:function()
