@@ -14,6 +14,7 @@ _moduleViewerLarge = {
     htmlLineTarget:null,
     htmlHeaderTarget:null,
     htmlFooterTarget:null,
+    moduleRecords:[],
     onExit : function() { var _ = this;
 
     },
@@ -35,40 +36,56 @@ _moduleViewerLarge = {
             _.htmlLineTarget = $('#htmlLine');
             _.htmlFooterTarget = $('#moduleFooter');
 
-            _model.getAll("Modules", function (moduleData) 
+            _model.getAll("moduleRecords", function (moduleRecords) 
             {
-
-              if (moduleData.length > 0) {
-                try
-                {
-                  _moduleViewerLarge.model = moduleData;  
-                  _moduleViewerLarge.currModel.moduleRecords = _moduleViewerLarge.model[0].data.moduleRecords;                
-
-                }catch(err)
-                {
-                  _log.d(JSON.stringify(moduleData));
-                  alert(err);
-                }
-                  
-              } else {
-                  alert('No Module Data');
-                  _moduleViewerLarge.model = [];
-              }
+              _moduleViewerLarge.moduleRecords = moduleRecords;
               layout.attach('#moduleViewerLargeFront');
             });
+
+            // _model.getAll("Modules", function (moduleData) 
+            // {
+
+            //     if (moduleData.length > 0) {
+            //     try
+            //     {
+            //       _moduleViewerLarge.model = moduleData;  
+            //       _moduleViewerLarge.currModel.moduleRecords = _moduleViewerLarge.model[0].data.moduleRecords;                
+
+            //     }catch(err)
+            //     {
+            //       _log.d(JSON.stringify(moduleData));
+            //       alert(err);
+            //     }
+                  
+            //   } else {
+            //       alert('No Module Data');
+            //       _moduleViewerLarge.model = [];
+            //   }
+            //   layout.attach('#moduleViewerLargeFront');
+            // });
             
           });
     },
 
     onMessage : function(data) {
 
+        debugger;
         for(var i in _moduleViewerLarge.moduleItems)
         {
           if(_moduleViewerLarge.moduleItems[i].moduleId == data.id)
           {
             _moduleViewerLarge.currModel = _moduleViewerLarge.moduleItems[i];
-            _moduleViewerLarge.currModel.moduleRecords = _moduleViewerLarge.model[0].data.moduleRecords;
-
+            _moduleViewerLarge.currModel.moduleRecords = [];
+            
+            for(var j in _moduleViewerLarge.moduleRecords)
+            {
+              var record = _moduleViewerLarge.moduleRecords[j];
+              if(record.moduleId == data.id)
+              {
+                _moduleViewerLarge.currModel.moduleRecords.push(record);
+              }
+            }
+            
             _moduleViewerLarge.htmlLineTarget.html(_moduleViewerLarge.moduleItems[i].htmlLine);
             _moduleViewerLarge.htmlHeaderTarget.html(_moduleViewerLarge.moduleItems[i].htmlHeader);
             _moduleViewerLarge.htmlFooterTarget.html(_moduleViewerLarge.moduleItems[i].htmlFooter);
@@ -340,8 +357,9 @@ _moduleViewerLarge = {
         $("#moduleLine").hide();
         $("#moduleFooter").hide();
 
-        $("#listPrev").hide();
-        $("#listNext").hide();
+        $("#cbl").hide();
+        $("#cbr").show();
+        $("#cbr").html('New');
 
       }else
       if(_moduleViewerLarge.currStep == 'item')
@@ -354,8 +372,9 @@ _moduleViewerLarge = {
         $("#moduleLine").hide();
         $("#moduleFooter").hide();
 
-        $("#listPrev").show();
-        $("#listNext").hide();
+        $("#cbl").show();
+        $("#cbl").html('Back');
+        $("#cbr").hide();
 
       }else if(_moduleViewerLarge.currStep == 'header')
       {
@@ -367,9 +386,10 @@ _moduleViewerLarge = {
         $("#moduleLine").hide();
         $("#moduleFooter").hide();
 
-        $("#listPrev").show();
-        $("#listNext").show();
-        $("#listNext").html('Next');
+        $("#cbl").show();
+        $("#cbl").html('Prev');
+        $("#cbr").show();
+        $("#cbr").html('Next');
 
       }else if(_moduleViewerLarge.currStep == 'items')
       {
@@ -381,9 +401,10 @@ _moduleViewerLarge = {
         $("#moduleLine").show();
         $("#moduleFooter").hide();
 
-        $("#listPrev").show();
-        $("#listNext").show();
-        $("#listNext").html('Next');
+        $("#cbl").show();
+        $("#cbl").html('Prev');
+        $("#cbr").show();
+        $("#cbr").html('Next');
 
       }else if(_moduleViewerLarge.currStep == 'footer')
       {
@@ -395,9 +416,10 @@ _moduleViewerLarge = {
         $("#moduleLine").hide();
         $("#moduleFooter").show();
 
-        $("#listPrev").show();
-        $("#listNext").show();
-        $("#listNext").html('Upload');
+        $("#cbl").show();
+        $("#cbl").html('Prev');
+        $("#cbr").show();
+        $("#cbr").html('Upload');
 
       }else if(_moduleViewerLarge.currStep == 'moduleRecord')
       {
@@ -409,8 +431,8 @@ _moduleViewerLarge = {
         $("#moduleLine").hide();
         $("#moduleFooter").hide();
 
-        $("#listPrev").hide();
-        $("#listNext").hide();
+        $("#cbl").hide();
+        $("#cbr").hide();
       }
 
       e = document.getElementById('moduleViewerLargeFront__FACE');
@@ -437,7 +459,7 @@ _moduleViewerLarge = {
           jobid = jobQueue.add(JOB);
     }
     ,
-    nextStep: function()
+    cbrClick: function()
     {
       if(_moduleViewerLarge.currStep == 'header')
       {
@@ -460,11 +482,14 @@ _moduleViewerLarge = {
         }
         // else
           // alert('TODO: Nothing More');
+      }else if(_moduleViewerLarge.currStep == 'record')
+      {
+          alert('TODO: Create New Record');
       }
       _moduleViewerLarge.showStep();
     }
     ,
-    prevStep: function()
+    cblClick: function()
     {
       if(_moduleViewerLarge.currStep == 'item')
       {
