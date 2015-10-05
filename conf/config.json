@@ -230,12 +230,22 @@
       "key"      : "moduleId",
       "handler"  : "generateHtml",
       "indexes"  : [ "moduleId" ]
+    },
+    {
+      "service"  : "moduleRecords",
+      "label"    : "Today's Module History",
+      "key"      : "projectId",
+      "handler"  : "getRecords",
+      "indexes"  : [ "projectId" ]
     }
   ],
 
 
   "ACTIONS":
   [
-
+    {
+       "action" : "uploadRecord",
+       "handler" : "uploadRecord"
+     }
   ]
 }
