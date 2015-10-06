@@ -7,14 +7,27 @@
             <div id='moduleViewContent'>
 
                 <div id='divRecords' style="color:black">
+
+                    <md-content>
+                        <md-list>
+                            <md-list-item class="md-1-line record_{{record.moduleId}}" ng-repeat="record in moduleRecords" name="{{record.moduleRecord.name}}" parent_module="{{record.moduleName}}" module_id='{{record.moduleId}}' recordIndex='{{$index}}' onClick="_moduleViewerLarge.recordClick(this)"  >
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>{{ record.moduleRecord.name }}</h3>
+                                    <md-divider ></md-divider>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+
+
                     <!-- <div class='scroll' id='scroll2'> -->
-                    <div id='main_list' ng-style="{'width':getWidth(page)}" >
+                   <!--  <div id='main_list' ng-style="{'width':getWidth(page)}" >
                         <md-grid-list
-                        md-cols-sm="2" md-cols-md="2" md-cols-gt-md="{{Math.ceil(moduleItem.moduleRecords.length/2)}}"
+                        md-cols-sm="2" md-cols-md="2" md-cols-gt-md="{{Math.ceil(moduleRecords.length/2)}}"
                         md-row-height-gt-md="{{getHeight}}" md-row-height="1:1"
                         md-gutter="8px" md-gutter-gt-sm="1%" >
 
-                            <md-grid-tile ng-repeat="tile in moduleItem.moduleRecords"
+                            <md-grid-tile ng-repeat="tile in moduleRecords"
                             md-rowspan="1"
                             md-colspan="1"
                             md-colspan-sm="1"
@@ -26,7 +39,7 @@
 
                             </md-grid-tile>
                         </md-grid-list>
-                    </div>
+                    </div> -->
                     <!-- </div> -->
                 </div>
 
@@ -44,15 +57,15 @@
                                     </div>
                                 </md-list-item>
                                 <md-divider ></md-divider>
-                                <md-list-item class="md-1-line cat_elem" ng-repeat="cat in moduleItem.categories" name="{{cat.name}}" parent_cat="{{cat.parent}}" cat_id='{{cat.id}}' onClick="_moduleViewerLarge.catClick(this)"  >
+                                <md-list-item class="md-1-line cat_elem" ng-repeat="cat in currRecord.categories" name="{{cat.name}}" parent_cat="{{cat.parent}}" cat_id='{{cat.id}}' onClick="_moduleViewerLarge.catClick(this)"  >
                                     <div class="md-list-item-text" layout="column">
                                         <h3>{{ cat.name }}</h3>
                                     </div>
                                 </md-list-item>
                                 <md-divider ></md-divider>
-                                <md-list-item class="md-1-line item_elem cat_{{item.catId}} md-no-proxy" ng-repeat="item in moduleItem.items" name="{{item.name}}" index='{{$index}}' onClick="_moduleViewerLarge.itemClick(this)" >
+                                <md-list-item class="md-1-line item_elem cat_{{item.categoryId}} md-no-proxy" ng-repeat="item in currRecord.items" name="{{item.itemName}}" index='{{$index}}' onClick="_moduleViewerLarge.itemClick(this)" >
                                     <div class="md-list-item-text" layout="column">
-                                        <h3>{{ item.name }}</h3>
+                                        <h3>{{ item.itemName }}</h3>
                                     </div>
                                 </md-list-item>
                             </md-list>
@@ -68,8 +81,8 @@
             </div>
 
         </content>
-        <cbl onClick='_moduleViewerLarge.prevStep()' id='listPrev' >Prev</cbl>
-        <cbr onClick='_moduleViewerLarge.nextStep()' id='listNext' >Next</cbr>
+        <cbl class='gui-extra' onClick='_moduleViewerLarge.cblClick()' id='cbl' >Prev</cbl>
+        <cbr class='gui-extra' onClick='_moduleViewerLarge.cbrClick()' id='cbr' >Next</cbr>
 
     </face>
 </card>
