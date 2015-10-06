@@ -34,7 +34,7 @@
                         </div>
                     </md-list-item>
                     <md-divider ></md-divider>
-                    <md-list-item class="md-2-line" onClick='_cardEngine.flip("moduleListLarge","moduleListLargeFront");'>
+                    <md-list-item class="md-2-line" onClick='_moduleListLarge.gotoModules()'>
                         <div>
                             <h3>Module</h3>
                             <h4>{{module}}</h4>
@@ -57,10 +57,10 @@
                     </md-list-item>
                     <md-divider ></md-divider>
 
-                    <md-list-item class="md-1-line item_elem cat_{{item.catId}} md-no-proxy" ng-repeat='item in items' _id='{{item.id}}' >
+                    <md-list-item class="md-1-line item_elem cat_{{item.categoryId}} md-no-proxy" ng-repeat='item in items' _id='{{item.itemId}}' >
                         <div class="md-list-item-text" layout="column" >
-                            <h3 ng-if="!item.selected">{{ item.name }}</h3>
-                            <h3 ng-if="item.selected" style='background:rgb(16, 103, 187)'>{{ item.name }}</h3>
+                            <h3 ng-if="!item.selected">{{ item.itemName }}</h3>
+                            <h3 ng-if="item.selected" style='background:rgb(16, 103, 187)'>{{ item.itemName }}</h3>
                         </div>
                     </md-list-item>
                 </md-list>
