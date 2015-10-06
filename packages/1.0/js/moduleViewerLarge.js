@@ -1,7 +1,7 @@
 _moduleViewerLarge = {
 
     model: null,
-    currStep: 'record',
+    currStep: 'none',
     items:[],
     moduleItems:[],
     parent:'',
@@ -10,6 +10,7 @@ _moduleViewerLarge = {
     backtrackId : [],
     currData : {},
     currModel:null,
+    currRecord:null,
     modelHeader:[],
     htmlLineTarget:null,
     htmlHeaderTarget:null,
@@ -39,71 +40,87 @@ _moduleViewerLarge = {
             _model.getAll("moduleRecords", function (moduleRecords) 
             {
               _moduleViewerLarge.moduleRecords = moduleRecords;
+
+              // for(var i in _moduleViewerLarge.moduleItems)
+              // {
+              //     var module = _moduleViewerLarge.moduleItems[i];
+              //     module.moduleRecords = [];
+              //     for(var j in _moduleViewerLarge.moduleRecords)
+              //     {
+              //       var record = _moduleViewerLarge.moduleRecords[j];
+              //       if(record.moduleId == module.moduleId)
+              //       {
+              //         module.moduleRecords.push(record);
+              //       }
+              //     }
+              // }
+              for(var i in _moduleViewerLarge.moduleRecords)
+              {
+                var record = _moduleViewerLarge.moduleRecords[i];
+
+                if(record.modelFooter.length == 0)
+                  record.hasFooter = false;
+                else
+                  record.hasFooter = true;
+
+                if(record.modelHeader.length == 0)
+                  record.hasHeader = false;
+                else
+                  record.hasHeader = true;
+
+                if(record.modelLine.length == 0)
+                  record.hasLine = false;
+                else
+                  record.hasLine = true;
+              }
+
+
               layout.attach('#moduleViewerLargeFront');
+              $("#cbl").hide();
+              $("#cbr").hide();
+              
             });
 
-            // _model.getAll("Modules", function (moduleData) 
-            // {
-
-            //     if (moduleData.length > 0) {
-            //     try
-            //     {
-            //       _moduleViewerLarge.model = moduleData;  
-            //       _moduleViewerLarge.currModel.moduleRecords = _moduleViewerLarge.model[0].data.moduleRecords;                
-
-            //     }catch(err)
-            //     {
-            //       _log.d(JSON.stringify(moduleData));
-            //       alert(err);
-            //     }
-                  
-            //   } else {
-            //       alert('No Module Data');
-            //       _moduleViewerLarge.model = [];
-            //   }
-            //   layout.attach('#moduleViewerLargeFront');
-            // });
-            
           });
     },
 
     onMessage : function(data) {
 
-        debugger;
         for(var i in _moduleViewerLarge.moduleItems)
         {
           if(_moduleViewerLarge.moduleItems[i].moduleId == data.id)
           {
             _moduleViewerLarge.currModel = _moduleViewerLarge.moduleItems[i];
-            _moduleViewerLarge.currModel.moduleRecords = [];
             
-            for(var j in _moduleViewerLarge.moduleRecords)
-            {
-              var record = _moduleViewerLarge.moduleRecords[j];
-              if(record.moduleId == data.id)
-              {
-                _moduleViewerLarge.currModel.moduleRecords.push(record);
-              }
-            }
+            // _moduleViewerLarge.currModel.moduleRecords = [];
             
-            _moduleViewerLarge.htmlLineTarget.html(_moduleViewerLarge.moduleItems[i].htmlLine);
-            _moduleViewerLarge.htmlHeaderTarget.html(_moduleViewerLarge.moduleItems[i].htmlHeader);
-            _moduleViewerLarge.htmlFooterTarget.html(_moduleViewerLarge.moduleItems[i].htmlFooter);
+            // for(var j in _moduleViewerLarge.moduleRecords)
+            // {
+            //   var record = _moduleViewerLarge.moduleRecords[j];
+            //   if(record.moduleId == data.id)
+            //   {
+            //     _moduleViewerLarge.currModel.moduleRecords.push(record);
+            //   }
+            // }
+            
+            // _moduleViewerLarge.htmlLineTarget.html(_moduleViewerLarge.moduleItems[i].htmlLine);
+            // _moduleViewerLarge.htmlHeaderTarget.html(_moduleViewerLarge.moduleItems[i].htmlHeader);
+            // _moduleViewerLarge.htmlFooterTarget.html(_moduleViewerLarge.moduleItems[i].htmlFooter);
 
-            if(_moduleViewerLarge.currModel.modelFooter.length == 0)
-              _moduleViewerLarge.currModel.hasFooter = false;
-            else
-              _moduleViewerLarge.currModel.hasFooter = true;
+            // if(_moduleViewerLarge.currModel.modelFooter.length == 0)
+            //   _moduleViewerLarge.currModel.hasFooter = false;
+            // else
+            //   _moduleViewerLarge.currModel.hasFooter = true;
 
-            if(_moduleViewerLarge.currModel.modelHeader.length == 0)
-              _moduleViewerLarge.currModel.hasHeader = false;
-            else
-              _moduleViewerLarge.currModel.hasHeader = true;
+            // if(_moduleViewerLarge.currModel.modelHeader.length == 0)
+            //   _moduleViewerLarge.currModel.hasHeader = false;
+            // else
+            //   _moduleViewerLarge.currModel.hasHeader = true;
 
-            if(_moduleViewerLarge.currModel.modelLine.length == 0)
-              _moduleViewerLarge.currModel.hasLine = false;
-            else
-              _moduleViewerLarge.currModel.hasLine = true;
+            // if(_moduleViewerLarge.currModel.modelLine.length == 0)
+            //   _moduleViewerLarge.currModel.hasLine = false;
+            // else
+            //   _moduleViewerLarge.currModel.hasLine = true;
 
             break;
           }
@@ -111,29 +128,27 @@ _moduleViewerLarge = {
 
         _moduleViewerLarge.id = data.id;
 
-      try{
+      // try{
           $('#divRecords').show();
           $('#divItems').hide();
           $('#htmlLine').hide();
-        }catch(err)
-        {
-          alert('1 ' + err);
-        }
+        // }catch(err)
+        // {
+        //   alert('1 ' + err);
+        // }
 
         // layout.attach('#moduleViewerLargeFront');
+        // e = document.getElementById('moduleViewerLargeFront__FACE');
+        // scope = angular.element(e).scope();
+        // scope.$apply(function() 
+        // { 
+        //   scope.moduleItem = _moduleViewerLarge.currModel;
+        // }); 
 
-        angular.element(_moduleViewerLarge.htmlHeaderTarget).injector().invoke(function($compile) {
-          var scope = angular.element(_moduleViewerLarge.htmlHeaderTarget).scope();
-          $compile(_moduleViewerLarge.htmlHeaderTarget)(scope);
-        });
-        angular.element(_moduleViewerLarge.htmlLineTarget).injector().invoke(function($compile) {
-          var scope = angular.element(_moduleViewerLarge.htmlLineTarget).scope();
-          $compile(_moduleViewerLarge.htmlLineTarget)(scope);
-        });
-        angular.element(_moduleViewerLarge.htmlFooterTarget).injector().invoke(function($compile) {
-          var scope = angular.element(_moduleViewerLarge.htmlFooterTarget).scope();
-          $compile(_moduleViewerLarge.htmlFooterTarget)(scope);
-        });
+
+        
+
+        _moduleViewerLarge.gotoRecords();
 
     },
     Ctrl : function($scope) {
@@ -173,44 +188,45 @@ _moduleViewerLarge = {
             }, 500);
         };
 
-        $scope.moduleItem = _moduleViewerLarge.currModel;
-
-        if(_moduleViewerLarge.currModel.modelLine.length > 0)  
-        {
-          _moduleViewerLarge.records = _moduleViewerLarge.currModel.modelLine[0]; 
-          _moduleViewerLarge.modelHeader = _moduleViewerLarge.currModel.modelHeader;  
-          $scope.lineItems = _moduleViewerLarge.records;
-          $scope.headerItems = _moduleViewerLarge.modelHeader;
-        }
+        // $scope.moduleItem = _moduleViewerLarge.currModel;
+        $scope.moduleRecords = _moduleViewerLarge.moduleRecords;
+        // debugger;
+        // if(_moduleViewerLarge.currModel.modelLine.length > 0)  
+        // {
+        //   _moduleViewerLarge.records = _moduleViewerLarge.currModel.modelLine[0]; 
+        //   _moduleViewerLarge.modelHeader = _moduleViewerLarge.currModel.modelHeader;  
+        //   $scope.lineItems = _moduleViewerLarge.records;
+        //   $scope.headerItems = _moduleViewerLarge.modelHeader;
+        // }
           
-        _moduleViewerLarge.items = [];
+        // _moduleViewerLarge.items = [];
 
-        $scope.getWidth = function(page)
-        {   
-            return ((_._cH) * 0.5)  + 'px';
-            if(page == 'records')
-            {
-              if(isTablet)
-              {
-                  width = ((_._cH) * 0.5) * Math.ceil($scope.moduleItem.moduleRecords.length / 2);
-                  return width + 'px';    
-              }else
-              {
-                  return '100%';
-              }
-            }else if(page == 'categories')
-            {
-              if(isTablet)
-              {
-                  width = ((_._cH) * 0.5) * Math.ceil($scope.showCat.length / 2);
-                  return width + 'px';    
-              }else
-              {
-                  return '100%';
-              }
-            }
+        // $scope.getWidth = function(page)
+        // {   
+        //     return ((_._cH) * 0.5)  + 'px';
+        //     if(page == 'records')
+        //     {
+        //       if(isTablet)
+        //       {
+        //           width = ((_._cH) * 0.5) * Math.ceil($scope.moduleItem.moduleRecords.length / 2);
+        //           return width + 'px';    
+        //       }else
+        //       {
+        //           return '100%';
+        //       }
+        //     }else if(page == 'categories')
+        //     {
+        //       if(isTablet)
+        //       {
+        //           width = ((_._cH) * 0.5) * Math.ceil($scope.showCat.length / 2);
+        //           return width + 'px';    
+        //       }else
+        //       {
+        //           return '100%';
+        //       }
+        //     }
             
-        };
+        // };
 
     }
     ,
@@ -218,30 +234,59 @@ _moduleViewerLarge = {
     {
       
       var recordIndex = $(item).attr("recordIndex");
+      _moduleViewerLarge.currRecord = _moduleViewerLarge.moduleRecords[recordIndex];
 
-      if(_moduleViewerLarge.currModel.hasHeader)
+      if(_moduleViewerLarge.currRecord.hasHeader)
       {
         _moduleViewerLarge.currStep = 'header';
-      }else if(_moduleViewerLarge.currModel.hasLine)
+      }else if(_moduleViewerLarge.currRecord.hasLine)
       {
         _moduleViewerLarge.currStep ='items';
-      }else if(_moduleViewerLarge.currModel.hasFooter)
+      }else if(_moduleViewerLarge.currRecord.hasFooter)
       {
         _moduleViewerLarge.currStep ='footer';
       }else
       {
         alert('No Data for record.');
       }
-        
-      _moduleViewerLarge.showStep();
-
 
       _moduleViewerLarge.currData = {
-        record:_moduleViewerLarge.currModel.moduleRecords[recordIndex].name,
+        record:_moduleViewerLarge.currRecord.moduleRecord.name,
         categories:[],
         items:[],
         item:''
       }
+
+      e = document.getElementById('moduleViewerLargeFront__FACE');
+      scope = angular.element(e).scope();
+      scope.$apply(function() 
+      { 
+        scope.currRecord =  _moduleViewerLarge.currRecord;
+        _moduleViewerLarge.parent = '';
+        _moduleViewerLarge.parentId = 0;
+        setTimeout(function () {
+                _moduleViewerLarge.filterFunction();
+                _moduleViewerLarge.showStep();
+            }, 100);
+      }); 
+
+      _moduleViewerLarge.htmlLineTarget.html(_moduleViewerLarge.currRecord.htmlLine);
+      _moduleViewerLarge.htmlHeaderTarget.html(_moduleViewerLarge.currRecord.htmlHeader);
+      _moduleViewerLarge.htmlFooterTarget.html(_moduleViewerLarge.currRecord.htmlFooter);
+
+      angular.element(_moduleViewerLarge.htmlHeaderTarget).injector().invoke(function($compile) {
+          var scope = angular.element(_moduleViewerLarge.htmlHeaderTarget).scope();
+          $compile(_moduleViewerLarge.htmlHeaderTarget)(scope);
+        });
+        angular.element(_moduleViewerLarge.htmlLineTarget).injector().invoke(function($compile) {
+          var scope = angular.element(_moduleViewerLarge.htmlLineTarget).scope();
+          $compile(_moduleViewerLarge.htmlLineTarget)(scope);
+        });
+        angular.element(_moduleViewerLarge.htmlFooterTarget).injector().invoke(function($compile) {
+          var scope = angular.element(_moduleViewerLarge.htmlFooterTarget).scope();
+          $compile(_moduleViewerLarge.htmlFooterTarget)(scope);
+        });
+
       _moduleListLarge.updateBreadcrumb(_moduleViewerLarge.currData);
 
     }
@@ -336,7 +381,7 @@ _moduleViewerLarge = {
       scope = angular.element(e).scope();
       scope.$apply(function() 
       { 
-        _moduleViewerLarge.records = _moduleViewerLarge.currModel.modelLine[index];
+        _moduleViewerLarge.records = _moduleViewerLarge.currRecord.modelLine[index];
         scope.lineItems = _moduleViewerLarge.records;
       }); 
       
@@ -359,7 +404,7 @@ _moduleViewerLarge = {
 
         $("#cbl").hide();
         $("#cbr").show();
-        $("#cbr").html('New');
+        $("#cbr").html('&#xf055; New');
 
       }else
       if(_moduleViewerLarge.currStep == 'item')
@@ -502,16 +547,16 @@ _moduleViewerLarge = {
       if(_moduleViewerLarge.currStep == 'footer')
       {
 
-        if(_moduleViewerLarge.currModel.hasLine)
+        if(_moduleViewerLarge.currRecord.hasLine)
           _moduleViewerLarge.currStep = 'items'
-        else if(_moduleViewerLarge.currModel.hasHeader)
+        else if(_moduleViewerLarge.currRecord.hasHeader)
           _moduleViewerLarge.currStep = 'header'
         else
           _moduleViewerLarge.currStep = 'record'
 
       }else if(_moduleViewerLarge.currStep == 'items')
       {
-        if(_moduleViewerLarge.currModel.hasHeader)
+        if(_moduleViewerLarge.currRecord.hasHeader)
           _moduleViewerLarge.currStep = 'header'
         else
           _moduleViewerLarge.currStep = 'record'
