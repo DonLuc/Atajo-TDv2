@@ -4,6 +4,7 @@
         <ctl>MODULE LIST</ctl>
         <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
         <content>
+            <h2 style="color: #000000">Hello</h2>
             <ul ng-show="modules.length > 0" style="border-radius:5px; margin:3px; border:none;">
                 <li ng-repeat="module in modules track by $index | orderBy : 'moduleTCorder'" class="cardListElement"
                     ng-show="module.visible" module_id="{{module.id}}" onclick="_moduleListSmall.loadModuleView(this);">
@@ -30,7 +31,7 @@
         <content>
             <placeholder ng-show="records.length == 0">No Module content</placeholder>
             <md-list ng-show="records.length!=0">
-                <md-subheader class="md-no-sticky">List of record</md-subheader>
+                <md-subheader class="md-no-sticky">List of record(s)</md-subheader>
                 <md-list-item class="md-2-line" ng-repeat="rec in records ">
                     <div class="md-list-item-text">
                         <h3>{{rec.name}}</h3>
@@ -42,7 +43,7 @@
         </content>
         </content>
         <cbl></cbl>
-        <cbr onclick="_moduleListSmall.next()"> New</cbr>
+        <cbr onclick="_moduleListSmall.loadNewModule()"> New</cbr>
 
     </face>
 

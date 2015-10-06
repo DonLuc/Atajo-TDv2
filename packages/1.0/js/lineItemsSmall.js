@@ -33,7 +33,7 @@ _lineItemsSmall = {
     Ctrl: function ($scope) {
 
         $scope.test = "hello world 222";
-
+        $scope.lineItems = _lineItemsSmall.model.items;
         $scope.headerItems=_lineItemsSmall.model.modelHeader;
         $scope.footerItems=_lineItemsSmall.model.modelFooter;
         $scope.showCat = true;
@@ -56,6 +56,9 @@ _lineItemsSmall = {
         }
 
         $scope.nextCat = function (parent, items,id) {
+
+            console.log("prev7");
+            console.log("next cat ...");
             var subCat = [];
             for (var j = 0; j < _lineItemsSmall.model.categories.length; j++) {
                 var currObj = _lineItemsSmall.model.categories[j];
@@ -64,9 +67,11 @@ _lineItemsSmall = {
                 }
                 if (j == _lineItemsSmall.model.categories.length - 1)
                     if (subCat.length == 0) {
-                        _moduleContainer.currCatName = parent;
-                        $scope.lineItems = _lineItemsSmall.model.items;
+
                         $scope.showCat = false;
+                        _moduleContainer.currCatName = parent;
+
+                        console.log("show line items list");
                         $(".lineItems").hide();
                         $(".cat_"+id).show();
                         //var e = document.getElementById('lineItemsSmallFront__FACE');
@@ -159,6 +164,42 @@ _lineItemsSmall = {
                 $scope.showHeader = false;
             }
         };
+
+
+        $scope.nextVisible=function(){
+            console.log("show next button");
+            if(_moduleContainer.showHeader==true && _moduleContainer.hasLine==true){
+                console.log("show next button 1");
+                return true;
+            }else if(_moduleContainer.showLine==true && _moduleContainer.hasFooter==true ){
+                console.log("show next button 2");
+                return true;
+            }else if(_moduleContainer.showHeader==true && _moduleContainer.hasFooter==true){
+                console.log("show next button 3");
+                return true;
+            }else {
+                console.log("show next button5");
+                return false
+
+            };
+        }
+        $scope.prevVisible=function(){
+            console.log("show prev button");
+            if(_moduleContainer.showLine==true && _moduleContainer.hasHeader==true){
+                console.log("show prev button1");
+                return true;
+            }else if(_moduleContainer.showFooter==true && _moduleContainer.hasLine==true ){
+                console.log("show prev button2");
+                return true;
+            }else if(_moduleContainer.showFooter==true && _moduleContainer.hasHeader==true){
+                console.log("show prev button3");
+                return true;
+            }else {
+                console.log("show prev button4");
+                return false;
+
+            };
+        }
 
     },
 

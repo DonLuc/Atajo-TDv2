@@ -6,6 +6,7 @@ exports.process = function (form, modelRoot, attachElm) {
 
     var xml = '';
     var model = {};
+    //xml += ' <form name="' + modelRoot + '">';
     for (var e in form) {
 
         elm = form[e];
@@ -28,8 +29,7 @@ exports.process = function (form, modelRoot, attachElm) {
 
         if (elm.type == 'TEXT') {
             model[elm.name] = def;
-            xml += ' <md-input-container flex> <label>' + text + '</label>' +
-            '<input type="text" ng-model="' + modelRoot + '[' + e + '].value"  class="textField" />' +
+            xml += ' <md-input-container flex> <label>' + text + '</label><input type="text" md-maxlength="' + modelRoot + '[' + e + '].maxLength" md-minlength="' + modelRoot + '[' + e + '].minLength"  required ng-model="' + modelRoot + '['+ e +'].answer" class="textField" />' +
             '</md-input-container>';
         }
         else if (elm.type == 'DATE') {
@@ -41,7 +41,7 @@ exports.process = function (form, modelRoot, attachElm) {
             //'<input type="date"  class="dateField" />' +
             //'</md-input-container>';
 
-            xml += ' <md-datepicker  md-placeholder="' + text + '"  ng-model="' + modelRoot + '[' + e + '].value" class="dateField"> </md-datepicker>';
+            xml += ' <md-datepicker  md-placeholder="' + text + '"  ng-model="' + modelRoot + '[' + e + '].answer" class="dateField"> </md-datepicker>';
 
         }
         else if (elm.type == 'TIME') {
@@ -50,7 +50,7 @@ exports.process = function (form, modelRoot, attachElm) {
 
 
             xml += ' <md-input-container flex> <label>' + text + '</label>' +
-            '<input type="time" ng-model="' + modelRoot + '[' + e + '].value"  class="timeField" />' +
+            '<input type="time" ng-model="' + modelRoot + '[' + e + '].answer"  class="timeField" />' +
             '</md-input-container>';
         }
         else if (elm.type == 'NUMBER') {
@@ -59,7 +59,7 @@ exports.process = function (form, modelRoot, attachElm) {
 
 
             xml += ' <md-input-container flex> <label>' + text + '</label>' +
-            '<input type="number"   class="numberField" ng-model="' + modelRoot + '[' + e + '].value" />' +
+            '<input type="number"  md-minlength="' + modelRoot + '[' + e + '].minLength" md-maxlength="' + modelRoot + '[' + e + '].maxLength" class="numberField" ng-model="' + modelRoot + '[' + e + '].answer" />' +
             '</md-input-container>';
         }
 
@@ -69,7 +69,13 @@ exports.process = function (form, modelRoot, attachElm) {
 
 
             xml += ' <md-input-container flex> <label>' + text + '</label>' +
-            '<input type="email" ng-model="' + modelRoot + '[' + e + '].value" class="emailField" />' +
+            '<input type="email"  name="'+ elm.id + '"  md-minlength="' + modelRoot + '[' + e + '].minLength" md-maxlength="' + modelRoot + '[' + e + '].maxLength" ng-model="' + modelRoot + '[' + e + '].answer" ' +
+            'class="emailField" ng-pattern="/^.+@.+\..+$/" />' +
+            //    '   <div ng-messages="' + modelRoot + '.' + elm.id + '.$error" role="alert">'+
+            //'<div ng-message-exp="['+"minlength"+', '+"maxlength"+', '+"pattern"+']">'+
+            //'Your email must be between 10 and 100 characters long and look like an e-mail address.'+
+            //'</div>'+
+            //'</div>'+
             '</md-input-container>';
         }
 
@@ -86,7 +92,7 @@ exports.process = function (form, modelRoot, attachElm) {
             //xml += '<select ng-change="selectChange(\'' + elm.name + '\')" ' + size + ' valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '_SELECTED"  ng-options="item.value' + ' for item' + ' in ' + modelRoot + '[' + e +'].options' + '" ></select>';
 
 
-            xml += ' <md-input-container> <label>' + text + '</label><md-select ng-model="' + modelRoot + '[' + e + '].value" > <md-option ng-repeat="item in ' + modelRoot + '[' + e +'].options' +' " value="{{item.value}}"> {{item.value}}</md-option> </md-select> </md-input-container>';
+            xml += ' <md-input-container> <label>' + text + '</label><md-select ng-model="' + modelRoot + '[' + e + '].answer" > <md-option ng-repeat="item in ' + modelRoot + '[' + e +'].options' +' " value="{{item.value}}"> {{item.value}}</md-option> </md-select> </md-input-container>';
         }
 
         else if (elm.type == "MULTICHOICE") {
@@ -99,7 +105,7 @@ exports.process = function (form, modelRoot, attachElm) {
             //model[elm.name] = elm.options;
             //size = (typeof elm.size != 'undefined') ? elm.size : 1;
             //size = 'size="' + size + '"';
-            xml += ' <md-input-container> <label>' + text + '</label><md-select ng-model="' + modelRoot + '[' + e + '].value" multiple> <md-option ng-repeat="item in ' + modelRoot + '[' + e +'].options' +' " value="{{item.value}}"> {{item.value}}</md-option> </md-select> </md-input-container>';
+            xml += ' <md-input-container> <label>' + text + '</label><md-select ng-model="' + modelRoot + '[' + e + '].answer" multiple> <md-option ng-repeat="item in ' + modelRoot + '[' + e +'].options' +' " value="{{item.value}}"> {{item.value}}</md-option> </md-select> </md-input-container>';
 
             //xml += '<select multiple  valid="' + elm.valid + '" ng-model="' + modelRoot + '.' + elm.id + '_SELECTED"  ng-options="item.value' + ' for item' + ' in ' + modelRoot + '[' + e + '].options' + '"  ></select>';
 
@@ -110,7 +116,7 @@ exports.process = function (form, modelRoot, attachElm) {
             model[elm.name] = '';
             xml += '<center>'
             + '<div onclick="_moduleContainer.signature(\'' + elm.text + '\');">'
-            + '<input type="text" style="display:none" ng-model="' + modelRoot + '[' + e + '].value" /> <div class="placeholder"><br /><center>TAP HERE TO SIGN</center><br /></div><img src="" style="max-width:100%; max-height:80px" /><br /></div></center>';
+            + '<input type="text" style="display:none" ng-model="' + modelRoot + '[' + e + '].answer" /> <div class="placeholder"><br /><center>TAP HERE TO SIGN</center><br /></div><img src="" style="max-width:100%; max-height:80px" /><br /></div></center>';
         }
 
 
@@ -118,7 +124,7 @@ exports.process = function (form, modelRoot, attachElm) {
             model[elm.name] = '';
             xml += '<center>'
             + '<div onclick="_moduleContainer.scan();">'
-            + '<input type="text" style="display:none" ng-model="' + modelRoot + '[' + e + '].value" /> <div class="placeholder"><br /><center>TAP HERE TO SCAN</center><br /></div><br /></div></center>';
+            + '<input type="text" style="display:none" ng-model="' + modelRoot + '[' + e + '].answer" /> <div class="placeholder"><br /><center>TAP HERE TO SCAN</center><br /></div><br /></div></center>';
         }
 
 
@@ -173,6 +179,7 @@ exports.process = function (form, modelRoot, attachElm) {
 
 
     }
+    //xml +='</form>'
 
     _log.d("done with form");
     form.data = xml;

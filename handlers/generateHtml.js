@@ -301,7 +301,7 @@ exports.req = function (obj, cb) {
         var headerHtml = "";
         if (module.headerFields.length > 0) {
             _log.d("PROCESSING HEADER ITEMS FOR MODULE:" + module.name);
-            var headerHtml = moduleBuilder.process(module.headerFields, 'headerItems', 'sectionFront');
+            var headerHtml = moduleBuilder.process(sortByOrder(module.headerFields), 'headerItems', 'sectionFront');
             cbHeader(headerHtml);
         }
         else {
@@ -316,7 +316,7 @@ exports.req = function (obj, cb) {
         var footerHtml = "";
         if (module.footerFields.length > 0) {
             _log.d("PROCESSING FOOTER ITEMS FOR MODULE:" + module.name);
-            var footerHtml = moduleBuilder.process(module.footerFields, 'footerItems', 'sectionFront');
+            var footerHtml = moduleBuilder.process(sortByOrder(module.footerFields), 'footerItems', 'sectionFront');
 
             cbFooter(footerHtml);
         }
@@ -332,13 +332,32 @@ exports.req = function (obj, cb) {
         var lineItemsHtml = "";
         if (module.lineFields.length > 0) {
             _log.d("PROCESSING  LINE ITEMS FOR MODULE :" + module.name);
-            var lineItemsHtml = moduleBuilder.process(module.lineFields, 'lineItems', 'sectionFront');
+            var lineItemsHtml = moduleBuilder.process(sortByOrder(module.lineFields), 'lineItems', 'sectionFront');
             cbLine(lineItemsHtml);
         }
         else {
             _log.d("PROCESSING  LINE ITEMS FOR MODULE (NONE FOUND):" + module.name);
             cbLine(lineItemsHtml);
 
+        }
+    }
+
+    function sortByOrder(fields){
+        if (fields.length > 0) {
+            _log.d("sorting fields by order");
+            fields.sort(function (a, b) {
+                var x = a.order;
+                var y = b.order;
+
+                if (x < y) //sort string ascending
+                    return -1
+                if (x > y)
+                    return 1
+                return 0 //default return value (no sorting)
+            })
+            return fields;
+        } else{
+            return fields;
         }
     }
 }

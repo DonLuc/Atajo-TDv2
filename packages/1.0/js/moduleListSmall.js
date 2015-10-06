@@ -73,10 +73,12 @@ _moduleListSmall = {
                 _moduleContainer.moduleHeadingH = d[0].moduleName + "-Header";
 
             } else if (d[0].htmlLine != "") {
+                _moduleContainer.hasHeader = false;
                 _moduleContainer.showHeader = false;
                 _moduleContainer.showLine = true;
                 _moduleContainer.showFooter = false;
             } else if (d[0].htmlFooter != "") {
+                _moduleContainer.hasHeader = false;
                 _moduleContainer.showHeader = false;
                 _moduleContainer.showLine = false;
                 _moduleContainer.showFooter = true;
@@ -85,10 +87,14 @@ _moduleListSmall = {
 
             if (d[0].htmlLine != "") {
                 _moduleContainer.hasLine = true;
+            }else{
+                _moduleContainer.hasLine = false;
             }
 
             if (d[0].htmlFooter != "") {
                 _moduleContainer.hasFooter = true;
+            }else{
+                _moduleContainer.hasFooter = false;
             }
             layout.attach("#moduleListSmallViewer");
 
@@ -118,7 +124,7 @@ _moduleListSmall = {
         }
     },
 
-    next: function () {
+    loadNewModule: function () {
         layout.sendMessage("lineItemsSmall", _moduleListSmall.itemsModel);
     }
 };
