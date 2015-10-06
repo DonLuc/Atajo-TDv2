@@ -12,6 +12,12 @@ _moduleListLarge = {
 
     },
 
+    gotoModules: function()
+    {
+        _cardEngine.flip("moduleListLarge","moduleListLargeFront");
+        layout.sendMessage("moduleViewerLarge", null);
+    }
+    ,
     onMessage : function(data) {
 
         _moduleListLarge.entityId = data.entityId;
@@ -83,7 +89,7 @@ _moduleListLarge = {
             scope.items = data.items;
             for(var i in scope.items)
             {
-                if(scope.items[i].name == data.item)
+                if(scope.items[i].itemName == data.item)
                 {
                     scope.items[i].selected = true;
                 }else

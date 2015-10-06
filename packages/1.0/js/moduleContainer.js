@@ -321,11 +321,13 @@ _moduleContainer = {
         }
     }
     ,
-    generateUploadObject: function(moduleItem,entityId,userId)
+    generateUploadObject: function(record,entityId,userId)
     {
+        _log.d('1');
         var date = new Date();
         var timeStamp = (date.getYear() + 1990) +''+ ('0' + date.getMonth()).slice(-2) +''+ ('0' +date.getDate()).slice(-2) +''+('0' +date.getHours()).slice(-2) +''+ ('0' +date.getMinutes()).slice(-2)+''+('0' +date.getSeconds()).slice(-2);
-
+        _log.d('2');
+        
         var uploadObject = 
         {
             activity:[],
@@ -338,49 +340,54 @@ _moduleContainer = {
             client_name : _login.credentials.username,//What must be here?
             generated_time : timeStamp
         };
-
+        _log.d('3');
         var moduleRecord = {};
 
-        moduleRecord.moduleRecordTcInstanceId = '1';
+
+
+        moduleRecord.moduleRecordTcInstanceId = record.moduleRecord.moduleRecordTcInstanceId,
+        moduleRecord.copyType = record.moduleRecord.copyType;
+        moduleRecord.isEditableOnDevice = record.moduleRecord.isEditableOnDevice;
+        moduleRecord.isRemovableOnDevice = record.moduleRecord.isRemovableOnDevice;
+        moduleRecord.isDatasourceOnDevice = record.moduleRecord.isDatasourceOnDevice;
+        moduleRecord.overlayItemsFromProjects = record.moduleRecord.overlayItemsFromProjects;
+        moduleRecord.maxScore = record.moduleRecord.maxScore;
+        moduleRecord.moduleRecordTcKeepOnDevice = record.moduleRecord.moduleRecordTcKeepOnDevice;
+        moduleRecord.compulsory = record.moduleRecord.compulsory;
+        moduleRecord.groupItemsIntoOneCategory = record.moduleRecord.groupItemsIntoOneCategory;
+        moduleRecord.instructionId = record.moduleRecord.instructionId;
+        moduleRecord.closed = record.moduleRecord.closed;
+        moduleRecord.behaviour = record.moduleRecord.behaviour;
+        moduleRecord.moduleRecordTcIsHistoric = record.moduleRecord.moduleRecordTcIsHistoric;
+        moduleRecord.projectId = record.moduleRecord.projectId;
+        moduleRecord.showOnEntityScore = record.moduleRecord.showOnEntityScore;
+        moduleRecord.startDate = record.moduleRecord.startDate;
+
+
+                //where to get these?
         moduleRecord.endDate = "";
         moduleRecord.showScore = false;
         moduleRecord.captureEndDate = timeStamp;
         moduleRecord.headerAnswers = [];
         moduleRecord.score = 0;
         moduleRecord.moduleVersion = timeStamp;
-        moduleRecord.copyType = 0;
-        moduleRecord.isDatasourceOnDevice = true;
-        moduleRecord.id = moduleItem.id;//what id is this?
-        moduleRecord.moduleId = moduleItem.id;
+        moduleRecord.id = record.moduleRecord.id;//what id is this?
+        moduleRecord.moduleId = record.moduleId;
         moduleRecord.lines = [];
-        moduleRecord.overlayItemsFromProjects = false;
-        moduleRecord.isRemovableOnDevice = false;
-        moduleRecord.maxScore = 0;
-        moduleRecord.moduleRecordTcKeepOnDevice = true;
-        moduleRecord.isEditableOnDevice = true;
         moduleRecord.timeTaken = 20;
-        moduleRecord.compulsory = false;
         moduleRecord.footerAnswers = [];
-        moduleRecord.groupItemsIntoOneCategory = false;
-        moduleRecord.name = moduleItem.name;
-        moduleRecord.instructionId = -1;
-        moduleRecord.closed = false;
-        moduleRecord.behaviour = 0;
+        moduleRecord.name = record.moduleRecord.name;
         moduleRecord.captureDate = timeStamp;
-        moduleRecord.moduleRecordTcIsHistoric = false;
-        moduleRecord.projectId = 103;
-        moduleRecord.showOnEntityScore = false;
-        moduleRecord.startDate = "";
         moduleRecord.captureStartDate = timeStamp;
-
+        _log.d('4');
         //Add Line Items
-        for(var i in moduleItem.items)
+        for(var i in record.items)
         {
-            var item = moduleItem.items[i];
-            var modelLine = moduleItem.modelLine[i];
+            var item = record.items[i];
+            var modelLine = record.modelLine[i];
             var newItem = {};
 
-            newItem.itemId = item.id;
+            newItem.itemId = item.itemId;
             newItem.lineTClinesAreCompulsory = item.compulsory;
             newItem.score = 0;
             newItem.itemName = item.name;
@@ -401,12 +408,14 @@ _moduleContainer = {
                 answer.defaultValue = false;
                 answer.optionId = 0;
                 answer.behaviour = 0;
-                answer.id = 0;
+                _log.d('5');answer.id = 0;
+                
                 answer.decisionId = 0;
                 answer.value = 0;
                 if(typeof field.value != 'undefined') answer.value = field.value;
                 answer.order = 0;
-                answer.fieldId = field.id;
+                _log.d('6');answer.fieldId = field.id;
+                
 
                 newItem.answers.push(answer);
             }
@@ -415,37 +424,41 @@ _moduleContainer = {
         }
 
         //Add Header Items
-        for(var i in moduleItem.modelHeader)
+        for(var i in record.modelHeader)
         {
-            var field = moduleItem.modelHeader[i];
+            var field = record.modelHeader[i];
             var answer = {};
             answer.score = field.score;
             answer.defaultValue = field.defaultValue;
             answer.optionId = 0;
             answer.behaviour = 0;
+            _log.d('7');
             answer.id = 0;
+            
             answer.decisionId = 0;
             if(typeof field.value != 'undefined') answer.value = field.value;
             answer.order = field.order;
+            _log.d('8');
             answer.fieldId = field.id;
+
 
             moduleRecord.headerAnswers.push(answer);
         }
 
         //Add Footer Items
-        for(var i in moduleItem.modelFooter)
+        for(var i in record.modelFooter)
         {
-            var field = moduleItem.modelFooter[i];
+            var field = record.modelFooter[i];
             var answer = {};
             answer.score = field.score;
             answer.defaultValue = field.defaultValue;
             answer.optionId = 0;
             answer.behaviour = 0;
-            answer.id = 0;
+            _log.d('9');answer.id = 0;
             answer.decisionId = 0;
             if(typeof field.value != 'undefined') answer.value = field.value;
             answer.order = field.order;
-            answer.fieldId = field.id;
+            _log.d('10');answer.fieldId = field.id;
 
             moduleRecord.footerAnswers.push(answer);
         }

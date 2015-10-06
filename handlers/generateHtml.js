@@ -213,7 +213,9 @@ exports.req = function (obj, cb) {
                                         "modelLine": lineData,
                                         "modelFooter": module.footerFields,
                                         "categories": moduleCats,
-                                        "items":items
+                                        "items":items,
+                                        "recordNameSingular":module.recordNameSingular,
+                                        "recordNamePlural":module.recordNamePlural
                                     };
                                     modulesList.push(modulObj);
                                     if (q < modules.length - 1) {
@@ -239,7 +241,9 @@ exports.req = function (obj, cb) {
                                                 "modelLine": lineData,
                                                 "modelFooter": module.footerFields,
                                                 "categories": moduleCats,
-                                                "items":items
+                                                "items":items,
+                                                "recordNameSingular":module.recordNameSingular,
+                                                "recordNamePlural":module.recordNamePlural
                                             };
                                             modulesList.push(modulObj);
                                             if (q < modules.length - 1) {
@@ -276,7 +280,9 @@ exports.req = function (obj, cb) {
                                     "modelLine": module.lineFields,
                                     "modelFooter": module.footerFields,
                                     "categories": moduleCats,
-                                    "items":items
+                                    "items":items,
+                                    "recordNameSingular":module.recordNameSingular,
+                                    "recordNamePlural":module.recordNamePlural
                                 };
                                 modulesList.push(modulObj);
 
