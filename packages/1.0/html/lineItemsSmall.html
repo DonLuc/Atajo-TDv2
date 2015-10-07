@@ -1,11 +1,14 @@
 <card id="lineItemsSmall" fill="true" flip="rl">
 
     <face id="lineItemsSmallFront" settings="default:true" controller="_lineItemsSmall.Ctrl">
-        <ctl>Modules</ctl>
-        <ctr class="gui-extra" flip-target="lineItemsSmallHelp">&#xf059;</ctr>
+        <ctl>Modules Viewer</ctl>
+        <!--<ctr class="gui-extra" flip-target="lineItemsSmallHelp">&#xf059;</ctr>-->
+        <ctr class="gui-extra" >Save</ctr>
         <content>
 
-            <div ng-show="showHeader" class="moduleHeader"></div>
+
+            <div ng-show="showHeader" class="moduleHeader">
+            </div>
             <div ng-show="showLine" class="moduleLine">
                 <md-list ng-show="showCat">
                     <md-subheader class="md-no-sticky">List of categories</md-subheader>
@@ -20,6 +23,8 @@
                     <md-divider></md-divider>
                 </md-list>
                 <md-list ng-hide="showCat" md-swipe-right="backToCat()">
+
+
                     <md-subheader class="md-no-sticky">Line Items</md-subheader>
                     <md-list-item class="md-2-line lineItems cat_{{item.catId}}" ng-repeat="item in lineItems " ng-click="openLineItem($index)">
                         <div class="md-list-item-text " >
@@ -39,10 +44,10 @@
         </content>
 
         <cbl>
-            <x ng-hide="showHeader" ng-click="showPrev()">Prev</x>
+            <x ng-show="prevVisible()" ng-click="showPrev()">Prev</x>
         </cbl>
         <cbr>
-            <x ng-hide="showFooter" ng-click="showNext()">Next</x>
+            <x ng-show="nextVisible()" ng-click="showNext()">Next</x>
         </cbr>
 
     </face>
@@ -53,9 +58,6 @@
         <content>
 
             <div class="moduleLine"></div>
-            <!--<placeholder>-->
-            <!--This is a help section - and provides the user with information relevant to the current you are on.-->
-            <!--</placeholder>-->
 
 
         </content>
