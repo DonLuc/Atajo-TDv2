@@ -1,13 +1,12 @@
 <card id="moduleListSmall" fill="true" flip="rl">
 
-    <face id="moduleListSmallFront" settings="default:true" controller="_moduleListSmall.moduleCtrl">
+    <face id="moduleListSmallFront"  settings="default:true,search:['modulesSearch']"  controller="_moduleListSmall.moduleCtrl">
         <ctl>MODULE LIST</ctl>
         <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
         <content>
-            <h2 style="color: #000000">Hello</h2>
             <ul ng-show="modules.length > 0" style="border-radius:5px; margin:3px; border:none;">
-                <li ng-repeat="module in modules track by $index | orderBy : 'moduleTCorder'" class="cardListElement"
-                    ng-show="module.visible" module_id="{{module.id}}" onclick="_moduleListSmall.loadModuleView(this);">
+                <li ng-repeat="module in modules track by $index | orderBy : 'moduleTCorder'" class="cardListElement modulesSearch"
+                    ng-show="module.visible" module_id="{{module.id}}" onclick="_moduleListSmall.loadModuleView(this);" >
                     <div class="grid">
                         <div class="unit w-4-16">
                             <i class="fa fa-compass" style="font-size:30pt; color: rgba(0,0,0,0.4);"></i>
@@ -25,15 +24,16 @@
 
     </face>
 
-    <face id="moduleListSmallViewer" controller="_moduleListSmall.moduleViewerCtrl">
+    <face id="moduleListSmallViewer" settings="search:['recordsSearch']"  controller="_moduleListSmall.moduleViewerCtrl">
         <ctl>MODULE LIST</ctl>
         <ctr class="gui" flip-target="close">x</ctr>
         <content>
             <placeholder ng-show="records.length == 0">No Module content</placeholder>
+            <label>Search: <input ng-model="searchText"></label>
             <md-list ng-show="records.length!=0">
                 <md-subheader class="md-no-sticky">List of record(s)</md-subheader>
-                <md-list-item class="md-2-line" ng-repeat="rec in records ">
-                    <div class="md-list-item-text">
+                <md-list-item class="md-2-line cardListElement " ng-repeat="rec in records | filter:searchText">
+                    <div class="md-list-item-text recordsSearch">
                         <h3>{{rec.name}}</h3>
 
                         <p>Secondary text</p>

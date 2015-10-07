@@ -1,6 +1,6 @@
 <card id="entityList" fill="true" flip="rl">
 
-<face id="entityFront" settings="default:true" controller="_entityList.entityCtrl">
+<face id="entityFront" settings="default:true,search:['entitySearch']"  controller="_entityList.entityCtrl">
     <ctl>ENTITY LIST</ctl>
     <ctr class="gui-extra" flip-target="exampleHelp">&#xf059;</ctr>
     <content>
@@ -36,7 +36,7 @@
 
 
         <ul  ng-show="entities.length > 0" style="border-radius:5px; margin:3px; border:none;">
-            <li ng-repeat="entity in entities track by $index | orderBy:'visitOrder'" entityId="{{entity.entityId}}" class="cardListElement" onTouchStart="_entityList.loadModule(this);">
+            <li ng-repeat="entity in entities track by $index | orderBy:'visitOrder'" entityId="{{entity.entityId}}" class="cardListElement entitySearch" onTouchStart="_entityList.loadModule(this);">
                 <div class="grid amberLine">
                         <i class="unit w-3-16 fa fa-compass gridHeight" style="font-size:20pt; color: rgba(0,0,0,0.4);"></i>
 
